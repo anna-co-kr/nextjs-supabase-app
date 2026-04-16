@@ -40,3 +40,10 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Claude Code 로컬 설정
+.claude/
+
+# MCP 로컬 설정
+.mcp.json
+WebGUI.md
