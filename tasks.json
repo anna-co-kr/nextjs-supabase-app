@@ -1,0 +1,477 @@
+{
+  "tasks": [
+    {
+      "id": "02cdf50b-e1d9-46dd-bd17-efbc56ee1f0b",
+      "name": "Task 001: 프로젝트 구조 및 라우팅 설정",
+      "description": "Next.js App Router 기반 전체 라우트 구조를 재편하고 공통 레이아웃 골격을 구현한다. 기존 스타터킷 라우트를 Gather 서비스 구조로 전환하며, 13개 페이지의 빈 껍데기(page.tsx)를 생성한다.",
+      "notes": "각 page.tsx는 h1 제목과 경로 설명만 포함하는 최소 껍데기로 생성. proxy.ts의 공개 경로 조건에 /events 추가 필수. 기존 app/protected/layout.tsx는 삭제 후 app/(protected)/layout.tsx로 교체.",
+      "status": "pending",
+      "dependencies": [],
+      "createdAt": "2026-04-17T07:28:21.586Z",
+      "updatedAt": "2026-04-17T07:28:21.586Z",
+      "relatedFiles": [
+        {
+          "path": "app/page.tsx",
+          "type": "TO_MODIFY",
+          "description": "랜딩 페이지 — 스타터 내용 제거"
+        },
+        {
+          "path": "app/protected/layout.tsx",
+          "type": "TO_MODIFY",
+          "description": "기존 protected 레이아웃 → (protected) 그룹으로 이동"
+        },
+        {
+          "path": "lib/supabase/proxy.ts",
+          "type": "TO_MODIFY",
+          "description": "/events/* 공개 경로 예외 추가"
+        },
+        {
+          "path": "components/login-form.tsx",
+          "type": "TO_MODIFY",
+          "description": "로그인 후 리디렉션 경로 /protected → /dashboard"
+        },
+        {
+          "path": "app/(protected)/layout.tsx",
+          "type": "CREATE",
+          "description": "인증 사용자 공통 레이아웃 (사이드바+헤더 골격)"
+        },
+        {
+          "path": "app/(protected)/dashboard/page.tsx",
+          "type": "CREATE",
+          "description": "대시보드 빈 껍데기"
+        },
+        {
+          "path": "app/events/[slug]/page.tsx",
+          "type": "CREATE",
+          "description": "공개 이벤트 상세 빈 껍데기"
+        }
+      ],
+      "implementationGuide": "1. app/(public)/page.tsx 생성 (랜딩 페이지 빈 껍데기, 기존 app/page.tsx 내용 제거)\n2. app/(protected)/layout.tsx 생성 (사이드바 + 헤더 골격, 기존 app/protected/layout.tsx 교체)\n3. app/(protected)/dashboard/page.tsx 생성\n4. app/(protected)/events/new/page.tsx 생성\n5. app/(protected)/events/[eventId]/page.tsx 생성\n6. app/(protected)/events/[eventId]/members/page.tsx 생성\n7. app/(protected)/events/[eventId]/announcements/page.tsx 생성\n8. app/(protected)/events/[eventId]/settlements/page.tsx 생성\n9. app/events/[slug]/page.tsx 생성 (공개)\n10. app/events/[slug]/apply/page.tsx 생성\n11. app/(protected)/events/[eventId]/announcements-list/page.tsx 생성 (참여자용)\n12. app/(protected)/events/[eventId]/settlements-status/page.tsx 생성 (참여자용)\n13. lib/supabase/proxy.ts 수정: /events/* 공개 경로 예외 추가\n14. components/login-form.tsx 수정: router.push 경로를 /protected에서 /dashboard로 변경\n15. app/error.tsx, app/not-found.tsx, app/loading.tsx 생성 (전역 에러/로딩 페이지)\n16. 스타터킷 잔재 파일 제거: components/tutorial/*, components/hero.tsx, components/deploy-button.tsx, components/next-logo.tsx, components/supabase-logo.tsx, app/protected/page.tsx",
+      "verificationCriteria": "npm run dev 실행 후 /dashboard 접근 시 인증 후 레이아웃 표시, /events/test-slug 접근 시 비인증 상태에서도 페이지 렌더링, /auth/login 접근 시 리디렉션 없이 표시. npm run lint 오류 0개.",
+      "analysisResult": "Gather 서비스 Phase 1 UI/UX 프로토타입 구현. 더미 데이터 기반으로 PRD의 13개 페이지 전체 UI를 Next.js 15 App Router + TypeScript + TailwindCSS + shadcn/ui로 구축한다. DB/백엔드 연동 없이 전체 사용자 플로우를 체험 가능하게 만드는 것이 목표. 기존 Supabase 인증 로직은 유지하고 UI만 교체한다."
+    },
+    {
+      "id": "afb60a33-c5d7-49b7-b851-7703fe7aa5ba",
+      "name": "Task 002: UI 타입 정의 및 더미 데이터 설계",
+      "description": "Phase 1 UI 구현에 필요한 TypeScript View 모델 타입과 더미 데이터를 정의한다. DB 스키마와 분리된 화면 전용 타입으로, Phase 3에서 실제 DB 타입과 매핑된다.",
+      "notes": "모든 타입에 any 금지. lib/types/index.ts에서 전체 re-export. 더미 데이터는 한국어 텍스트 사용 (서비스 대상 사용자 언어).",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "02cdf50b-e1d9-46dd-bd17-efbc56ee1f0b"
+        }
+      ],
+      "createdAt": "2026-04-17T07:28:21.586Z",
+      "updatedAt": "2026-04-17T07:28:21.586Z",
+      "relatedFiles": [
+        {
+          "path": "lib/types/event.types.ts",
+          "type": "CREATE",
+          "description": "이벤트 View 모델 타입"
+        },
+        {
+          "path": "lib/types/member.types.ts",
+          "type": "CREATE",
+          "description": "참여자 View 모델 타입"
+        },
+        {
+          "path": "lib/types/announcement.types.ts",
+          "type": "CREATE",
+          "description": "공지 View 모델 타입"
+        },
+        {
+          "path": "lib/types/settlement.types.ts",
+          "type": "CREATE",
+          "description": "정산 View 모델 타입"
+        },
+        {
+          "path": "lib/types/index.ts",
+          "type": "CREATE",
+          "description": "타입 전체 re-export"
+        },
+        {
+          "path": "lib/fixtures.ts",
+          "type": "CREATE",
+          "description": "더미 데이터 모음"
+        }
+      ],
+      "implementationGuide": "1. lib/types/event.types.ts 생성:\n   - EventType: 'regular' | 'oneshot'\n   - ApprovalType: 'auto' | 'manual'\n   - EventStatus: 'upcoming' | 'ongoing' | 'closed'\n   - EventView interface (id, title, description, location, eventType, startsAt, maxParticipants, registrationDeadline, approvalType, publicSlug, hostId, hostName, confirmedCount, status, createdAt)\n\n2. lib/types/member.types.ts 생성:\n   - MemberStatus: 'confirmed' | 'waiting' | 'rejected'\n   - EventMemberView interface (id, eventId, userId, userName, userEmail, status, appliedAt)\n\n3. lib/types/announcement.types.ts 생성:\n   - AnnouncementView interface (id, eventId, authorId, authorName, title, body, isPinned, createdAt, commentCount, reactions)\n   - CommentView interface (id, announcementId, authorId, authorName, body, createdAt)\n   - ReactionView interface (emoji, count, hasReacted)\n\n4. lib/types/settlement.types.ts 생성:\n   - SplitType: 'equal' | 'individual' | 'ratio'\n   - SettlementItemView interface (id, eventId, name, amount, splitType)\n   - PaymentView interface (id, eventId, userId, userName, amountDue, isPaid, paidAt)\n   - HostBankAccount interface (bankName, accountNumber)\n\n5. lib/fixtures.ts 생성:\n   - mockEvents: EventView[] (3개 샘플)\n   - mockMembers: EventMemberView[] (5개 샘플)\n   - mockAnnouncements: AnnouncementView[] (2개 샘플)\n   - mockComments: CommentView[] (3개 샘플)\n   - mockSettlementItems: SettlementItemView[] (2개 샘플)\n   - mockPayments: PaymentView[] (5개 샘플)\n   - mockBankAccount: HostBankAccount",
+      "verificationCriteria": "npm run type-check 오류 0개. lib/fixtures.ts import 시 모든 더미 데이터가 정의된 타입과 일치. any 타입 미사용.",
+      "analysisResult": "Gather 서비스 Phase 1 UI/UX 프로토타입 구현. 더미 데이터 기반으로 PRD의 13개 페이지 전체 UI를 Next.js 15 App Router + TypeScript + TailwindCSS + shadcn/ui로 구축한다. DB/백엔드 연동 없이 전체 사용자 플로우를 체험 가능하게 만드는 것이 목표. 기존 Supabase 인증 로직은 유지하고 UI만 교체한다."
+    },
+    {
+      "id": "75bb61cc-2130-48db-9d2a-ba345cd40b4d",
+      "name": "Task 003: 공통 컴포넌트 라이브러리 구현",
+      "description": "shadcn/ui 추가 설치 및 Gather 서비스 전용 도메인 컴포넌트를 구현한다. 이후 모든 페이지 UI의 기반이 되는 컴포넌트 라이브러리를 구축한다.",
+      "notes": "shadcn add 명령어는 npx shadcn@latest add 형식 사용. EventCard, MemberItem은 'use client' 불필요 (클릭은 Link 컴포넌트로 처리). 도메인 컴포넌트 파일은 PascalCase.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "afb60a33-c5d7-49b7-b851-7703fe7aa5ba"
+        }
+      ],
+      "createdAt": "2026-04-17T07:28:21.586Z",
+      "updatedAt": "2026-04-17T07:28:21.586Z",
+      "relatedFiles": [
+        {
+          "path": "components/layout/Header.tsx",
+          "type": "CREATE",
+          "description": "공통 헤더 컴포넌트"
+        },
+        {
+          "path": "components/layout/Sidebar.tsx",
+          "type": "CREATE",
+          "description": "공통 사이드바/네비게이션"
+        },
+        {
+          "path": "components/event/EventCard.tsx",
+          "type": "CREATE",
+          "description": "이벤트 카드 컴포넌트"
+        },
+        {
+          "path": "components/event/StatusBadge.tsx",
+          "type": "CREATE",
+          "description": "상태 배지 컴포넌트"
+        },
+        {
+          "path": "components/member/MemberItem.tsx",
+          "type": "CREATE",
+          "description": "참여자 아이템 컴포넌트"
+        },
+        {
+          "path": "components/common/EmptyState.tsx",
+          "type": "CREATE",
+          "description": "빈 상태 공통 컴포넌트"
+        },
+        {
+          "path": "components/common/LoadingSkeleton.tsx",
+          "type": "CREATE",
+          "description": "로딩 스켈레톤 공통 컴포넌트"
+        },
+        {
+          "path": "app/(protected)/layout.tsx",
+          "type": "TO_MODIFY",
+          "description": "Header + Sidebar 통합"
+        },
+        {
+          "path": "lib/types/index.ts",
+          "type": "DEPENDENCY",
+          "description": "컴포넌트 props 타입 참조"
+        }
+      ],
+      "implementationGuide": "1. shadcn 컴포넌트 추가 설치:\n   npx shadcn@latest add table tabs dialog select textarea separator avatar toast skeleton form radio-group popover\n\n2. components/layout/Header.tsx 생성:\n   - 서비스명(Gather) 로고 + 사용자명 표시 + 로그아웃 버튼\n   - Server Component (logout은 별도 client 컴포넌트)\n\n3. components/layout/Sidebar.tsx 생성:\n   - 네비게이션 메뉴 (대시보드, 새 이벤트 만들기)\n   - 모바일: 하단 탭바 또는 햄버거 메뉴\n\n4. components/event/EventCard.tsx 생성:\n   - EventView props 수신\n   - 이벤트명, 날짜, 참여 인원/최대 인원, 상태 배지 표시\n   - 클릭 시 href 이동\n\n5. components/event/StatusBadge.tsx 생성:\n   - EventStatus, MemberStatus 값에 따른 Badge 색상 매핑\n\n6. components/member/MemberItem.tsx 생성:\n   - 아바타 + 이름 + 이메일 + 상태 배지\n   - 주최자용: 승인/거절 버튼 포함 옵션\n\n7. components/common/EmptyState.tsx 생성:\n   - icon, title, description, actionLabel, onAction props\n\n8. components/common/LoadingSkeleton.tsx 생성:\n   - variant: 'card' | 'list' | 'table'\n\n9. app/(protected)/layout.tsx 에 Header + Sidebar 통합",
+      "verificationCriteria": "npm run type-check 오류 0개. /dashboard 접근 시 헤더+사이드바 레이아웃 표시. 모바일(375px) 반응형 확인. shadcn 컴포넌트 components/ui/ 에 정상 설치.",
+      "analysisResult": "Gather 서비스 Phase 1 UI/UX 프로토타입 구현. 더미 데이터 기반으로 PRD의 13개 페이지 전체 UI를 Next.js 15 App Router + TypeScript + TailwindCSS + shadcn/ui로 구축한다. DB/백엔드 연동 없이 전체 사용자 플로우를 체험 가능하게 만드는 것이 목표. 기존 Supabase 인증 로직은 유지하고 UI만 교체한다."
+    },
+    {
+      "id": "331bb4c7-83c1-4ada-8a2b-c0b02d211d81",
+      "name": "Task 004: 인증 페이지 UI 리디자인",
+      "description": "기존 Supabase 인증 로직을 유지하면서 로그인/회원가입/비밀번호 재설정 페이지 UI를 Gather 서비스 디자인으로 리디자인한다.",
+      "notes": "Supabase 인증 로직(supabase.auth.signIn, signUp, resetPassword) 변경 금지. UI와 검증 로직만 교체. React Hook Form은 package.json에 없으므로 npm install react-hook-form @hookform/resolvers zod 필요.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "75bb61cc-2130-48db-9d2a-ba345cd40b4d"
+        }
+      ],
+      "createdAt": "2026-04-17T07:28:21.586Z",
+      "updatedAt": "2026-04-17T07:28:21.586Z",
+      "relatedFiles": [
+        {
+          "path": "app/auth/login/page.tsx",
+          "type": "TO_MODIFY",
+          "description": "로그인 페이지 레이아웃 리디자인"
+        },
+        {
+          "path": "app/auth/sign-up/page.tsx",
+          "type": "TO_MODIFY",
+          "description": "회원가입 페이지 레이아웃 리디자인"
+        },
+        {
+          "path": "components/login-form.tsx",
+          "type": "TO_MODIFY",
+          "description": "한국어 UI + React Hook Form + Zod 적용"
+        },
+        {
+          "path": "components/sign-up-form.tsx",
+          "type": "TO_MODIFY",
+          "description": "한국어 UI + React Hook Form + Zod 적용"
+        },
+        {
+          "path": "package.json",
+          "type": "TO_MODIFY",
+          "description": "react-hook-form, @hookform/resolvers, zod 의존성 추가"
+        }
+      ],
+      "implementationGuide": "1. app/auth/login/page.tsx — 중앙 정렬 카드 레이아웃, Gather 브랜딩\n   - 기존 LoginForm 컴포넌트 재사용 (로직 유지)\n   - 페이지 레이아웃만 리디자인 (배경색, 로고, 카피)\n\n2. app/auth/sign-up/page.tsx — 동일 패턴\n   - 기존 SignUpForm 재사용\n\n3. app/auth/forgot-password/page.tsx — 동일 패턴\n   - 기존 ForgotPasswordForm 재사용\n\n4. components/login-form.tsx — UI 개선:\n   - 한국어 레이블/플레이스홀더 적용\n   - React Hook Form + Zod 검증 도입 (기존 useState 방식 교체)\n   - zod schema: email().min(1), password().min(6)\n\n5. components/sign-up-form.tsx — 동일 패턴\n   - 이름/이메일/비밀번호/비밀번호확인 Zod 검증\n\n6. app/auth/sign-up-success/page.tsx — 이메일 인증 안내 UI 개선",
+      "verificationCriteria": "로그인/회원가입 폼 유효성 검증 동작(빈 값 제출 시 에러 메시지 표시). 기존 Supabase 로그인 로직 정상 동작. npm run type-check 오류 0개.",
+      "analysisResult": "Gather 서비스 Phase 1 UI/UX 프로토타입 구현. 더미 데이터 기반으로 PRD의 13개 페이지 전체 UI를 Next.js 15 App Router + TypeScript + TailwindCSS + shadcn/ui로 구축한다. DB/백엔드 연동 없이 전체 사용자 플로우를 체험 가능하게 만드는 것이 목표. 기존 Supabase 인증 로직은 유지하고 UI만 교체한다."
+    },
+    {
+      "id": "2626160d-4640-45a3-bc57-e04b078f6760",
+      "name": "Task 005: 대시보드 및 이벤트 목록 UI",
+      "description": "로그인 후 첫 화면인 대시보드를 더미 데이터로 구현한다. 주최 중인 이벤트와 참여 중인 이벤트 탭 구분, 이벤트 카드 리스트, 새 이벤트 만들기 버튼을 포함한다.",
+      "notes": "Server Component로 구현 (더미 데이터는 import, 인터랙션 없음). Tabs 클릭만 client-side이므로 Tabs wrapper만 'use client'. 실제 사용자 식별 없이 더미 데이터 전체 표시.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "75bb61cc-2130-48db-9d2a-ba345cd40b4d"
+        }
+      ],
+      "createdAt": "2026-04-17T07:28:21.586Z",
+      "updatedAt": "2026-04-17T07:28:21.586Z",
+      "relatedFiles": [
+        {
+          "path": "app/(protected)/dashboard/page.tsx",
+          "type": "TO_MODIFY",
+          "description": "대시보드 UI 구현"
+        },
+        {
+          "path": "lib/fixtures.ts",
+          "type": "DEPENDENCY",
+          "description": "mockEvents 더미 데이터"
+        },
+        {
+          "path": "components/event/EventCard.tsx",
+          "type": "DEPENDENCY",
+          "description": "이벤트 카드 컴포넌트"
+        },
+        {
+          "path": "components/common/EmptyState.tsx",
+          "type": "DEPENDENCY",
+          "description": "빈 상태 컴포넌트"
+        }
+      ],
+      "implementationGuide": "1. app/(protected)/dashboard/page.tsx 구현:\n   - mockEvents에서 hostId가 현재 사용자인 것 → 주최 이벤트\n   - mockEvents에서 나머지 → 참여 이벤트 (더미로 구분)\n   - Tabs 컴포넌트로 '내가 주최한 모임' / '참여 중인 모임' 탭 구분\n   - 각 탭에 EventCard 그리드 (2열 md, 1열 모바일)\n   - 이벤트 없을 시 EmptyState 컴포넌트 표시\n   - 헤더 영역에 '새 모임 만들기' Button → /events/new 링크\n\n2. 반응형:\n   - 모바일: 1열 카드 리스트\n   - 태블릿+: 2열 그리드\n\n3. 로딩 상태: LoadingSkeleton variant='card' 사용",
+      "verificationCriteria": "/dashboard 접근 시 이벤트 카드 목록 표시. 탭 전환 동작. 모바일 반응형 확인. '새 모임 만들기' 버튼 클릭 시 /events/new 이동.",
+      "analysisResult": "Gather 서비스 Phase 1 UI/UX 프로토타입 구현. 더미 데이터 기반으로 PRD의 13개 페이지 전체 UI를 Next.js 15 App Router + TypeScript + TailwindCSS + shadcn/ui로 구축한다. DB/백엔드 연동 없이 전체 사용자 플로우를 체험 가능하게 만드는 것이 목표. 기존 Supabase 인증 로직은 유지하고 UI만 교체한다."
+    },
+    {
+      "id": "ffc6d5bb-917d-4935-a117-0db19be78a2a",
+      "name": "Task 006: 이벤트 생성/수정/관리 페이지 UI",
+      "description": "이벤트 생성 폼, 이벤트 관리(수정) 페이지, 공개 링크 표시 UI를 구현한다. React Hook Form + Zod 검증만 포함하며 실제 저장 로직은 없다.",
+      "notes": "날짜/시간 입력은 input type='datetime-local' 사용 (외부 DatePicker 라이브러리 없이). 'use client' 필요 (폼 인터랙션). 공개 링크 복사 버튼은 클라이언트 전용 동작.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "75bb61cc-2130-48db-9d2a-ba345cd40b4d"
+        }
+      ],
+      "createdAt": "2026-04-17T07:28:21.586Z",
+      "updatedAt": "2026-04-17T07:28:21.586Z",
+      "relatedFiles": [
+        {
+          "path": "app/(protected)/events/new/page.tsx",
+          "type": "TO_MODIFY",
+          "description": "이벤트 생성 폼 UI"
+        },
+        {
+          "path": "app/(protected)/events/[eventId]/page.tsx",
+          "type": "TO_MODIFY",
+          "description": "이벤트 관리 페이지 UI"
+        },
+        {
+          "path": "lib/fixtures.ts",
+          "type": "DEPENDENCY",
+          "description": "mockEvents 더미 데이터"
+        },
+        {
+          "path": "lib/types/event.types.ts",
+          "type": "DEPENDENCY",
+          "description": "EventView 타입"
+        }
+      ],
+      "implementationGuide": "1. app/(protected)/events/new/page.tsx 구현:\n   - 이벤트명(필수), 설명, 장소, 날짜/시간(필수), 이벤트 유형 Select, 최대 인원 Input(number), 참여 마감일, 승인 방식 RadioGroup\n   - Zod schema 정의: title.min(2), startsAt required, maxParticipants.min(1).max(500)\n   - 제출 시 console.log (더미, 실제 저장 없음)\n   - '이벤트 만들기' 제출 버튼\n\n2. app/(protected)/events/[eventId]/page.tsx 구현:\n   - mockEvents[0] 더미 데이터로 폼 초기값 채움\n   - 위 생성 폼과 동일한 필드 + 공개 링크 표시 영역\n   - 공개 링크: Input + '복사' 버튼 (navigator.clipboard.writeText)\n   - 하단 탭: 참여자 관리 / 공지 관리 / 정산 관리 링크 버튼\n   - '저장' 버튼 (더미, 저장 없음)\n\n3. 공통 폼 컴포넌트 재사용을 위해 components/event/EventForm.tsx 추출 (선택적)",
+      "verificationCriteria": "/events/new 폼 유효성 검증 동작. /events/[eventId] 더미 데이터로 폼 초기값 표시. 공개 링크 복사 버튼 동작. npm run type-check 오류 0개.",
+      "analysisResult": "Gather 서비스 Phase 1 UI/UX 프로토타입 구현. 더미 데이터 기반으로 PRD의 13개 페이지 전체 UI를 Next.js 15 App Router + TypeScript + TailwindCSS + shadcn/ui로 구축한다. DB/백엔드 연동 없이 전체 사용자 플로우를 체험 가능하게 만드는 것이 목표. 기존 Supabase 인증 로직은 유지하고 UI만 교체한다."
+    },
+    {
+      "id": "1e789cc3-a5d9-483f-8e21-b3ad9f1f3dca",
+      "name": "Task 007: 공개 이벤트 페이지 및 참여 신청 UI",
+      "description": "비로그인 사용자도 접근 가능한 공개 이벤트 상세 페이지와 참여 신청 페이지 UI를 구현한다.",
+      "notes": "공개 페이지는 (protected) 그룹 외부 — app/events/ 경로. proxy.ts에서 /events/* 이미 예외 처리됨(Task 001). D-Day 계산은 더미 고정값 사용.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "75bb61cc-2130-48db-9d2a-ba345cd40b4d"
+        }
+      ],
+      "createdAt": "2026-04-17T07:28:21.586Z",
+      "updatedAt": "2026-04-17T07:28:21.586Z",
+      "relatedFiles": [
+        {
+          "path": "app/events/[slug]/page.tsx",
+          "type": "TO_MODIFY",
+          "description": "공개 이벤트 상세 UI"
+        },
+        {
+          "path": "app/events/[slug]/apply/page.tsx",
+          "type": "TO_MODIFY",
+          "description": "참여 신청 UI"
+        },
+        {
+          "path": "lib/fixtures.ts",
+          "type": "DEPENDENCY",
+          "description": "mockEvents 더미 데이터"
+        }
+      ],
+      "implementationGuide": "1. app/events/[slug]/page.tsx 구현:\n   - 상단 네비게이션: Gather 로고 + 로그인/회원가입 링크 (비인증 상태)\n   - 이벤트명, 설명, 장소, 날짜, 유형 표시\n   - 현재 참여 인원 / 최대 인원 ProgressBar (shadcn Progress 컴포넌트 추가)\n   - 마감일 D-Day 카운트다운 표시 (더미: 'D-5')\n   - '공유 링크 복사' 버튼\n   - '참여 신청하기' 버튼 → /events/[slug]/apply 링크\n   - mockEvents[0] 더미 데이터 사용\n\n2. app/events/[slug]/apply/page.tsx 구현:\n   - 이벤트 요약 정보 Card\n   - 정원 여유/초과 상태 표시 (더미: 여유 있음)\n   - 자동 승인 안내 또는 수동 승인 대기 안내 텍스트\n   - '신청 완료' 버튼 (더미, 클릭 시 toast 표시)\n   - 비로그인 접근 시 로그인 유도 UI (더미: 로그인 상태 가정)\n\n3. npx shadcn@latest add progress",
+      "verificationCriteria": "비인증 상태에서 /events/test-slug 접근 가능. 참여 인원 프로그레스바 표시. '참여 신청하기' → apply 페이지 이동. npm run type-check 오류 0개.",
+      "analysisResult": "Gather 서비스 Phase 1 UI/UX 프로토타입 구현. 더미 데이터 기반으로 PRD의 13개 페이지 전체 UI를 Next.js 15 App Router + TypeScript + TailwindCSS + shadcn/ui로 구축한다. DB/백엔드 연동 없이 전체 사용자 플로우를 체험 가능하게 만드는 것이 목표. 기존 Supabase 인증 로직은 유지하고 UI만 교체한다."
+    },
+    {
+      "id": "13dffceb-3f8e-491e-aa39-dbe5bd98e036",
+      "name": "Task 008: 참여자 관리 페이지 UI",
+      "description": "주최자가 참여 신청자를 확정/거절하고 대기자를 관리하는 페이지 UI를 더미 데이터로 구현한다.",
+      "notes": "'use client' 필요 (탭 인터랙션, 버튼 클릭). CSV 버튼은 disabled 또는 '준비 중' 상태로 표시 가능.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "75bb61cc-2130-48db-9d2a-ba345cd40b4d"
+        }
+      ],
+      "createdAt": "2026-04-17T07:28:21.586Z",
+      "updatedAt": "2026-04-17T07:28:21.586Z",
+      "relatedFiles": [
+        {
+          "path": "app/(protected)/events/[eventId]/members/page.tsx",
+          "type": "TO_MODIFY",
+          "description": "참여자 관리 UI"
+        },
+        {
+          "path": "lib/fixtures.ts",
+          "type": "DEPENDENCY",
+          "description": "mockMembers 더미 데이터"
+        },
+        {
+          "path": "components/member/MemberItem.tsx",
+          "type": "DEPENDENCY",
+          "description": "참여자 아이템 컴포넌트"
+        }
+      ],
+      "implementationGuide": "1. app/(protected)/events/[eventId]/members/page.tsx 구현:\n   - 상단: 이벤트명 breadcrumb\n   - Tabs: '확정' / '대기' / '거절' 탭\n   - 각 탭에 MemberItem 리스트\n   - 수동 승인 이벤트: 각 MemberItem에 '승인' / '거절' 버튼 (더미, onClick console.log)\n   - 확정 탭: 참여 인원 카운트 표시 (확정 n / 최대 n)\n   - 대기 탭: 대기 순서 번호 표시\n   - 상단 우측: 'CSV 내보내기' 버튼 (더미, Phase 3에서 구현)\n   - 빈 상태: EmptyState 컴포넌트\n   - mockMembers 더미 데이터 사용",
+      "verificationCriteria": "확정/대기/거절 탭 전환 동작. 각 탭에 더미 참여자 목록 표시. 승인/거절 버튼 클릭 시 console.log 동작. 모바일 반응형 확인.",
+      "analysisResult": "Gather 서비스 Phase 1 UI/UX 프로토타입 구현. 더미 데이터 기반으로 PRD의 13개 페이지 전체 UI를 Next.js 15 App Router + TypeScript + TailwindCSS + shadcn/ui로 구축한다. DB/백엔드 연동 없이 전체 사용자 플로우를 체험 가능하게 만드는 것이 목표. 기존 Supabase 인증 로직은 유지하고 UI만 교체한다."
+    },
+    {
+      "id": "4648843c-8976-43ca-8abb-70e77c661ff0",
+      "name": "Task 009: 공지 작성/목록 및 댓글/리액션 UI",
+      "description": "주최자용 공지 관리 페이지와 참여자용 공지 목록 페이지 UI를 구현한다. 고정 공지, 댓글, 이모지 리액션 UI를 포함한다.",
+      "notes": "'use client' 필요 (고정 토글, 댓글 입력, 리액션 클릭). 이모지 리액션은 클릭 시 count +1 useState로 로컬 업데이트 (더미).",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "75bb61cc-2130-48db-9d2a-ba345cd40b4d"
+        }
+      ],
+      "createdAt": "2026-04-17T07:28:21.586Z",
+      "updatedAt": "2026-04-17T07:28:21.586Z",
+      "relatedFiles": [
+        {
+          "path": "app/(protected)/events/[eventId]/announcements/page.tsx",
+          "type": "TO_MODIFY",
+          "description": "공지 관리 UI (주최자)"
+        },
+        {
+          "path": "app/(protected)/events/[eventId]/announcements-list/page.tsx",
+          "type": "TO_MODIFY",
+          "description": "공지 목록 UI (참여자)"
+        },
+        {
+          "path": "lib/fixtures.ts",
+          "type": "DEPENDENCY",
+          "description": "mockAnnouncements, mockComments 더미 데이터"
+        }
+      ],
+      "implementationGuide": "1. app/(protected)/events/[eventId]/announcements/page.tsx (주최자용) 구현:\n   - 공지 작성 폼: 제목 Input + 본문 Textarea + 고정 여부 Checkbox + '저장' 버튼 (더미)\n   - 공지 목록: 고정 공지 상단 핀 아이콘 표시, 최신순 정렬\n   - 각 공지 Card: 제목, 본문 미리보기, 작성일, 고정 토글 버튼\n   - D-1/D-3 자동 리마인더 예약 현황 텍스트 (더미: '이벤트 D-3, D-1일 자동 발송 예약됨')\n   - mockAnnouncements 더미 데이터 사용\n\n2. app/(protected)/events/[eventId]/announcements-list/page.tsx (참여자용) 구현:\n   - 고정 공지 강조 표시 (배경색 차이)\n   - 공지 클릭 시 상세 펼치기 (Accordion 패턴)\n   - 댓글 목록 + 댓글 입력 Input + '등록' 버튼 (더미)\n   - 이모지 리액션 버튼 (👍❤️😂 3종) + 집계 수 표시\n   - mockComments 더미 데이터 사용\n\n3. npx shadcn@latest add accordion",
+      "verificationCriteria": "공지 작성 폼 표시. 고정 공지 상단 표시. 댓글 입력 UI 동작. 이모지 리액션 클릭 시 카운트 증가. npm run type-check 오류 0개.",
+      "analysisResult": "Gather 서비스 Phase 1 UI/UX 프로토타입 구현. 더미 데이터 기반으로 PRD의 13개 페이지 전체 UI를 Next.js 15 App Router + TypeScript + TailwindCSS + shadcn/ui로 구축한다. DB/백엔드 연동 없이 전체 사용자 플로우를 체험 가능하게 만드는 것이 목표. 기존 Supabase 인증 로직은 유지하고 UI만 교체한다."
+    },
+    {
+      "id": "6f7fdbe4-9fd3-48a3-8869-5982c3f4132a",
+      "name": "Task 010: 정산 관리 및 참여자 정산 현황 UI",
+      "description": "주최자용 정산 관리 페이지와 참여자용 정산 현황 페이지 UI를 더미 데이터로 구현한다. 분담 방식 선택과 클라이언트 계산 프리뷰를 포함한다.",
+      "notes": "'use client' 필요 (동적 항목 추가, RadioGroup, Checkbox, 계산). 분담 방식별 계산 로직은 클라이언트 유틸리티 함수로 분리 (lib/utils/settlement.ts).",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "75bb61cc-2130-48db-9d2a-ba345cd40b4d"
+        }
+      ],
+      "createdAt": "2026-04-17T07:28:21.586Z",
+      "updatedAt": "2026-04-17T07:28:21.586Z",
+      "relatedFiles": [
+        {
+          "path": "app/(protected)/events/[eventId]/settlements/page.tsx",
+          "type": "TO_MODIFY",
+          "description": "정산 관리 UI (주최자)"
+        },
+        {
+          "path": "app/(protected)/events/[eventId]/settlements-status/page.tsx",
+          "type": "TO_MODIFY",
+          "description": "정산 현황 UI (참여자)"
+        },
+        {
+          "path": "lib/utils/settlement.ts",
+          "type": "CREATE",
+          "description": "분담 계산 유틸리티"
+        },
+        {
+          "path": "lib/fixtures.ts",
+          "type": "DEPENDENCY",
+          "description": "mockSettlementItems, mockPayments, mockBankAccount"
+        }
+      ],
+      "implementationGuide": "1. app/(protected)/events/[eventId]/settlements/page.tsx (주최자용) 구현:\n   - 정산 항목 입력: 항목명 Input + 금액 Input(number) + '항목 추가' 버튼 (동적 필드 추가)\n   - 분담 방식 RadioGroup: 균등 / 개별 지정 / 비율\n   - 1인당 금액 프리뷰: 클라이언트 계산 (총액 / 인원수, 균등 방식)\n   - 주최자 계좌 등록: 은행명 Select + 계좌번호 Input\n   - 납부 현황 Table: 참여자명, 납부금액, 납부 여부 Checkbox, 납부일시\n   - '미납자 리마인더 발송' Button (더미, toast 표시)\n   - '정산 저장' Button (더미)\n   - mockSettlementItems, mockPayments 사용\n\n2. app/(protected)/events/[eventId]/settlements-status/page.tsx (참여자용) 구현:\n   - 본인 납부 금액 강조 표시 Card\n   - 비용 항목별 상세 내역 Table\n   - 납부 상태 Badge (미납/납부 완료)\n   - 주최자 계좌번호 표시 + '복사' 버튼",
+      "verificationCriteria": "항목 추가 버튼으로 동적 입력 필드 추가 동작. 균등 방식 선택 시 1인당 금액 자동 계산 표시. 납부 체크박스 토글 동작. 계좌번호 복사 버튼 동작.",
+      "analysisResult": "Gather 서비스 Phase 1 UI/UX 프로토타입 구현. 더미 데이터 기반으로 PRD의 13개 페이지 전체 UI를 Next.js 15 App Router + TypeScript + TailwindCSS + shadcn/ui로 구축한다. DB/백엔드 연동 없이 전체 사용자 플로우를 체험 가능하게 만드는 것이 목표. 기존 Supabase 인증 로직은 유지하고 UI만 교체한다."
+    },
+    {
+      "id": "0c8db784-090a-4bb2-89c4-39b1068974a8",
+      "name": "Task 011: 랜딩 페이지 UI 및 Phase 1 통합 점검",
+      "description": "Gather 서비스 랜딩 페이지를 구현하고, 13개 페이지 전체 네비게이션 흐름과 반응형을 점검한다.",
+      "notes": "랜딩 페이지는 Server Component. 이미지 없이 텍스트+아이콘(lucide-react)만으로 구성. 스타터킷 잔재(tutorial 컴포넌트 등) 이 단계에서 최종 제거.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "331bb4c7-83c1-4ada-8a2b-c0b02d211d81"
+        },
+        {
+          "taskId": "2626160d-4640-45a3-bc57-e04b078f6760"
+        },
+        {
+          "taskId": "ffc6d5bb-917d-4935-a117-0db19be78a2a"
+        },
+        {
+          "taskId": "1e789cc3-a5d9-483f-8e21-b3ad9f1f3dca"
+        },
+        {
+          "taskId": "13dffceb-3f8e-491e-aa39-dbe5bd98e036"
+        },
+        {
+          "taskId": "4648843c-8976-43ca-8abb-70e77c661ff0"
+        },
+        {
+          "taskId": "6f7fdbe4-9fd3-48a3-8869-5982c3f4132a"
+        }
+      ],
+      "createdAt": "2026-04-17T07:28:21.586Z",
+      "updatedAt": "2026-04-17T07:28:21.586Z",
+      "relatedFiles": [
+        {
+          "path": "app/page.tsx",
+          "type": "TO_MODIFY",
+          "description": "랜딩 페이지 Gather 디자인으로 구현"
+        },
+        {
+          "path": "app/layout.tsx",
+          "type": "TO_MODIFY",
+          "description": "메타데이터 Gather 서비스명으로 업데이트"
+        }
+      ],
+      "implementationGuide": "1. app/(public)/page.tsx 또는 app/page.tsx 구현:\n   - 헤더: Gather 로고 + '로그인' + '회원가입' 버튼\n   - 히어로 섹션: 서비스 핵심 가치 문구 + CTA 버튼 ('무료로 시작하기' → /auth/sign-up)\n   - 기능 소개 섹션: 이벤트 관리, 공지, 정산 3가지 카드\n   - 푸터: 서비스명 + 간단한 링크\n\n2. 통합 점검 체크리스트:\n   - 주최자 플로우: 랜딩 → 로그인 → 대시보드 → 이벤트 생성 → 이벤트 관리 → 참여자/공지/정산 관리\n   - 참여자 플로우: 공개 이벤트 → 참여 신청 → 공지 목록 → 정산 현황\n   - 모바일(375px), 태블릿(768px), 데스크톱(1280px) 반응형 확인\n   - 다크 모드 동작 확인\n   - 스켈레톤 스타터킷 잔재 파일 최종 정리\n\n3. npm run build 성공 확인\n4. npm run type-check 오류 0개 확인\n5. npm run lint 오류 0개 확인",
+      "verificationCriteria": "npm run build 성공. npm run type-check 오류 0개. npm run lint 오류 0개. 주최자/참여자 전체 플로우 링크 연결 정상. 모바일 375px 반응형 레이아웃 깨짐 없음.",
+      "analysisResult": "Gather 서비스 Phase 1 UI/UX 프로토타입 구현. 더미 데이터 기반으로 PRD의 13개 페이지 전체 UI를 Next.js 15 App Router + TypeScript + TailwindCSS + shadcn/ui로 구축한다. DB/백엔드 연동 없이 전체 사용자 플로우를 체험 가능하게 만드는 것이 목표. 기존 Supabase 인증 로직은 유지하고 UI만 교체한다."
+    }
+  ]
+}
