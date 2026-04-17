@@ -53,6 +53,7 @@ Next.js 15 App Router + Supabase를 사용하는 스타터 킷입니다.
 ### 프로필 헬퍼
 
 `lib/supabase/profile.ts`에 서버 전용 프로필 CRUD 함수 제공:
+
 - `getProfile()` — 현재 로그인 사용자 프로필 조회
 - `getProfileById(userId)` — 특정 사용자 프로필 조회 (RLS 퍼블릭 SELECT 필요)
 - `updateProfile(updates)` — 현재 로그인 사용자 프로필 수정
