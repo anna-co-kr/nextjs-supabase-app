@@ -5,10 +5,10 @@
       "name": "Task 001: 프로젝트 구조 및 라우팅 설정",
       "description": "Next.js App Router 기반 전체 라우트 구조를 재편하고 공통 레이아웃 골격을 구현한다. 기존 스타터킷 라우트를 Gather 서비스 구조로 전환하며, 13개 페이지의 빈 껍데기(page.tsx)를 생성한다.",
       "notes": "각 page.tsx는 h1 제목과 경로 설명만 포함하는 최소 껍데기로 생성. proxy.ts의 공개 경로 조건에 /events 추가 필수. 기존 app/protected/layout.tsx는 삭제 후 app/(protected)/layout.tsx로 교체.",
-      "status": "pending",
+      "status": "in_progress",
       "dependencies": [],
       "createdAt": "2026-04-17T07:28:21.586Z",
-      "updatedAt": "2026-04-17T07:28:21.586Z",
+      "updatedAt": "2026-04-17T07:29:32.960Z",
       "relatedFiles": [
         {
           "path": "app/page.tsx",
