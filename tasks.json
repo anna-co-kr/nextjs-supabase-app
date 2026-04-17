@@ -8,7 +8,7 @@
       "status": "in_progress",
       "dependencies": [],
       "createdAt": "2026-04-17T07:28:21.586Z",
-      "updatedAt": "2026-04-17T07:29:32.960Z",
+      "updatedAt": "2026-04-17T07:33:10.296Z",
       "relatedFiles": [
         {
           "path": "app/page.tsx",
@@ -48,7 +48,8 @@
       ],
       "implementationGuide": "1. app/(public)/page.tsx 생성 (랜딩 페이지 빈 껍데기, 기존 app/page.tsx 내용 제거)\n2. app/(protected)/layout.tsx 생성 (사이드바 + 헤더 골격, 기존 app/protected/layout.tsx 교체)\n3. app/(protected)/dashboard/page.tsx 생성\n4. app/(protected)/events/new/page.tsx 생성\n5. app/(protected)/events/[eventId]/page.tsx 생성\n6. app/(protected)/events/[eventId]/members/page.tsx 생성\n7. app/(protected)/events/[eventId]/announcements/page.tsx 생성\n8. app/(protected)/events/[eventId]/settlements/page.tsx 생성\n9. app/events/[slug]/page.tsx 생성 (공개)\n10. app/events/[slug]/apply/page.tsx 생성\n11. app/(protected)/events/[eventId]/announcements-list/page.tsx 생성 (참여자용)\n12. app/(protected)/events/[eventId]/settlements-status/page.tsx 생성 (참여자용)\n13. lib/supabase/proxy.ts 수정: /events/* 공개 경로 예외 추가\n14. components/login-form.tsx 수정: router.push 경로를 /protected에서 /dashboard로 변경\n15. app/error.tsx, app/not-found.tsx, app/loading.tsx 생성 (전역 에러/로딩 페이지)\n16. 스타터킷 잔재 파일 제거: components/tutorial/*, components/hero.tsx, components/deploy-button.tsx, components/next-logo.tsx, components/supabase-logo.tsx, app/protected/page.tsx",
       "verificationCriteria": "npm run dev 실행 후 /dashboard 접근 시 인증 후 레이아웃 표시, /events/test-slug 접근 시 비인증 상태에서도 페이지 렌더링, /auth/login 접근 시 리디렉션 없이 표시. npm run lint 오류 0개.",
-      "analysisResult": "Gather 서비스 Phase 1 UI/UX 프로토타입 구현. 더미 데이터 기반으로 PRD의 13개 페이지 전체 UI를 Next.js 15 App Router + TypeScript + TailwindCSS + shadcn/ui로 구축한다. DB/백엔드 연동 없이 전체 사용자 플로우를 체험 가능하게 만드는 것이 목표. 기존 Supabase 인증 로직은 유지하고 UI만 교체한다."
+      "analysisResult": "Gather 서비스 Phase 1 UI/UX 프로토타입 구현. 더미 데이터 기반으로 PRD의 13개 페이지 전체 UI를 Next.js 15 App Router + TypeScript + TailwindCSS + shadcn/ui로 구축한다. DB/백엔드 연동 없이 전체 사용자 플로우를 체험 가능하게 만드는 것이 목표. 기존 Supabase 인증 로직은 유지하고 UI만 교체한다.",
+      "summary": "13개 페이지 라우트 구조 생성 완료. 라우트 충돌 문제(events/[eventId] vs events/[slug])를 발견하여 이벤트 관리 경로를 /manage/[eventId]로 재구성. proxy.ts에 /events/* 공개 경로 예외 추가, 로그인 후 리디렉션 /protected → /dashboard 변경, 전역 error/not-found/loading 페이지 추가, 스타터킷 잔재(tutorial/*, hero, deploy-button 등) 제거. npm run build 성공, type-check 오류 0개, lint 오류 0개."
     },
     {
       "id": "afb60a33-c5d7-49b7-b851-7703fe7aa5ba",
