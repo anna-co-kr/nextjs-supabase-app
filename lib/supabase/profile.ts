@@ -15,11 +15,7 @@ export async function getProfile(): Promise<Profile | null> {
 
   if (userError || !user) return null;
 
-  const { data, error } = await supabase
-    .from("profiles")
-    .select("*")
-    .eq("id", user.id)
-    .single();
+  const { data, error } = await supabase.from("profiles").select("*").eq("id", user.id).single();
 
   if (error) {
     console.error("[getProfile] error:", error.message);
@@ -36,11 +32,7 @@ export async function getProfile(): Promise<Profile | null> {
 export async function getProfileById(userId: string): Promise<Profile | null> {
   const supabase = await createClient();
 
-  const { data, error } = await supabase
-    .from("profiles")
-    .select("*")
-    .eq("id", userId)
-    .single();
+  const { data, error } = await supabase.from("profiles").select("*").eq("id", userId).single();
 
   if (error) {
     console.error("[getProfileById] error:", error.message);
