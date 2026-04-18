@@ -108,14 +108,14 @@
       "name": "Task 003: 공통 컴포넌트 라이브러리 구현",
       "description": "shadcn/ui 추가 설치 및 Gather 서비스 전용 도메인 컴포넌트를 구현한다. 이후 모든 페이지 UI의 기반이 되는 컴포넌트 라이브러리를 구축한다.",
       "notes": "shadcn add 명령어는 npx shadcn@latest add 형식 사용. EventCard, MemberItem은 'use client' 불필요 (클릭은 Link 컴포넌트로 처리). 도메인 컴포넌트 파일은 PascalCase.",
-      "status": "pending",
+      "status": "in_progress",
       "dependencies": [
         {
           "taskId": "afb60a33-c5d7-49b7-b851-7703fe7aa5ba"
         }
       ],
       "createdAt": "2026-04-17T07:28:21.586Z",
-      "updatedAt": "2026-04-17T07:28:21.586Z",
+      "updatedAt": "2026-04-18T08:02:27.210Z",
       "relatedFiles": [
         {
           "path": "components/layout/Header.tsx",
