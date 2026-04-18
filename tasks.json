@@ -174,14 +174,14 @@
       "name": "Task 004: 인증 페이지 UI 리디자인",
       "description": "기존 Supabase 인증 로직을 유지하면서 로그인/회원가입/비밀번호 재설정 페이지 UI를 Gather 서비스 디자인으로 리디자인한다.",
       "notes": "Supabase 인증 로직(supabase.auth.signIn, signUp, resetPassword) 변경 금지. UI와 검증 로직만 교체. React Hook Form은 package.json에 없으므로 npm install react-hook-form @hookform/resolvers zod 필요.",
-      "status": "in_progress",
+      "status": "completed",
       "dependencies": [
         {
           "taskId": "75bb61cc-2130-48db-9d2a-ba345cd40b4d"
         }
       ],
       "createdAt": "2026-04-17T07:28:21.586Z",
-      "updatedAt": "2026-04-18T08:02:56.559Z",
+      "updatedAt": "2026-04-18T08:02:57.425Z",
       "relatedFiles": [
         {
           "path": "app/auth/login/page.tsx",
@@ -212,7 +212,8 @@
       "implementationGuide": "1. app/auth/login/page.tsx — 중앙 정렬 카드 레이아웃, Gather 브랜딩\n   - 기존 LoginForm 컴포넌트 재사용 (로직 유지)\n   - 페이지 레이아웃만 리디자인 (배경색, 로고, 카피)\n\n2. app/auth/sign-up/page.tsx — 동일 패턴\n   - 기존 SignUpForm 재사용\n\n3. app/auth/forgot-password/page.tsx — 동일 패턴\n   - 기존 ForgotPasswordForm 재사용\n\n4. components/login-form.tsx — UI 개선:\n   - 한국어 레이블/플레이스홀더 적용\n   - React Hook Form + Zod 검증 도입 (기존 useState 방식 교체)\n   - zod schema: email().min(1), password().min(6)\n\n5. components/sign-up-form.tsx — 동일 패턴\n   - 이름/이메일/비밀번호/비밀번호확인 Zod 검증\n\n6. app/auth/sign-up-success/page.tsx — 이메일 인증 안내 UI 개선",
       "verificationCriteria": "로그인/회원가입 폼 유효성 검증 동작(빈 값 제출 시 에러 메시지 표시). 기존 Supabase 로그인 로직 정상 동작. npm run type-check 오류 0개.",
       "analysisResult": "Gather 서비스 Phase 1 UI/UX 프로토타입 구현. 더미 데이터 기반으로 PRD의 13개 페이지 전체 UI를 Next.js 15 App Router + TypeScript + TailwindCSS + shadcn/ui로 구축한다. DB/백엔드 연동 없이 전체 사용자 플로우를 체험 가능하게 만드는 것이 목표. 기존 Supabase 인증 로직은 유지하고 UI만 교체한다.",
-      "summary": "로그인/회원가입/비밀번호 재설정/업데이트 페이지 UI 리디자인 완료. React Hook Form + Zod 검증 적용. 반응형 패딩(px-4 py-10 sm:px-10) 통일. Supabase 인증 로직 유지하면서 Gather 디자인 전환. auth/error, auth/sign-up-success 페이지 포함."
+      "summary": "로그인/회원가입/비밀번호 재설정/업데이트 페이지 UI 리디자인 완료. React Hook Form + Zod 검증 적용. 반응형 패딩(px-4 py-10 sm:px-10) 통일. Supabase 인증 로직 유지하면서 Gather 디자인 전환. auth/error, auth/sign-up-success 페이지 포함.",
+      "completedAt": "2026-04-18T08:02:57.422Z"
     },
     {
       "id": "2626160d-4640-45a3-bc57-e04b078f6760",
