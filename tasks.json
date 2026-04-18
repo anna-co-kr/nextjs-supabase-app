@@ -381,7 +381,7 @@
         }
       ],
       "createdAt": "2026-04-17T07:28:21.586Z",
-      "updatedAt": "2026-04-18T08:02:46.740Z",
+      "updatedAt": "2026-04-18T08:03:13.397Z",
       "relatedFiles": [
         {
           "path": "app/(protected)/events/[eventId]/announcements/page.tsx",
@@ -401,7 +401,8 @@
       ],
       "implementationGuide": "1. app/(protected)/events/[eventId]/announcements/page.tsx (주최자용) 구현:\n   - 공지 작성 폼: 제목 Input + 본문 Textarea + 고정 여부 Checkbox + '저장' 버튼 (더미)\n   - 공지 목록: 고정 공지 상단 핀 아이콘 표시, 최신순 정렬\n   - 각 공지 Card: 제목, 본문 미리보기, 작성일, 고정 토글 버튼\n   - D-1/D-3 자동 리마인더 예약 현황 텍스트 (더미: '이벤트 D-3, D-1일 자동 발송 예약됨')\n   - mockAnnouncements 더미 데이터 사용\n\n2. app/(protected)/events/[eventId]/announcements-list/page.tsx (참여자용) 구현:\n   - 고정 공지 강조 표시 (배경색 차이)\n   - 공지 클릭 시 상세 펼치기 (Accordion 패턴)\n   - 댓글 목록 + 댓글 입력 Input + '등록' 버튼 (더미)\n   - 이모지 리액션 버튼 (👍❤️😂 3종) + 집계 수 표시\n   - mockComments 더미 데이터 사용\n\n3. npx shadcn@latest add accordion",
       "verificationCriteria": "공지 작성 폼 표시. 고정 공지 상단 표시. 댓글 입력 UI 동작. 이모지 리액션 클릭 시 카운트 증가. npm run type-check 오류 0개.",
-      "analysisResult": "Gather 서비스 Phase 1 UI/UX 프로토타입 구현. 더미 데이터 기반으로 PRD의 13개 페이지 전체 UI를 Next.js 15 App Router + TypeScript + TailwindCSS + shadcn/ui로 구축한다. DB/백엔드 연동 없이 전체 사용자 플로우를 체험 가능하게 만드는 것이 목표. 기존 Supabase 인증 로직은 유지하고 UI만 교체한다."
+      "analysisResult": "Gather 서비스 Phase 1 UI/UX 프로토타입 구현. 더미 데이터 기반으로 PRD의 13개 페이지 전체 UI를 Next.js 15 App Router + TypeScript + TailwindCSS + shadcn/ui로 구축한다. DB/백엔드 연동 없이 전체 사용자 플로우를 체험 가능하게 만드는 것이 목표. 기존 Supabase 인증 로직은 유지하고 UI만 교체한다.",
+      "summary": "공지 목록/작성 페이지 및 참여자용 공지 목록 페이지 구현 완료. 고정 공지 상단 우선 정렬, 댓글/이모지 리액션 UI 구현. 리액션 버튼을 span 요소로 처리하여 Server Component 호환. 모바일 반응형 적용."
     },
     {
       "id": "6f7fdbe4-9fd3-48a3-8869-5982c3f4132a",
