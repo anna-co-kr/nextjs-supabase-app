@@ -227,7 +227,7 @@
         }
       ],
       "createdAt": "2026-04-17T07:28:21.586Z",
-      "updatedAt": "2026-04-18T08:02:41.730Z",
+      "updatedAt": "2026-04-18T08:02:59.556Z",
       "relatedFiles": [
         {
           "path": "app/(protected)/dashboard/page.tsx",
@@ -252,7 +252,8 @@
       ],
       "implementationGuide": "1. app/(protected)/dashboard/page.tsx 구현:\n   - mockEvents에서 hostId가 현재 사용자인 것 → 주최 이벤트\n   - mockEvents에서 나머지 → 참여 이벤트 (더미로 구분)\n   - Tabs 컴포넌트로 '내가 주최한 모임' / '참여 중인 모임' 탭 구분\n   - 각 탭에 EventCard 그리드 (2열 md, 1열 모바일)\n   - 이벤트 없을 시 EmptyState 컴포넌트 표시\n   - 헤더 영역에 '새 모임 만들기' Button → /events/new 링크\n\n2. 반응형:\n   - 모바일: 1열 카드 리스트\n   - 태블릿+: 2열 그리드\n\n3. 로딩 상태: LoadingSkeleton variant='card' 사용",
       "verificationCriteria": "/dashboard 접근 시 이벤트 카드 목록 표시. 탭 전환 동작. 모바일 반응형 확인. '새 모임 만들기' 버튼 클릭 시 /events/new 이동.",
-      "analysisResult": "Gather 서비스 Phase 1 UI/UX 프로토타입 구현. 더미 데이터 기반으로 PRD의 13개 페이지 전체 UI를 Next.js 15 App Router + TypeScript + TailwindCSS + shadcn/ui로 구축한다. DB/백엔드 연동 없이 전체 사용자 플로우를 체험 가능하게 만드는 것이 목표. 기존 Supabase 인증 로직은 유지하고 UI만 교체한다."
+      "analysisResult": "Gather 서비스 Phase 1 UI/UX 프로토타입 구현. 더미 데이터 기반으로 PRD의 13개 페이지 전체 UI를 Next.js 15 App Router + TypeScript + TailwindCSS + shadcn/ui로 구축한다. DB/백엔드 연동 없이 전체 사용자 플로우를 체험 가능하게 만드는 것이 목표. 기존 Supabase 인증 로직은 유지하고 UI만 교체한다.",
+      "summary": "대시보드 페이지 구현 완료. 주최/참여 이벤트 Tabs 구분, EventCard 컴포넌트로 이벤트 목록 표시. CURRENT_USER 기반 필터링, /dashboard/events/new 연결. 빈 상태(EmptyState) 처리. 반응형 그리드 적용."
     },
     {
       "id": "ffc6d5bb-917d-4935-a117-0db19be78a2a",
