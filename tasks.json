@@ -57,14 +57,14 @@
       "name": "Task 002: UI 타입 정의 및 더미 데이터 설계",
       "description": "Phase 1 UI 구현에 필요한 TypeScript View 모델 타입과 더미 데이터를 정의한다. DB 스키마와 분리된 화면 전용 타입으로, Phase 3에서 실제 DB 타입과 매핑된다.",
       "notes": "모든 타입에 any 금지. lib/types/index.ts에서 전체 re-export. 더미 데이터는 한국어 텍스트 사용 (서비스 대상 사용자 언어).",
-      "status": "in_progress",
+      "status": "completed",
       "dependencies": [
         {
           "taskId": "02cdf50b-e1d9-46dd-bd17-efbc56ee1f0b"
         }
       ],
       "createdAt": "2026-04-17T07:28:21.586Z",
-      "updatedAt": "2026-04-18T08:02:21.841Z",
+      "updatedAt": "2026-04-18T08:02:22.890Z",
       "relatedFiles": [
         {
           "path": "lib/types/event.types.ts",
@@ -100,7 +100,8 @@
       "implementationGuide": "1. lib/types/event.types.ts 생성:\n   - EventType: 'regular' | 'oneshot'\n   - ApprovalType: 'auto' | 'manual'\n   - EventStatus: 'upcoming' | 'ongoing' | 'closed'\n   - EventView interface (id, title, description, location, eventType, startsAt, maxParticipants, registrationDeadline, approvalType, publicSlug, hostId, hostName, confirmedCount, status, createdAt)\n\n2. lib/types/member.types.ts 생성:\n   - MemberStatus: 'confirmed' | 'waiting' | 'rejected'\n   - EventMemberView interface (id, eventId, userId, userName, userEmail, status, appliedAt)\n\n3. lib/types/announcement.types.ts 생성:\n   - AnnouncementView interface (id, eventId, authorId, authorName, title, body, isPinned, createdAt, commentCount, reactions)\n   - CommentView interface (id, announcementId, authorId, authorName, body, createdAt)\n   - ReactionView interface (emoji, count, hasReacted)\n\n4. lib/types/settlement.types.ts 생성:\n   - SplitType: 'equal' | 'individual' | 'ratio'\n   - SettlementItemView interface (id, eventId, name, amount, splitType)\n   - PaymentView interface (id, eventId, userId, userName, amountDue, isPaid, paidAt)\n   - HostBankAccount interface (bankName, accountNumber)\n\n5. lib/fixtures.ts 생성:\n   - mockEvents: EventView[] (3개 샘플)\n   - mockMembers: EventMemberView[] (5개 샘플)\n   - mockAnnouncements: AnnouncementView[] (2개 샘플)\n   - mockComments: CommentView[] (3개 샘플)\n   - mockSettlementItems: SettlementItemView[] (2개 샘플)\n   - mockPayments: PaymentView[] (5개 샘플)\n   - mockBankAccount: HostBankAccount",
       "verificationCriteria": "npm run type-check 오류 0개. lib/fixtures.ts import 시 모든 더미 데이터가 정의된 타입과 일치. any 타입 미사용.",
       "analysisResult": "Gather 서비스 Phase 1 UI/UX 프로토타입 구현. 더미 데이터 기반으로 PRD의 13개 페이지 전체 UI를 Next.js 15 App Router + TypeScript + TailwindCSS + shadcn/ui로 구축한다. DB/백엔드 연동 없이 전체 사용자 플로우를 체험 가능하게 만드는 것이 목표. 기존 Supabase 인증 로직은 유지하고 UI만 교체한다.",
-      "summary": "lib/types.ts에 Event, EventMember, Announcement, Settlement 등 View 모델 타입 정의 완료. lib/fixtures.ts에 DUMMY_EVENTS, DUMMY_MEMBERS, DUMMY_SETTLEMENTS, CURRENT_USER 더미 데이터 구현. SplitType, EventStatus, MemberStatus, PaymentStatus Enum 타입 정의 완료. any 타입 미사용."
+      "summary": "lib/types.ts에 Event, EventMember, Announcement, Settlement 등 View 모델 타입 정의 완료. lib/fixtures.ts에 DUMMY_EVENTS, DUMMY_MEMBERS, DUMMY_SETTLEMENTS, CURRENT_USER 더미 데이터 구현. SplitType, EventStatus, MemberStatus, PaymentStatus Enum 타입 정의 완료. any 타입 미사용.",
+      "completedAt": "2026-04-18T08:02:22.888Z"
     },
     {
       "id": "75bb61cc-2130-48db-9d2a-ba345cd40b4d",
