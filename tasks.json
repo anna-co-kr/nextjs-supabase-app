@@ -268,7 +268,7 @@
         }
       ],
       "createdAt": "2026-04-17T07:28:21.586Z",
-      "updatedAt": "2026-04-18T08:02:42.823Z",
+      "updatedAt": "2026-04-18T08:03:02.848Z",
       "relatedFiles": [
         {
           "path": "app/(protected)/events/new/page.tsx",
@@ -293,7 +293,8 @@
       ],
       "implementationGuide": "1. app/(protected)/events/new/page.tsx 구현:\n   - 이벤트명(필수), 설명, 장소, 날짜/시간(필수), 이벤트 유형 Select, 최대 인원 Input(number), 참여 마감일, 승인 방식 RadioGroup\n   - Zod schema 정의: title.min(2), startsAt required, maxParticipants.min(1).max(500)\n   - 제출 시 console.log (더미, 실제 저장 없음)\n   - '이벤트 만들기' 제출 버튼\n\n2. app/(protected)/events/[eventId]/page.tsx 구현:\n   - mockEvents[0] 더미 데이터로 폼 초기값 채움\n   - 위 생성 폼과 동일한 필드 + 공개 링크 표시 영역\n   - 공개 링크: Input + '복사' 버튼 (navigator.clipboard.writeText)\n   - 하단 탭: 참여자 관리 / 공지 관리 / 정산 관리 링크 버튼\n   - '저장' 버튼 (더미, 저장 없음)\n\n3. 공통 폼 컴포넌트 재사용을 위해 components/event/EventForm.tsx 추출 (선택적)",
       "verificationCriteria": "/events/new 폼 유효성 검증 동작. /events/[eventId] 더미 데이터로 폼 초기값 표시. 공개 링크 복사 버튼 동작. npm run type-check 오류 0개.",
-      "analysisResult": "Gather 서비스 Phase 1 UI/UX 프로토타입 구현. 더미 데이터 기반으로 PRD의 13개 페이지 전체 UI를 Next.js 15 App Router + TypeScript + TailwindCSS + shadcn/ui로 구축한다. DB/백엔드 연동 없이 전체 사용자 플로우를 체험 가능하게 만드는 것이 목표. 기존 Supabase 인증 로직은 유지하고 UI만 교체한다."
+      "analysisResult": "Gather 서비스 Phase 1 UI/UX 프로토타입 구현. 더미 데이터 기반으로 PRD의 13개 페이지 전체 UI를 Next.js 15 App Router + TypeScript + TailwindCSS + shadcn/ui로 구축한다. DB/백엔드 연동 없이 전체 사용자 플로우를 체험 가능하게 만드는 것이 목표. 기존 Supabase 인증 로직은 유지하고 UI만 교체한다.",
+      "summary": "이벤트 생성 폼(/dashboard/events/new) React Hook Form + Zod + Controller 패턴으로 구현. endDate refine 검증. 이벤트 관리 허브 페이지 구현. CopyButton으로 공유 링크 복사. 참여자/공지/정산 관리 네비게이션 카드 제공."
     },
     {
       "id": "1e789cc3-a5d9-483f-8e21-b3ad9f1f3dca",
