@@ -3,93 +3,62 @@ import { ThemeSwitcher } from "@/components/theme-switcher";
 import { LogoutButton } from "@/components/logout-button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { CURRENT_USER } from "@/lib/fixtures";
-import { LayoutDashboard, PlusCircle, Settings, Sparkles } from "lucide-react";
+import { LayoutDashboard, PlusCircle, Settings } from "lucide-react";
 
 export default function ProtectedLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex min-h-screen">
-      {/* ─── 데스크톱 사이드바 ────────────────────────────────────────────── */}
+    <div className="flex min-h-screen bg-white dark:bg-black">
+      {/* ─── 데스크톱 사이드바: Apple 클린 스타일 ──────────────────────── */}
       <aside
-        className="hidden w-60 shrink-0 md:flex md:flex-col"
-        style={{ background: "var(--sidebar)" }}
+        className="hidden w-60 shrink-0 flex-col border-r border-[#d2d2d7] bg-white dark:border-[#3a3a3c] dark:bg-black md:flex"
+        aria-label="사이드바 네비게이션"
       >
-        {/* 사이드바 로고 영역 */}
-        <div
-          className="flex h-16 items-center gap-3 border-b px-5"
-          style={{ borderColor: "var(--sidebar-border)" }}
-        >
-          {/* Gather 로고 아이콘 */}
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-violet-400 to-indigo-500 shadow-sm">
-            <Sparkles className="h-4 w-4 text-white" aria-hidden="true" />
-          </div>
+        {/* 사이드바 로고 영역: 단순 텍스트 로고 */}
+        <div className="flex h-14 items-center border-b border-[#d2d2d7] px-5 dark:border-[#3a3a3c]">
           <Link
             href="/dashboard"
-            className="bg-gradient-to-r from-violet-300 to-indigo-300 bg-clip-text text-lg font-bold tracking-tight text-transparent"
+            className="text-xl font-semibold text-black dark:text-white"
+            aria-label="Gather 대시보드로 이동"
           >
             Gather
           </Link>
         </div>
 
-        {/* 사이드바 네비게이션 */}
-        <nav className="flex flex-1 flex-col gap-1 p-3" aria-label="주요 메뉴">
-          {/* 네비게이션 섹션 레이블 */}
-          <p
-            className="mb-1 px-3 text-xs font-medium uppercase tracking-widest"
-            style={{ color: "color-mix(in oklch, var(--sidebar-foreground) 40%, transparent)" }}
-          >
-            메뉴
-          </p>
-
+        {/* 사이드바 네비게이션 링크 */}
+        <nav className="flex flex-1 flex-col gap-0.5 p-3" aria-label="주요 메뉴">
           {/* 대시보드 링크 */}
           <Link
             href="/dashboard"
-            className="group flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-150 hover:bg-white/10"
-            style={{ color: "var(--sidebar-foreground)" }}
+            className="flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium text-black transition-colors hover:bg-[#f5f5f7] dark:text-white dark:hover:bg-[#1c1c1e]"
           >
-            <LayoutDashboard
-              className="h-4 w-4 opacity-70 transition-opacity group-hover:opacity-100"
-              aria-hidden="true"
-            />
+            <LayoutDashboard className="h-4 w-4 text-[#6e6e73]" aria-hidden="true" />
             대시보드
           </Link>
 
           {/* 새 모임 만들기 링크 */}
           <Link
             href="/dashboard/events/new"
-            className="group flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-150 hover:bg-white/10"
-            style={{ color: "var(--sidebar-foreground)" }}
+            className="flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium text-black transition-colors hover:bg-[#f5f5f7] dark:text-white dark:hover:bg-[#1c1c1e]"
           >
-            <PlusCircle
-              className="h-4 w-4 opacity-70 transition-opacity group-hover:opacity-100"
-              aria-hidden="true"
-            />
-            새 모임 만들기
+            <PlusCircle className="h-4 w-4 text-[#6e6e73]" aria-hidden="true" />새 모임 만들기
           </Link>
         </nav>
 
         {/* 사이드바 하단: 프로필 + 로그아웃 */}
-        <div className="space-y-3 border-t p-4" style={{ borderColor: "var(--sidebar-border)" }}>
+        <div className="border-t border-[#d2d2d7] p-4 dark:border-[#3a3a3c]">
           {/* 사용자 프로필 섹션 */}
-          <div className="flex items-center gap-3 rounded-lg px-2 py-2">
-            {/* 아바타: 인디고 계열 그라디언트 배경 */}
+          <div className="mb-3 flex items-center gap-3 rounded-lg px-2 py-2">
+            {/* 아바타: Apple 스타일 중성 회색 배경 */}
             <Avatar size="default">
-              <AvatarFallback className="bg-gradient-to-br from-violet-500 to-indigo-600 text-xs font-semibold text-white">
+              <AvatarFallback className="bg-[#e8e8ed] text-xs font-semibold text-black dark:bg-[#3a3a3c] dark:text-white">
                 {CURRENT_USER.name[0]}
               </AvatarFallback>
             </Avatar>
             <div className="flex min-w-0 flex-col">
-              <span
-                className="truncate text-sm font-medium"
-                style={{ color: "var(--sidebar-foreground)" }}
-              >
+              <span className="truncate text-sm font-medium text-black dark:text-white">
                 {CURRENT_USER.name}
               </span>
-              <span
-                className="truncate text-xs"
-                style={{ color: "color-mix(in oklch, var(--sidebar-foreground) 55%, transparent)" }}
-              >
-                {CURRENT_USER.email}
-              </span>
+              <span className="truncate text-xs text-[#6e6e73]">{CURRENT_USER.email}</span>
             </div>
           </div>
           {/* 로그아웃 버튼 */}
@@ -98,22 +67,22 @@ export default function ProtectedLayout({ children }: { children: React.ReactNod
       </aside>
 
       <div className="flex flex-1 flex-col">
-        {/* ─── 상단 헤더 ──────────────────────────────────────────────────── */}
-        <header className="flex h-16 items-center justify-between border-b bg-background/80 px-6 backdrop-blur-sm">
-          {/* 모바일 로고 */}
-          <div className="flex items-center gap-2 md:hidden">
-            <div className="flex h-7 w-7 items-center justify-center rounded-md bg-gradient-to-br from-violet-500 to-indigo-600">
-              <Sparkles className="h-3.5 w-3.5 text-white" aria-hidden="true" />
-            </div>
+        {/* ─── 모바일/공통 상단 헤더: frosted glass ───────────────────── */}
+        <header className="flex h-14 items-center justify-between border-b border-[#d2d2d7] bg-white/80 px-6 backdrop-blur-xl dark:border-[#3a3a3c] dark:bg-black/80">
+          {/* 모바일 전용 로고 */}
+          <div className="md:hidden">
             <Link
               href="/dashboard"
-              className="bg-gradient-to-r from-violet-600 to-indigo-600 bg-clip-text text-lg font-bold tracking-tight text-transparent dark:from-violet-400 dark:to-indigo-400"
+              className="text-lg font-semibold text-black dark:text-white"
+              aria-label="Gather 대시보드로 이동"
             >
               Gather
             </Link>
           </div>
+          {/* 데스크톱: 빈 공간 (로고는 사이드바에 있음) */}
+          <div className="hidden md:block" />
           {/* 헤더 우측: 테마 스위처 */}
-          <div className="ml-auto flex items-center gap-3">
+          <div className="flex items-center gap-3">
             <ThemeSwitcher />
           </div>
         </header>
@@ -122,26 +91,26 @@ export default function ProtectedLayout({ children }: { children: React.ReactNod
         <main className="flex-1 p-6 pb-20 md:pb-6">{children}</main>
       </div>
 
-      {/* ─── 모바일 하단 고정 네비게이션 ───────────────────────────────────── */}
+      {/* ─── 모바일 하단 고정 네비게이션: frosted glass ──────────────── */}
       <nav
-        className="fixed bottom-0 left-0 right-0 z-50 flex border-t bg-background/95 pb-2 backdrop-blur-sm md:hidden"
+        className="fixed bottom-0 left-0 right-0 z-50 flex border-t border-[#d2d2d7] bg-white/90 pb-2 backdrop-blur-xl dark:border-[#3a3a3c] dark:bg-black/90 md:hidden"
         aria-label="모바일 하단 네비게이션"
       >
         {/* 대시보드 링크 */}
         <Link
           href="/dashboard"
-          className="flex flex-1 flex-col items-center justify-center gap-1 py-2 text-muted-foreground transition-colors hover:text-primary"
+          className="flex flex-1 flex-col items-center justify-center gap-1 py-2 text-[#6e6e73] transition-colors hover:text-black dark:hover:text-white"
         >
           <LayoutDashboard className="h-5 w-5" aria-hidden="true" />
           <span className="text-xs font-medium">대시보드</span>
         </Link>
 
-        {/* 새 모임 만들기 — 중앙 강조 버튼 */}
+        {/* 새 모임 만들기 — 중앙 Apple blue pill 버튼 */}
         <Link
           href="/dashboard/events/new"
-          className="flex flex-1 flex-col items-center justify-center gap-1 py-2 text-muted-foreground transition-colors hover:text-primary"
+          className="flex flex-1 flex-col items-center justify-center gap-1 py-2 text-[#6e6e73] transition-colors hover:text-black dark:hover:text-white"
         >
-          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-violet-500 to-indigo-600 shadow-md">
+          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#0071e3]">
             <PlusCircle className="h-5 w-5 text-white" aria-hidden="true" />
           </div>
           <span className="text-xs font-medium">새 모임</span>
@@ -149,7 +118,7 @@ export default function ProtectedLayout({ children }: { children: React.ReactNod
 
         {/* 설정 — 준비 중 */}
         <span
-          className="flex flex-1 cursor-not-allowed flex-col items-center justify-center gap-1 py-2 text-muted-foreground/40"
+          className="flex flex-1 cursor-not-allowed flex-col items-center justify-center gap-1 py-2 text-[#6e6e73]/40"
           aria-disabled="true"
           title="준비 중입니다"
         >

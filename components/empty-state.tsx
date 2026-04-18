@@ -12,17 +12,17 @@ interface EmptyStateProps {
 export function EmptyState({ icon, title, description, action, className }: EmptyStateProps) {
   return (
     <div className={cn("flex flex-col items-center justify-center py-20 text-center", className)}>
-      {/* 아이콘 컨테이너 — 일러스트레이션 느낌의 그라디언트 배경 */}
-      <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-2xl bg-gradient-to-br from-violet-100 to-indigo-100 text-violet-500 shadow-sm dark:from-violet-900/30 dark:to-indigo-900/30 dark:text-violet-400">
-        {icon ?? <Inbox className="h-9 w-9" aria-hidden="true" />}
+      {/* 아이콘 컨테이너 — Apple 스타일: gradient 없음, 단순 회색 배경 */}
+      <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-[#f5f5f7] text-[#6e6e73] dark:bg-[#1c1c1e] dark:text-[#6e6e73]">
+        {icon ?? <Inbox className="h-7 w-7" aria-hidden="true" />}
       </div>
 
       {/* 제목 */}
-      <p className="text-base font-semibold text-foreground">{title}</p>
+      <p className="text-base font-semibold text-black dark:text-white">{title}</p>
 
-      {/* 설명 텍스트 */}
+      {/* 설명 텍스트 — Apple 서브텍스트 컬러 */}
       {description && (
-        <p className="mt-2 max-w-sm text-sm leading-relaxed text-muted-foreground">{description}</p>
+        <p className="mt-2 max-w-sm text-sm leading-relaxed text-[#6e6e73]">{description}</p>
       )}
 
       {/* 액션 영역 (버튼 등) */}

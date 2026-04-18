@@ -7,48 +7,41 @@ interface EventStatusBadgeProps {
   className?: string;
 }
 
-// 이벤트 상태별 세련된 pill 스타일 — 선명한 컬러와 점 인디케이터 포함
-const EVENT_STATUS_MAP: Record<
-  EventStatus,
-  { label: string; className: string; dotColor: string }
-> = {
+// 이벤트 상태별 Apple 스타일 pill — dot 없음, 단순 배경색+텍스트
+const EVENT_STATUS_MAP: Record<EventStatus, { label: string; className: string }> = {
   draft: {
     label: "임시저장",
-    className: "border-border/60 bg-muted/60 text-muted-foreground",
-    dotColor: "bg-muted-foreground",
+    // Apple 회색: #f5f5f7 배경, #6e6e73 텍스트
+    className: "bg-[#f5f5f7] text-[#6e6e73] dark:bg-[#2c2c2e] dark:text-[#ebebf0]",
   },
   open: {
     label: "모집중",
-    className:
-      "border-violet-200 bg-violet-50 text-violet-700 dark:border-violet-700/50 dark:bg-violet-900/30 dark:text-violet-300",
-    dotColor: "bg-violet-500 dark:bg-violet-400",
+    // Apple blue 계열: #e3f0ff 배경, #0071e3 텍스트
+    className: "bg-[#e3f0ff] text-[#0071e3] dark:bg-[#0071e3]/20 dark:text-[#4dabf7]",
   },
   closed: {
     label: "마감",
-    className:
-      "border-slate-200 bg-slate-50 text-slate-600 dark:border-slate-700/50 dark:bg-slate-800/40 dark:text-slate-400",
-    dotColor: "bg-slate-400",
+    // Apple 회색 계열
+    className: "bg-[#f5f5f7] text-[#6e6e73] dark:bg-[#2c2c2e] dark:text-[#ebebf0]",
   },
   cancelled: {
     label: "취소됨",
-    className:
-      "border-red-200 bg-red-50 text-red-600 dark:border-red-800/50 dark:bg-red-900/20 dark:text-red-400",
-    dotColor: "bg-red-500 dark:bg-red-400",
+    // Apple 레드 계열: 연한 빨강 배경
+    className: "bg-red-50 text-red-600 dark:bg-red-900/20 dark:text-red-400",
   },
 };
 
 export function EventStatusBadge({ status, className }: EventStatusBadgeProps) {
-  const { label, className: colorClass, dotColor } = EVENT_STATUS_MAP[status];
+  const { label, className: colorClass } = EVENT_STATUS_MAP[status];
   return (
+    /* Apple 스타일 pill: rounded-full, border 없음, 작은 패딩 */
     <span
       className={cn(
-        "inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-xs font-medium",
+        "inline-flex items-center rounded-full px-3 py-1 text-xs font-medium",
         colorClass,
         className,
       )}
     >
-      {/* 상태 인디케이터 점 */}
-      <span className={cn("h-1.5 w-1.5 rounded-full", dotColor)} aria-hidden="true" />
       {label}
     </span>
   );
@@ -59,28 +52,32 @@ interface MemberStatusBadgeProps {
   className?: string;
 }
 
+// 멤버 상태 배지 — Apple 스타일 pill
 const MEMBER_STATUS_MAP: Record<MemberStatus, { label: string; className: string }> = {
   confirmed: {
     label: "확정",
-    className:
-      "bg-emerald-100 text-emerald-700 border-emerald-200 dark:bg-emerald-900/30 dark:text-emerald-400 dark:border-emerald-800/50",
+    // Apple 그린 계열: #e8f5e9 배경
+    className: "bg-[#e8f5e9] text-[#1a7f37] dark:bg-[#1a7f37]/20 dark:text-[#4ade80]",
   },
   waiting: {
     label: "대기",
-    className:
-      "bg-amber-100 text-amber-700 border-amber-200 dark:bg-amber-900/30 dark:text-amber-400 dark:border-amber-800/50",
+    // Apple 옐로우 계열
+    className: "bg-amber-50 text-amber-700 dark:bg-amber-900/20 dark:text-amber-400",
   },
   rejected: {
     label: "거절",
-    className:
-      "bg-red-100 text-red-700 border-red-200 dark:bg-red-900/30 dark:text-red-400 dark:border-red-800/50",
+    // Apple 레드 계열
+    className: "bg-red-50 text-red-600 dark:bg-red-900/20 dark:text-red-400",
   },
 };
 
 export function MemberStatusBadge({ status, className }: MemberStatusBadgeProps) {
   const { label, className: colorClass } = MEMBER_STATUS_MAP[status];
   return (
-    <Badge variant="outline" className={cn(colorClass, className)}>
+    <Badge
+      variant="outline"
+      className={cn("rounded-full border-0 px-3 py-1 text-xs font-medium", colorClass, className)}
+    >
       {label}
     </Badge>
   );
@@ -91,23 +88,27 @@ interface PaymentStatusBadgeProps {
   className?: string;
 }
 
+// 납부 상태 배지 — Apple 스타일 pill
 const PAYMENT_STATUS_MAP: Record<PaymentStatus, { label: string; className: string }> = {
   paid: {
     label: "납부완료",
-    className:
-      "bg-emerald-100 text-emerald-700 border-emerald-200 dark:bg-emerald-900/30 dark:text-emerald-400 dark:border-emerald-800/50",
+    // Apple 그린 계열
+    className: "bg-[#e8f5e9] text-[#1a7f37] dark:bg-[#1a7f37]/20 dark:text-[#4ade80]",
   },
   pending: {
     label: "미납",
-    className:
-      "bg-orange-100 text-orange-700 border-orange-200 dark:bg-orange-900/30 dark:text-orange-400 dark:border-orange-800/50",
+    // Apple 오렌지 계열
+    className: "bg-orange-50 text-orange-700 dark:bg-orange-900/20 dark:text-orange-400",
   },
 };
 
 export function PaymentStatusBadge({ status, className }: PaymentStatusBadgeProps) {
   const { label, className: colorClass } = PAYMENT_STATUS_MAP[status];
   return (
-    <Badge variant="outline" className={cn(colorClass, className)}>
+    <Badge
+      variant="outline"
+      className={cn("rounded-full border-0 px-3 py-1 text-xs font-medium", colorClass, className)}
+    >
       {label}
     </Badge>
   );

@@ -9,21 +9,19 @@ interface PageHeaderProps {
 
 export function PageHeader({ title, description, action, className }: PageHeaderProps) {
   return (
-    // 섹션 시작을 자연스럽게 구분 — border-b 없이 spacing으로 계층감 표현
+    /* Apple 스타일 페이지 헤더: border-b로 섹션 구분, 넉넉한 하단 여백 */
     <div
       className={cn(
-        "flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between sm:gap-6",
+        "mb-6 flex flex-col gap-4 border-b border-[#d2d2d7] pb-6 dark:border-[#3a3a3c] sm:flex-row sm:items-start sm:justify-between sm:gap-6",
         className,
       )}
     >
       <div className="flex flex-col gap-1.5">
-        {/* 페이지 제목 — 굵기와 자간으로 계층 강조 */}
-        <h1 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl">{title}</h1>
-        {/* 설명 텍스트 */}
+        {/* 페이지 제목 — Apple 스타일: 크고 굵게, tight 자간 */}
+        <h1 className="text-3xl font-bold tracking-tight text-black dark:text-white">{title}</h1>
+        {/* 설명 텍스트 — Apple 서브텍스트 컬러 */}
         {description && (
-          <p className="text-sm leading-relaxed text-muted-foreground md:text-base">
-            {description}
-          </p>
+          <p className="text-sm leading-relaxed text-[#6e6e73] md:text-base">{description}</p>
         )}
       </div>
 
