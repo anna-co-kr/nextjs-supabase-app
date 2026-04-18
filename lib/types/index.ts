@@ -11,6 +11,8 @@ export interface UserProfile {
 
 export type EventStatus = "draft" | "open" | "closed" | "cancelled";
 export type EventType = "one_time" | "recurring";
+/** 참여 신청 승인 방식: auto(즉시 확정) | manual(주최자 수동 확정) */
+export type ApprovalType = "auto" | "manual";
 
 export interface Event {
   id: string;
@@ -18,6 +20,8 @@ export interface Event {
   description: string;
   type: EventType;
   status: EventStatus;
+  /** 참여 신청 승인 방식 — PRD F003: 주최자 수동 확정 지원 */
+  approvalType: ApprovalType;
   host: UserProfile;
   maxCapacity: number;
   confirmedCount: number;
@@ -25,6 +29,9 @@ export interface Event {
   startDate: string;
   endDate?: string;
   location?: string;
+  /** 참여 신청 마감일 — PRD registration_deadline 컬럼에 대응 */
+  registrationDeadline?: string;
+  /** 공개 공유 링크 슬러그 — PRD public_slug 컬럼에 대응, View 모델에서 shareToken으로 통일 */
   shareToken: string;
   createdAt: string;
   updatedAt: string;
@@ -42,6 +49,8 @@ export interface EventMember {
   note?: string;
   appliedAt: string;
   confirmedAt?: string;
+  /** 거절 처리된 일시 — 주최자가 거절 처리한 시점 추적 */
+  rejectedAt?: string;
 }
 
 // ─── 공지 ────────────────────────────────────────────────────────────────────
