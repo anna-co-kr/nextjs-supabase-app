@@ -364,14 +364,14 @@
       "name": "Task 009: 공지 작성/목록 및 댓글/리액션 UI",
       "description": "주최자용 공지 관리 페이지와 참여자용 공지 목록 페이지 UI를 구현한다. 고정 공지, 댓글, 이모지 리액션 UI를 포함한다.",
       "notes": "'use client' 필요 (고정 토글, 댓글 입력, 리액션 클릭). 이모지 리액션은 클릭 시 count +1 useState로 로컬 업데이트 (더미).",
-      "status": "pending",
+      "status": "in_progress",
       "dependencies": [
         {
           "taskId": "75bb61cc-2130-48db-9d2a-ba345cd40b4d"
         }
       ],
       "createdAt": "2026-04-17T07:28:21.586Z",
-      "updatedAt": "2026-04-17T07:28:21.586Z",
+      "updatedAt": "2026-04-18T08:02:46.740Z",
       "relatedFiles": [
         {
           "path": "app/(protected)/events/[eventId]/announcements/page.tsx",
