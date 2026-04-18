@@ -338,14 +338,14 @@
       "name": "Task 008: 참여자 관리 페이지 UI",
       "description": "주최자가 참여 신청자를 확정/거절하고 대기자를 관리하는 페이지 UI를 더미 데이터로 구현한다.",
       "notes": "'use client' 필요 (탭 인터랙션, 버튼 클릭). CSV 버튼은 disabled 또는 '준비 중' 상태로 표시 가능.",
-      "status": "in_progress",
+      "status": "completed",
       "dependencies": [
         {
           "taskId": "75bb61cc-2130-48db-9d2a-ba345cd40b4d"
         }
       ],
       "createdAt": "2026-04-17T07:28:21.586Z",
-      "updatedAt": "2026-04-18T08:03:10.286Z",
+      "updatedAt": "2026-04-18T08:03:11.165Z",
       "relatedFiles": [
         {
           "path": "app/(protected)/events/[eventId]/members/page.tsx",
@@ -366,7 +366,8 @@
       "implementationGuide": "1. app/(protected)/events/[eventId]/members/page.tsx 구현:\n   - 상단: 이벤트명 breadcrumb\n   - Tabs: '확정' / '대기' / '거절' 탭\n   - 각 탭에 MemberItem 리스트\n   - 수동 승인 이벤트: 각 MemberItem에 '승인' / '거절' 버튼 (더미, onClick console.log)\n   - 확정 탭: 참여 인원 카운트 표시 (확정 n / 최대 n)\n   - 대기 탭: 대기 순서 번호 표시\n   - 상단 우측: 'CSV 내보내기' 버튼 (더미, Phase 3에서 구현)\n   - 빈 상태: EmptyState 컴포넌트\n   - mockMembers 더미 데이터 사용",
       "verificationCriteria": "확정/대기/거절 탭 전환 동작. 각 탭에 더미 참여자 목록 표시. 승인/거절 버튼 클릭 시 console.log 동작. 모바일 반응형 확인.",
       "analysisResult": "Gather 서비스 Phase 1 UI/UX 프로토타입 구현. 더미 데이터 기반으로 PRD의 13개 페이지 전체 UI를 Next.js 15 App Router + TypeScript + TailwindCSS + shadcn/ui로 구축한다. DB/백엔드 연동 없이 전체 사용자 플로우를 체험 가능하게 만드는 것이 목표. 기존 Supabase 인증 로직은 유지하고 UI만 교체한다.",
-      "summary": "참여자 관리 페이지 구현 완료. 확정/대기/거절 Tabs 필터, 모바일 카드(sm:hidden) + 데스크톱 Table(hidden sm:block) 이중 레이아웃. MemberStatusBadge, Avatar 적용. MemberTableProps interface 정의. CSV 내보내기 버튼 UI 포함."
+      "summary": "참여자 관리 페이지 구현 완료. 확정/대기/거절 Tabs 필터, 모바일 카드(sm:hidden) + 데스크톱 Table(hidden sm:block) 이중 레이아웃. MemberStatusBadge, Avatar 적용. MemberTableProps interface 정의. CSV 내보내기 버튼 UI 포함.",
+      "completedAt": "2026-04-18T08:03:11.163Z"
     },
     {
       "id": "4648843c-8976-43ca-8abb-70e77c661ff0",
