@@ -257,14 +257,14 @@
       "name": "Task 006: 이벤트 생성/수정/관리 페이지 UI",
       "description": "이벤트 생성 폼, 이벤트 관리(수정) 페이지, 공개 링크 표시 UI를 구현한다. React Hook Form + Zod 검증만 포함하며 실제 저장 로직은 없다.",
       "notes": "날짜/시간 입력은 input type='datetime-local' 사용 (외부 DatePicker 라이브러리 없이). 'use client' 필요 (폼 인터랙션). 공개 링크 복사 버튼은 클라이언트 전용 동작.",
-      "status": "pending",
+      "status": "in_progress",
       "dependencies": [
         {
           "taskId": "75bb61cc-2130-48db-9d2a-ba345cd40b4d"
         }
       ],
       "createdAt": "2026-04-17T07:28:21.586Z",
-      "updatedAt": "2026-04-17T07:28:21.586Z",
+      "updatedAt": "2026-04-18T08:02:42.823Z",
       "relatedFiles": [
         {
           "path": "app/(protected)/events/new/page.tsx",
