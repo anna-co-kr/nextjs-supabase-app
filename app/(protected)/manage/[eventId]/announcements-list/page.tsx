@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { EmptyState } from "@/components/empty-state";
 import { PageHeader } from "@/components/page-header";
+import { cn } from "@/lib/utils";
 import { DUMMY_EVENTS, DUMMY_ANNOUNCEMENTS } from "@/lib/fixtures";
 
 export default async function AnnouncementsListPage({
@@ -69,11 +70,12 @@ export default async function AnnouncementsListPage({
                       <span
                         key={r.emoji}
                         title="Phase 3에서 리액션 기능이 추가됩니다"
-                        className={`flex cursor-default items-center gap-1 rounded-full border px-2 py-0.5 text-xs ${
+                        className={cn(
+                          "flex cursor-default items-center gap-1 rounded-full border px-2 py-0.5 text-xs",
                           r.reactedByMe
                             ? "border-primary/30 bg-primary/10 text-primary"
-                            : "border-border bg-muted"
-                        }`}
+                            : "border-border bg-muted",
+                        )}
                       >
                         {r.emoji} {r.count}
                       </span>
@@ -83,7 +85,7 @@ export default async function AnnouncementsListPage({
 
                 {/* 댓글 */}
                 {a.comments.length > 0 && (
-                  <div className="space-y-2 border-t pt-3">
+                  <div className="space-y-2 border-t border-border pt-3">
                     {a.comments.map((c) => (
                       <div key={c.id} className="flex gap-2">
                         <Avatar className="mt-0.5 h-6 w-6 shrink-0">

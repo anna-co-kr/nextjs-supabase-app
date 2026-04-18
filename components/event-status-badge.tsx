@@ -26,8 +26,8 @@ const EVENT_STATUS_MAP: Record<EventStatus, { label: string; className: string }
   },
   cancelled: {
     label: "취소됨",
-    // 레드 계열
-    className: "bg-red-50 text-red-600 dark:bg-red-900/20 dark:text-red-400",
+    // destructive 시맨틱 색상 사용 — 다크모드 자동 대응
+    className: "bg-destructive/10 text-destructive",
   },
 };
 
@@ -56,18 +56,18 @@ interface MemberStatusBadgeProps {
 const MEMBER_STATUS_MAP: Record<MemberStatus, { label: string; className: string }> = {
   confirmed: {
     label: "확정",
-    // 그린 계열
+    // 그린 계열 — 시맨틱 토큰 미존재, 다크모드 명시 대응
     className: "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400",
   },
   waiting: {
     label: "대기",
-    // Apple 옐로우 계열
+    // 앰버 계열 — 시맨틱 토큰 미존재, 다크모드 명시 대응
     className: "bg-amber-50 text-amber-700 dark:bg-amber-900/20 dark:text-amber-400",
   },
   rejected: {
     label: "거절",
-    // Apple 레드 계열
-    className: "bg-red-50 text-red-600 dark:bg-red-900/20 dark:text-red-400",
+    // destructive 시맨틱 색상 사용 — 다크모드 자동 대응
+    className: "bg-destructive/10 text-destructive",
   },
 };
 
@@ -92,13 +92,13 @@ interface PaymentStatusBadgeProps {
 const PAYMENT_STATUS_MAP: Record<PaymentStatus, { label: string; className: string }> = {
   paid: {
     label: "납부완료",
-    // 그린 계열
+    // 그린 계열 — 시맨틱 토큰 미존재, 다크모드 명시 대응
     className: "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400",
   },
   pending: {
     label: "미납",
-    // Apple 오렌지 계열
-    className: "bg-orange-50 text-orange-700 dark:bg-orange-900/20 dark:text-orange-400",
+    // destructive 시맨틱 색상 사용 — 다크모드 자동 대응
+    className: "bg-destructive/10 text-destructive",
   },
 };
 

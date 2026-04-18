@@ -27,13 +27,13 @@ const features = [
 
 export default function LandingPage() {
   return (
-    <div className="flex min-h-screen flex-col bg-white dark:bg-black">
+    <div className="flex min-h-screen flex-col bg-background">
       {/* ─── 헤더: frosted glass sticky 네비게이션 ─────────────────────── */}
       <header className="sticky top-0 z-50 flex h-12 items-center justify-between border-b border-border/60 bg-background/80 px-6 backdrop-blur-xl md:px-10">
         {/* 로고: 단순하고 클린한 텍스트 */}
         <Link
           href="/"
-          className="text-sm font-semibold text-black dark:text-white"
+          className="text-sm font-semibold text-foreground"
           aria-label="Gather 홈으로 이동"
         >
           Gather

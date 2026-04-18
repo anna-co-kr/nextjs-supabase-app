@@ -20,7 +20,7 @@ export function EventCard({ event, href }: EventCardProps) {
       <div className="group h-full rounded-lg bg-muted p-5 transition-colors duration-200 hover:bg-accent">
         {/* 카드 상단: 제목 + 상태 배지 */}
         <div className="mb-4 flex items-start justify-between gap-2">
-          <h3 className="line-clamp-2 text-lg font-semibold tracking-tight text-black dark:text-white">
+          <h3 className="line-clamp-2 text-lg font-semibold tracking-tight text-foreground">
             {event.title}
           </h3>
           <EventStatusBadge status={event.status} className="shrink-0" />
@@ -62,7 +62,7 @@ export function EventCard({ event, href }: EventCardProps) {
             <span
               className={cn(
                 "text-xs font-semibold tabular-nums",
-                isFull ? "text-red-500" : "text-primary",
+                isFull ? "text-destructive" : "text-primary",
               )}
             >
               {capacityPercent}%
@@ -82,7 +82,7 @@ export function EventCard({ event, href }: EventCardProps) {
           <div
             className={cn(
               "h-full rounded-full transition-all duration-500",
-              isFull ? "bg-red-500" : capacityPercent >= 80 ? "bg-amber-500" : "bg-primary",
+              isFull ? "bg-destructive" : capacityPercent >= 80 ? "bg-amber-500" : "bg-primary",
             )}
             style={{ width: `${Math.min(capacityPercent, 100)}%` }}
           />

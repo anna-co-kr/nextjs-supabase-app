@@ -47,7 +47,12 @@ export default async function EventManagePage({
         </Card>
         <Card>
           <CardContent className="pt-6 text-center">
-            <p className="text-3xl font-bold text-yellow-600">{event.waitingCount}</p>
+            <p
+              className="text-3xl font-bold text-amber-600 dark:text-amber-400"
+              aria-label={`대기자 ${event.waitingCount}명`}
+            >
+              {event.waitingCount}
+            </p>
             <p className="text-sm text-muted-foreground">대기자</p>
           </CardContent>
         </Card>

@@ -2,7 +2,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 export function EventCardSkeleton() {
   return (
-    <div className="space-y-3 rounded-lg border p-4">
+    /* 스켈레톤: EventCard와 동일한 bg-muted 배경으로 통일 */
+    <div className="space-y-3 rounded-lg bg-muted p-5">
       <div className="flex items-start justify-between">
         <Skeleton className="h-5 w-3/4" />
         <Skeleton className="h-5 w-14" />
@@ -30,6 +31,11 @@ export function EventListSkeleton({ count = 6 }: { count?: number }) {
   );
 }
 
+/**
+ * 테이블 행 스켈레톤 — 반드시 <tbody> 또는 <table> 내부에서 사용
+ * @example
+ * <table><tbody><TableRowSkeleton cols={5} /></tbody></table>
+ */
 export function TableRowSkeleton({ cols = 4 }: { cols?: number }) {
   return (
     <tr>

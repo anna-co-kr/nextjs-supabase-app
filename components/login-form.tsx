@@ -45,7 +45,7 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
       <div className="flex flex-col items-center gap-2 text-center">
         <Link
           href="/"
-          className="text-2xl font-semibold text-black dark:text-white"
+          className="text-2xl font-semibold text-foreground"
           aria-label="Gather 홈으로 이동"
         >
           Gather
@@ -85,7 +85,7 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
                 className="h-12 rounded-md border-border text-sm"
                 {...register("email")}
               />
-              {errors.email && <p className="text-xs text-red-500">{errors.email.message}</p>}
+              {errors.email && <p className="text-xs text-destructive">{errors.email.message}</p>}
             </div>
 
             <div className="space-y-1.5">
@@ -108,12 +108,15 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
                 className="h-12 rounded-md border-border text-sm"
                 {...register("password")}
               />
-              {errors.password && <p className="text-xs text-red-500">{errors.password.message}</p>}
+              {errors.password && (
+                <p className="text-xs text-destructive">{errors.password.message}</p>
+              )}
             </div>
 
             {/* 폼 전체 에러 메시지 */}
+            {/* 폼 에러 박스: destructive 시맨틱 색상 사용 */}
             {errors.root && (
-              <div className="rounded-md bg-red-50 px-3 py-2.5 text-sm text-red-600 dark:bg-red-900/20 dark:text-red-400">
+              <div className="rounded-md bg-destructive/10 px-3 py-2.5 text-sm text-destructive">
                 {errors.root.message}
               </div>
             )}

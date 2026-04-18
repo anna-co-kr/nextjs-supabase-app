@@ -7,7 +7,7 @@ import { LayoutDashboard, PlusCircle, Settings } from "lucide-react";
 
 export default function ProtectedLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex min-h-screen bg-white dark:bg-black">
+    <div className="flex min-h-screen bg-background">
       {/* ─── 데스크톱 사이드바 ──────────────────────────────────────── */}
       <aside
         className="hidden w-60 shrink-0 flex-col border-r border-border bg-background md:flex"
@@ -17,7 +17,7 @@ export default function ProtectedLayout({ children }: { children: React.ReactNod
         <div className="flex h-14 items-center border-b border-border px-5">
           <Link
             href="/dashboard"
-            className="text-xl font-semibold text-black dark:text-white"
+            className="text-xl font-semibold text-foreground"
             aria-label="Gather 대시보드로 이동"
           >
             Gather

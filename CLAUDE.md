@@ -20,6 +20,7 @@ npm run type-check   # TypeScript 타입 검사
 ```
 NEXT_PUBLIC_SUPABASE_URL=
 NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=
+NEXT_PUBLIC_SITE_URL=        # 프로덕션 배포 URL (예: https://yourdomain.com), 미설정 시 http://localhost:3000 사용
 ```
 
 ## 프로젝트 개요
