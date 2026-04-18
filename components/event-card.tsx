@@ -16,8 +16,8 @@ export function EventCard({ event, href }: EventCardProps) {
 
   return (
     <Link href={href} className="block">
-      {/* Apple 스타일 카드: border 없음, shadow 없음, 배경색으로만 구분 */}
-      <div className="group h-full rounded-2xl bg-[#f5f5f7] p-5 transition-colors duration-200 hover:bg-[#ebebf0] dark:bg-[#1c1c1e] dark:hover:bg-[#2c2c2e]">
+      {/* 카드: border 없음, shadow 없음, 배경색으로만 구분 */}
+      <div className="group h-full rounded-lg bg-muted p-5 transition-colors duration-200 hover:bg-accent">
         {/* 카드 상단: 제목 + 상태 배지 */}
         <div className="mb-4 flex items-start justify-between gap-2">
           <h3 className="line-clamp-2 text-lg font-semibold tracking-tight text-black dark:text-white">
@@ -30,22 +30,27 @@ export function EventCard({ event, href }: EventCardProps) {
         <div className="space-y-2">
           {/* 날짜 */}
           <div className="flex items-center gap-2">
-            <CalendarDays className="h-3.5 w-3.5 shrink-0 text-[#6e6e73]" aria-hidden="true" />
-            <span className="text-sm text-[#6e6e73]">{formatEventDate(event.startDate)}</span>
+            <CalendarDays
+              className="h-3.5 w-3.5 shrink-0 text-muted-foreground"
+              aria-hidden="true"
+            />
+            <span className="text-sm text-muted-foreground">
+              {formatEventDate(event.startDate)}
+            </span>
           </div>
 
           {/* 장소 */}
           {event.location && (
             <div className="flex items-center gap-2">
-              <MapPin className="h-3.5 w-3.5 shrink-0 text-[#6e6e73]" aria-hidden="true" />
-              <span className="line-clamp-1 text-sm text-[#6e6e73]">{event.location}</span>
+              <MapPin className="h-3.5 w-3.5 shrink-0 text-muted-foreground" aria-hidden="true" />
+              <span className="line-clamp-1 text-sm text-muted-foreground">{event.location}</span>
             </div>
           )}
 
           {/* 참여 인원 */}
           <div className="flex items-center gap-2">
-            <Users className="h-3.5 w-3.5 shrink-0 text-[#6e6e73]" aria-hidden="true" />
-            <span className="flex-1 text-sm text-[#6e6e73]">
+            <Users className="h-3.5 w-3.5 shrink-0 text-muted-foreground" aria-hidden="true" />
+            <span className="flex-1 text-sm text-muted-foreground">
               {event.confirmedCount}/{event.maxCapacity}명
               {event.waitingCount > 0 && (
                 <span className="ml-1.5 font-medium text-amber-600 dark:text-amber-400">
@@ -57,7 +62,7 @@ export function EventCard({ event, href }: EventCardProps) {
             <span
               className={cn(
                 "text-xs font-semibold tabular-nums",
-                isFull ? "text-red-500" : "text-[#0071e3]",
+                isFull ? "text-red-500" : "text-primary",
               )}
             >
               {capacityPercent}%
@@ -65,9 +70,9 @@ export function EventCard({ event, href }: EventCardProps) {
           </div>
         </div>
 
-        {/* Apple 스타일 progress bar: Apple blue, 높이 h-1 */}
+        {/* 진행 바: primary 색상, 높이 h-1 */}
         <div
-          className="mt-4 h-1 w-full overflow-hidden rounded-full bg-[#d2d2d7] dark:bg-[#3a3a3c]"
+          className="mt-4 h-1 w-full overflow-hidden rounded-full bg-border"
           role="progressbar"
           aria-valuenow={capacityPercent}
           aria-valuemin={0}
@@ -77,7 +82,7 @@ export function EventCard({ event, href }: EventCardProps) {
           <div
             className={cn(
               "h-full rounded-full transition-all duration-500",
-              isFull ? "bg-red-500" : capacityPercent >= 80 ? "bg-amber-500" : "bg-[#0071e3]",
+              isFull ? "bg-red-500" : capacityPercent >= 80 ? "bg-amber-500" : "bg-primary",
             )}
             style={{ width: `${Math.min(capacityPercent, 100)}%` }}
           />

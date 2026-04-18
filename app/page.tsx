@@ -29,7 +29,7 @@ export default function LandingPage() {
   return (
     <div className="flex min-h-screen flex-col bg-white dark:bg-black">
       {/* ─── 헤더: frosted glass sticky 네비게이션 ─────────────────────── */}
-      <header className="sticky top-0 z-50 flex h-12 items-center justify-between border-b border-[#d2d2d7]/60 bg-white/80 px-6 backdrop-blur-xl dark:border-[#3a3a3c]/60 dark:bg-black/80 md:px-10">
+      <header className="sticky top-0 z-50 flex h-12 items-center justify-between border-b border-border/60 bg-background/80 px-6 backdrop-blur-xl md:px-10">
         {/* 로고: 단순하고 클린한 텍스트 */}
         <Link
           href="/"
@@ -45,15 +45,15 @@ export default function LandingPage() {
           <Button
             variant="ghost"
             size="sm"
-            className="h-8 rounded-full px-4 text-xs font-medium text-black hover:bg-[#f5f5f7] dark:text-white dark:hover:bg-[#1c1c1e]"
+            className="h-8 rounded-md px-4 text-xs font-medium"
             asChild
           >
             <Link href="/auth/login">로그인</Link>
           </Button>
-          {/* Apple 스타일 pill 버튼 */}
+          {/* 시작하기 버튼 */}
           <Button
             size="sm"
-            className="h-8 rounded-full bg-[#0071e3] px-4 text-xs font-medium text-white hover:bg-[#0077ed]"
+            className="h-8 rounded-md bg-primary px-4 text-xs font-medium text-primary-foreground hover:bg-primary/90"
             asChild
           >
             <Link href="/auth/sign-up">시작하기</Link>
@@ -62,11 +62,11 @@ export default function LandingPage() {
       </header>
 
       <main className="flex flex-1 flex-col">
-        {/* ─── 히어로 섹션: 검정 배경, 풀 블리드 ─────────────────────── */}
-        <section className="flex flex-col items-center justify-center bg-black px-6 py-28 text-center text-white md:px-10 md:py-40">
+        {/* ─── 히어로 섹션: 전경색 배경, 풀 블리드 ───────────────────── */}
+        <section className="flex flex-col items-center justify-center bg-foreground px-6 py-28 text-center text-background md:px-10 md:py-40">
           <div className="flex flex-col items-center gap-6">
             {/* 상단 뱃지 */}
-            <span className="text-sm font-medium text-[#0071e3]">새로운 방식의 모임 운영</span>
+            <span className="text-sm font-medium text-background/70">새로운 방식의 모임 운영</span>
 
             {/* 메인 헤드라인 — Apple 스타일 극도로 크고 굵게 */}
             <h1 className="max-w-4xl text-6xl font-bold tracking-tight md:text-8xl">
@@ -76,7 +76,7 @@ export default function LandingPage() {
             </h1>
 
             {/* 서브텍스트 */}
-            <p className="max-w-2xl text-xl leading-relaxed text-[#6e6e73] md:text-2xl">
+            <p className="max-w-2xl text-xl leading-relaxed text-background/60 md:text-2xl">
               공지, 참여자 관리, 정산까지.
               <br className="hidden sm:block" />
               모임 운영의 처음부터 끝까지 하나의 링크로.
@@ -84,10 +84,10 @@ export default function LandingPage() {
 
             {/* CTA 버튼 2개: pill 스타일 */}
             <div className="mt-2 flex flex-col items-center gap-3 sm:flex-row">
-              {/* 기본 Apple blue pill 버튼 */}
+              {/* 기본 CTA 버튼 */}
               <Button
                 size="lg"
-                className="h-12 rounded-full bg-[#0071e3] px-8 text-base font-medium text-white hover:bg-[#0077ed]"
+                className="h-12 rounded-md bg-background px-8 text-base font-medium text-foreground hover:bg-background/90"
                 asChild
               >
                 <Link href="/auth/sign-up">
@@ -95,10 +95,10 @@ export default function LandingPage() {
                   <ArrowRight className="ml-2 h-4 w-4" aria-hidden="true" />
                 </Link>
               </Button>
-              {/* 보조 버튼: 회색 pill */}
+              {/* 보조 버튼: 반투명 배경 */}
               <Button
                 size="lg"
-                className="h-12 rounded-full bg-[#1d1d1f] px-8 text-base font-medium text-white hover:bg-[#2d2d2f]"
+                className="h-12 rounded-md bg-background/10 px-8 text-base font-medium text-background hover:bg-background/20"
                 asChild
               >
                 <Link href="/events/jeju-spring-2025">데모 보기</Link>
@@ -107,11 +107,11 @@ export default function LandingPage() {
           </div>
         </section>
 
-        {/* ─── 기능 소개 섹션: 흰 배경 ───────────────────────────────── */}
-        <section className="bg-white px-6 py-28 text-black md:px-10 md:py-40">
+        {/* ─── 기능 소개 섹션: 배경색 ────────────────────────────────── */}
+        <section className="bg-background px-6 py-28 text-foreground md:px-10 md:py-40">
           <div className="mx-auto max-w-screen-xl">
             {/* 섹션 레이블 */}
-            <p className="mb-4 text-sm font-medium uppercase tracking-widest text-[#6e6e73]">
+            <p className="mb-4 text-sm font-medium uppercase tracking-widest text-muted-foreground">
               왜 Gather인가요?
             </p>
 
@@ -123,7 +123,7 @@ export default function LandingPage() {
             </h2>
 
             {/* 기능 목록: border-top으로 구분, 카드 없음 */}
-            <div className="divide-y divide-[#d2d2d7] dark:divide-[#3a3a3c]">
+            <div className="divide-y divide-border">
               {features.map(({ icon: Icon, title, description }) => (
                 <div
                   key={title}
@@ -131,32 +131,32 @@ export default function LandingPage() {
                 >
                   {/* 좌측: 아이콘 + 제목 */}
                   <div className="flex min-w-[200px] items-center gap-3 sm:flex-col sm:items-start sm:gap-2">
-                    <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#f5f5f7]">
-                      <Icon className="h-5 w-5 text-[#0071e3]" aria-hidden="true" />
+                    <span className="flex h-10 w-10 items-center justify-center rounded-md bg-muted">
+                      <Icon className="h-5 w-5 text-foreground" aria-hidden="true" />
                     </span>
                     <h3 className="text-2xl font-semibold tracking-tight">{title}</h3>
                   </div>
 
                   {/* 우측: 설명 */}
-                  <p className="text-lg leading-relaxed text-[#6e6e73]">{description}</p>
+                  <p className="text-lg leading-relaxed text-muted-foreground">{description}</p>
                 </div>
               ))}
             </div>
           </div>
         </section>
 
-        {/* ─── CTA 섹션: 진한 그라디언트 배경 ───────────────────────── */}
-        <section className="bg-gradient-to-b from-[#1d1d1f] to-black px-6 py-28 text-center text-white md:px-10 md:py-40">
+        {/* ─── CTA 섹션: 전경색 배경 ──────────────────────────────────── */}
+        <section className="bg-foreground px-6 py-28 text-center text-background md:px-10 md:py-40">
           <div className="mx-auto max-w-screen-xl">
             <h2 className="mb-6 text-4xl font-bold tracking-tight md:text-5xl">
               지금 바로 시작하세요
             </h2>
-            <p className="mb-10 text-lg text-[#6e6e73]">
+            <p className="mb-10 text-lg text-background/60">
               무료로 가입하고 첫 번째 모임을 만들어보세요.
             </p>
             <Button
               size="lg"
-              className="h-12 rounded-full bg-[#0071e3] px-10 text-base font-medium text-white hover:bg-[#0077ed]"
+              className="h-12 rounded-md bg-background px-10 text-base font-medium text-foreground hover:bg-background/90"
               asChild
             >
               <Link href="/auth/sign-up">
@@ -168,12 +168,14 @@ export default function LandingPage() {
         </section>
       </main>
 
-      {/* ─── 푸터: 심플 Apple 스타일 ─────────────────────────────────── */}
-      <footer className="border-t border-[#d2d2d7] bg-[#f5f5f7] px-6 py-8 dark:border-[#3a3a3c] dark:bg-[#1d1d1f]">
+      {/* ─── 푸터: 심플 스타일 ──────────────────────────────────────── */}
+      <footer className="border-t border-border bg-muted px-6 py-8">
         <div className="mx-auto max-w-screen-xl">
           <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
-            <span className="text-sm font-semibold text-black dark:text-white">Gather</span>
-            <span className="text-xs text-[#6e6e73]">© 2025 Gather. All rights reserved.</span>
+            <span className="text-sm font-semibold text-foreground">Gather</span>
+            <span className="text-xs text-muted-foreground">
+              © 2025 Gather. All rights reserved.
+            </span>
           </div>
         </div>
       </footer>

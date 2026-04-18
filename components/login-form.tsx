@@ -50,15 +50,15 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
         >
           Gather
         </Link>
-        <p className="text-sm text-[#6e6e73]">모임 운영의 모든 것</p>
+        <p className="text-sm text-muted-foreground">모임 운영의 모든 것</p>
       </div>
 
-      {/* 로그인 카드 — Apple 스타일: border 없음, 둥근 모서리, 흰 배경 */}
-      <div className="rounded-2xl bg-white p-8 shadow-sm dark:bg-[#1c1c1e]">
+      {/* 로그인 카드 — border 없음, 둥근 모서리, 카드 배경 */}
+      <div className="rounded-lg bg-card p-8 shadow-sm">
         {/* 카드 헤더 */}
         <div className="mb-6 text-center">
-          <h1 className="text-xl font-semibold text-black dark:text-white">로그인</h1>
-          <p className="mt-1 text-sm text-[#6e6e73]">Gather에 오신 것을 환영합니다</p>
+          <h1 className="text-xl font-semibold text-foreground">로그인</h1>
+          <p className="mt-1 text-sm text-muted-foreground">Gather에 오신 것을 환영합니다</p>
         </div>
 
         <div className="space-y-5">
@@ -66,25 +66,23 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
           <GoogleAuthButton label="Google로 계속하기" />
 
           {/* 구분선 */}
-          <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-[#d2d2d7] dark:after:border-[#3a3a3c]">
-            <span className="relative z-10 bg-white px-2 text-[#6e6e73] dark:bg-[#1c1c1e]">
-              또는
-            </span>
+          <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">
+            <span className="relative z-10 bg-card px-2 text-muted-foreground">또는</span>
           </div>
 
           {/* 이메일/비밀번호 폼 */}
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <div className="space-y-1.5">
-              <Label htmlFor="email" className="text-sm font-medium text-black dark:text-white">
+              <Label htmlFor="email" className="text-sm font-medium text-foreground">
                 이메일
               </Label>
-              {/* Apple 스타일 input: rounded-xl, h-12 */}
+              {/* 이메일 입력 필드 */}
               <Input
                 id="email"
                 type="email"
                 placeholder="name@example.com"
                 autoComplete="email"
-                className="h-12 rounded-xl border-[#d2d2d7] text-sm dark:border-[#3a3a3c]"
+                className="h-12 rounded-md border-border text-sm"
                 {...register("email")}
               />
               {errors.email && <p className="text-xs text-red-500">{errors.email.message}</p>}
@@ -92,16 +90,13 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
 
             <div className="space-y-1.5">
               <div className="flex items-center justify-between">
-                <Label
-                  htmlFor="password"
-                  className="text-sm font-medium text-black dark:text-white"
-                >
+                <Label htmlFor="password" className="text-sm font-medium text-foreground">
                   비밀번호
                 </Label>
-                {/* 비밀번호 찾기 링크: Apple blue 텍스트 */}
+                {/* 비밀번호 찾기 링크 */}
                 <Link
                   href="/auth/forgot-password"
-                  className="text-xs text-[#0071e3] underline-offset-4 hover:underline"
+                  className="text-xs text-primary underline-offset-4 hover:underline"
                 >
                   비밀번호를 잊으셨나요?
                 </Link>
@@ -110,7 +105,7 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
                 id="password"
                 type="password"
                 autoComplete="current-password"
-                className="h-12 rounded-xl border-[#d2d2d7] text-sm dark:border-[#3a3a3c]"
+                className="h-12 rounded-md border-border text-sm"
                 {...register("password")}
               />
               {errors.password && <p className="text-xs text-red-500">{errors.password.message}</p>}
@@ -118,15 +113,15 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
 
             {/* 폼 전체 에러 메시지 */}
             {errors.root && (
-              <div className="rounded-xl bg-red-50 px-3 py-2.5 text-sm text-red-600 dark:bg-red-900/20 dark:text-red-400">
+              <div className="rounded-md bg-red-50 px-3 py-2.5 text-sm text-red-600 dark:bg-red-900/20 dark:text-red-400">
                 {errors.root.message}
               </div>
             )}
 
-            {/* 로그인 제출 버튼 — Apple blue pill 스타일 */}
+            {/* 로그인 제출 버튼 */}
             <Button
               type="submit"
-              className="h-12 w-full rounded-full bg-[#0071e3] text-sm font-medium text-white hover:bg-[#0077ed]"
+              className="h-12 w-full rounded-md bg-primary text-sm font-medium text-primary-foreground hover:bg-primary/90"
               disabled={isSubmitting}
             >
               {isSubmitting ? "로그인 중..." : "로그인"}
@@ -134,11 +129,11 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
           </form>
 
           {/* 회원가입 유도 링크 */}
-          <p className="text-center text-sm text-[#6e6e73]">
+          <p className="text-center text-sm text-muted-foreground">
             계정이 없으신가요?{" "}
             <Link
               href="/auth/sign-up"
-              className="font-medium text-[#0071e3] underline-offset-4 hover:underline"
+              className="font-medium text-primary underline-offset-4 hover:underline"
             >
               회원가입
             </Link>

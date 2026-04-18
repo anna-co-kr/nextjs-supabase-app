@@ -38,7 +38,7 @@ export default function ApplyPage({ params }: { params: Promise<{ slug: string }
   };
 
   const publicHeader = (
-    <header className="sticky top-0 z-50 flex h-14 items-center justify-between border-b border-[#d2d2d7] bg-white/80 px-6 backdrop-blur-xl dark:border-[#3a3a3c] dark:bg-black/80">
+    <header className="sticky top-0 z-50 flex h-14 items-center justify-between border-b border-border bg-background/80 px-6 backdrop-blur-xl">
       <Link href="/" className="text-base font-semibold tracking-tight">
         Gather
       </Link>
@@ -103,7 +103,7 @@ export default function ApplyPage({ params }: { params: Promise<{ slug: string }
           </Card>
         </div>
       </main>
-      <footer className="border-t border-[#d2d2d7] bg-[#f5f5f7] py-6 text-center text-xs text-[#6e6e73] dark:border-[#3a3a3c] dark:bg-[#1c1c1e]">
+      <footer className="border-t border-border bg-muted py-6 text-center text-xs text-muted-foreground">
         © 2025 Gather. All rights reserved.
       </footer>
     </div>

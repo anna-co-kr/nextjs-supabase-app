@@ -19,7 +19,7 @@ export default async function PublicEventPage({ params }: { params: Promise<{ sl
   return (
     <div className="flex min-h-screen flex-col">
       {/* 공개 헤더 */}
-      <header className="sticky top-0 z-50 flex h-14 items-center justify-between border-b border-[#d2d2d7] bg-white/80 px-6 backdrop-blur-xl dark:border-[#3a3a3c] dark:bg-black/80">
+      <header className="sticky top-0 z-50 flex h-14 items-center justify-between border-b border-border bg-background/80 px-6 backdrop-blur-xl">
         <Link href="/" className="text-base font-semibold tracking-tight">
           Gather
         </Link>
@@ -28,7 +28,7 @@ export default async function PublicEventPage({ params }: { params: Promise<{ sl
           <Button variant="ghost" size="sm" asChild>
             <Link href="/auth/login">로그인</Link>
           </Button>
-          <Button size="sm" className="rounded-full bg-[#0071e3] hover:bg-[#0077ed]" asChild>
+          <Button size="sm" className="rounded-md bg-primary hover:bg-primary/90" asChild>
             <Link href="/auth/sign-up">시작하기</Link>
           </Button>
         </div>
@@ -99,7 +99,7 @@ export default async function PublicEventPage({ params }: { params: Promise<{ sl
         </div>
       </main>
 
-      <footer className="border-t border-[#d2d2d7] bg-[#f5f5f7] py-6 text-center text-xs text-[#6e6e73] dark:border-[#3a3a3c] dark:bg-[#1c1c1e]">
+      <footer className="border-t border-border bg-muted py-6 text-center text-xs text-muted-foreground">
         © 2025 Gather. All rights reserved.
       </footer>
     </div>
