@@ -417,7 +417,7 @@
         }
       ],
       "createdAt": "2026-04-17T07:28:21.586Z",
-      "updatedAt": "2026-04-18T08:02:47.778Z",
+      "updatedAt": "2026-04-18T08:03:16.551Z",
       "relatedFiles": [
         {
           "path": "app/(protected)/events/[eventId]/settlements/page.tsx",
@@ -442,7 +442,8 @@
       ],
       "implementationGuide": "1. app/(protected)/events/[eventId]/settlements/page.tsx (주최자용) 구현:\n   - 정산 항목 입력: 항목명 Input + 금액 Input(number) + '항목 추가' 버튼 (동적 필드 추가)\n   - 분담 방식 RadioGroup: 균등 / 개별 지정 / 비율\n   - 1인당 금액 프리뷰: 클라이언트 계산 (총액 / 인원수, 균등 방식)\n   - 주최자 계좌 등록: 은행명 Select + 계좌번호 Input\n   - 납부 현황 Table: 참여자명, 납부금액, 납부 여부 Checkbox, 납부일시\n   - '미납자 리마인더 발송' Button (더미, toast 표시)\n   - '정산 저장' Button (더미)\n   - mockSettlementItems, mockPayments 사용\n\n2. app/(protected)/events/[eventId]/settlements-status/page.tsx (참여자용) 구현:\n   - 본인 납부 금액 강조 표시 Card\n   - 비용 항목별 상세 내역 Table\n   - 납부 상태 Badge (미납/납부 완료)\n   - 주최자 계좌번호 표시 + '복사' 버튼",
       "verificationCriteria": "항목 추가 버튼으로 동적 입력 필드 추가 동작. 균등 방식 선택 시 1인당 금액 자동 계산 표시. 납부 체크박스 토글 동작. 계좌번호 복사 버튼 동작.",
-      "analysisResult": "Gather 서비스 Phase 1 UI/UX 프로토타입 구현. 더미 데이터 기반으로 PRD의 13개 페이지 전체 UI를 Next.js 15 App Router + TypeScript + TailwindCSS + shadcn/ui로 구축한다. DB/백엔드 연동 없이 전체 사용자 플로우를 체험 가능하게 만드는 것이 목표. 기존 Supabase 인증 로직은 유지하고 UI만 교체한다."
+      "analysisResult": "Gather 서비스 Phase 1 UI/UX 프로토타입 구현. 더미 데이터 기반으로 PRD의 13개 페이지 전체 UI를 Next.js 15 App Router + TypeScript + TailwindCSS + shadcn/ui로 구축한다. DB/백엔드 연동 없이 전체 사용자 플로우를 체험 가능하게 만드는 것이 목표. 기존 Supabase 인증 로직은 유지하고 UI만 교체한다.",
+      "summary": "정산 관리 페이지 구현 완료. 입금 계좌 등록/수정 UI, 총액/납부완료/미납 요약 카드(다크모드 색상 지원). 항목별 모바일 카드 + 데스크톱 Table 이중 레이아웃. PaymentStatusBadge 적용. SPLIT_TYPE_LABEL 매핑 완료."
     },
     {
       "id": "0c8db784-090a-4bb2-89c4-39b1068974a8",
