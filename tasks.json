@@ -174,14 +174,14 @@
       "name": "Task 004: 인증 페이지 UI 리디자인",
       "description": "기존 Supabase 인증 로직을 유지하면서 로그인/회원가입/비밀번호 재설정 페이지 UI를 Gather 서비스 디자인으로 리디자인한다.",
       "notes": "Supabase 인증 로직(supabase.auth.signIn, signUp, resetPassword) 변경 금지. UI와 검증 로직만 교체. React Hook Form은 package.json에 없으므로 npm install react-hook-form @hookform/resolvers zod 필요.",
-      "status": "pending",
+      "status": "in_progress",
       "dependencies": [
         {
           "taskId": "75bb61cc-2130-48db-9d2a-ba345cd40b4d"
         }
       ],
       "createdAt": "2026-04-17T07:28:21.586Z",
-      "updatedAt": "2026-04-17T07:28:21.586Z",
+      "updatedAt": "2026-04-18T08:02:40.519Z",
       "relatedFiles": [
         {
           "path": "app/auth/login/page.tsx",
