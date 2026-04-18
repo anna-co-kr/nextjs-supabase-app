@@ -7,22 +7,50 @@ interface EventStatusBadgeProps {
   className?: string;
 }
 
+// 이벤트 상태별 세련된 pill 스타일 — 선명한 컬러와 점 인디케이터 포함
 const EVENT_STATUS_MAP: Record<
   EventStatus,
-  { label: string; variant: "default" | "secondary" | "destructive" | "outline" }
+  { label: string; className: string; dotColor: string }
 > = {
-  draft: { label: "임시저장", variant: "outline" },
-  open: { label: "모집중", variant: "default" },
-  closed: { label: "마감", variant: "secondary" },
-  cancelled: { label: "취소됨", variant: "destructive" },
+  draft: {
+    label: "임시저장",
+    className: "border-border/60 bg-muted/60 text-muted-foreground",
+    dotColor: "bg-muted-foreground",
+  },
+  open: {
+    label: "모집중",
+    className:
+      "border-violet-200 bg-violet-50 text-violet-700 dark:border-violet-700/50 dark:bg-violet-900/30 dark:text-violet-300",
+    dotColor: "bg-violet-500 dark:bg-violet-400",
+  },
+  closed: {
+    label: "마감",
+    className:
+      "border-slate-200 bg-slate-50 text-slate-600 dark:border-slate-700/50 dark:bg-slate-800/40 dark:text-slate-400",
+    dotColor: "bg-slate-400",
+  },
+  cancelled: {
+    label: "취소됨",
+    className:
+      "border-red-200 bg-red-50 text-red-600 dark:border-red-800/50 dark:bg-red-900/20 dark:text-red-400",
+    dotColor: "bg-red-500 dark:bg-red-400",
+  },
 };
 
 export function EventStatusBadge({ status, className }: EventStatusBadgeProps) {
-  const { label, variant } = EVENT_STATUS_MAP[status];
+  const { label, className: colorClass, dotColor } = EVENT_STATUS_MAP[status];
   return (
-    <Badge variant={variant} className={className}>
+    <span
+      className={cn(
+        "inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-xs font-medium",
+        colorClass,
+        className,
+      )}
+    >
+      {/* 상태 인디케이터 점 */}
+      <span className={cn("h-1.5 w-1.5 rounded-full", dotColor)} aria-hidden="true" />
       {label}
-    </Badge>
+    </span>
   );
 }
 
@@ -35,17 +63,17 @@ const MEMBER_STATUS_MAP: Record<MemberStatus, { label: string; className: string
   confirmed: {
     label: "확정",
     className:
-      "bg-green-100 text-green-700 border-green-200 dark:bg-green-900/30 dark:text-green-400 dark:border-green-800",
+      "bg-emerald-100 text-emerald-700 border-emerald-200 dark:bg-emerald-900/30 dark:text-emerald-400 dark:border-emerald-800/50",
   },
   waiting: {
     label: "대기",
     className:
-      "bg-yellow-100 text-yellow-700 border-yellow-200 dark:bg-yellow-900/30 dark:text-yellow-400 dark:border-yellow-800",
+      "bg-amber-100 text-amber-700 border-amber-200 dark:bg-amber-900/30 dark:text-amber-400 dark:border-amber-800/50",
   },
   rejected: {
     label: "거절",
     className:
-      "bg-red-100 text-red-700 border-red-200 dark:bg-red-900/30 dark:text-red-400 dark:border-red-800",
+      "bg-red-100 text-red-700 border-red-200 dark:bg-red-900/30 dark:text-red-400 dark:border-red-800/50",
   },
 };
 
@@ -67,12 +95,12 @@ const PAYMENT_STATUS_MAP: Record<PaymentStatus, { label: string; className: stri
   paid: {
     label: "납부완료",
     className:
-      "bg-green-100 text-green-700 border-green-200 dark:bg-green-900/30 dark:text-green-400 dark:border-green-800",
+      "bg-emerald-100 text-emerald-700 border-emerald-200 dark:bg-emerald-900/30 dark:text-emerald-400 dark:border-emerald-800/50",
   },
   pending: {
     label: "미납",
     className:
-      "bg-orange-100 text-orange-700 border-orange-200 dark:bg-orange-900/30 dark:text-orange-400 dark:border-orange-800",
+      "bg-orange-100 text-orange-700 border-orange-200 dark:bg-orange-900/30 dark:text-orange-400 dark:border-orange-800/50",
   },
 };
 
