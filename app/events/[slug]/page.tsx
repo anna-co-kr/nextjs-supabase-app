@@ -16,7 +16,7 @@ export default async function PublicEventPage({ params }: { params: Promise<{ sl
   const isClosed = event.status === "closed" || event.status === "cancelled";
 
   return (
-    <div className="mx-auto max-w-lg px-4 py-10">
+    <div className="mx-auto max-w-lg px-4 py-6 sm:py-10">
       <Card>
         <CardHeader>
           <div className="flex items-start justify-between gap-2">

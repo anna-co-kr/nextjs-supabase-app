@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import {
   Table,
   TableBody,
@@ -16,27 +17,25 @@ import { PageHeader } from "@/components/page-header";
 import { DUMMY_EVENTS, DUMMY_MEMBERS } from "@/lib/fixtures";
 import type { EventMember } from "@/lib/types";
 
-function MemberTable({ members }: { members: EventMember[] }) {
+interface MemberTableProps {
+  members: EventMember[];
+}
+
+function MemberTable({ members }: MemberTableProps) {
   if (members.length === 0) {
     return <EmptyState title="해당하는 참여자가 없습니다" className="py-10" />;
   }
+
   return (
-    <Table>
-      <TableHeader>
-        <TableRow>
-          <TableHead>참여자</TableHead>
-          <TableHead>신청일</TableHead>
-          <TableHead>상태</TableHead>
-          <TableHead>메모</TableHead>
-          <TableHead className="text-right">관리</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
+    <>
+      {/* 모바일 카드 목록 — sm 이상에서 숨김 */}
+      <div className="flex flex-col gap-3 sm:hidden">
         {members.map((m) => (
-          <TableRow key={m.id}>
-            <TableCell>
+          <Card key={m.id}>
+            <CardContent className="flex flex-col gap-3 p-4">
+              {/* 참여자 정보 */}
               <div className="flex items-center gap-2">
-                <Avatar className="h-7 w-7">
+                <Avatar className="h-8 w-8">
                   <AvatarFallback className="text-xs">{m.user.name[0]}</AvatarFallback>
                 </Avatar>
                 <div>
@@ -44,16 +43,20 @@ function MemberTable({ members }: { members: EventMember[] }) {
                   <p className="text-xs text-muted-foreground">{m.user.email}</p>
                 </div>
               </div>
-            </TableCell>
-            <TableCell className="text-sm text-muted-foreground">
-              {new Date(m.appliedAt).toLocaleDateString("ko-KR")}
-            </TableCell>
-            <TableCell>
-              <MemberStatusBadge status={m.status} />
-            </TableCell>
-            <TableCell className="text-sm text-muted-foreground">{m.note ?? "—"}</TableCell>
-            <TableCell className="text-right">
-              <div className="flex justify-end gap-1">
+
+              {/* 신청일 및 상태 */}
+              <div className="flex items-center justify-between">
+                <span className="text-xs text-muted-foreground">
+                  {new Date(m.appliedAt).toLocaleDateString("ko-KR")} 신청
+                </span>
+                <MemberStatusBadge status={m.status} />
+              </div>
+
+              {/* 메모 (있는 경우에만 표시) */}
+              {m.note && <p className="text-xs text-muted-foreground">{m.note}</p>}
+
+              {/* 관리 버튼 */}
+              <div className="flex gap-2 pt-1">
                 {m.status !== "confirmed" && (
                   <Button size="sm" variant="outline" className="h-7 text-xs">
                     확정
@@ -65,11 +68,64 @@ function MemberTable({ members }: { members: EventMember[] }) {
                   </Button>
                 )}
               </div>
-            </TableCell>
-          </TableRow>
+            </CardContent>
+          </Card>
         ))}
-      </TableBody>
-    </Table>
+      </div>
+
+      {/* 데스크톱 테이블 — sm 미만에서 숨김 */}
+      <div className="hidden sm:block">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>참여자</TableHead>
+              <TableHead>신청일</TableHead>
+              <TableHead>상태</TableHead>
+              <TableHead>메모</TableHead>
+              <TableHead className="text-right">관리</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {members.map((m) => (
+              <TableRow key={m.id}>
+                <TableCell>
+                  <div className="flex items-center gap-2">
+                    <Avatar className="h-7 w-7">
+                      <AvatarFallback className="text-xs">{m.user.name[0]}</AvatarFallback>
+                    </Avatar>
+                    <div>
+                      <p className="text-sm font-medium">{m.user.name}</p>
+                      <p className="text-xs text-muted-foreground">{m.user.email}</p>
+                    </div>
+                  </div>
+                </TableCell>
+                <TableCell className="text-sm text-muted-foreground">
+                  {new Date(m.appliedAt).toLocaleDateString("ko-KR")}
+                </TableCell>
+                <TableCell>
+                  <MemberStatusBadge status={m.status} />
+                </TableCell>
+                <TableCell className="text-sm text-muted-foreground">{m.note ?? "—"}</TableCell>
+                <TableCell className="text-right">
+                  <div className="flex justify-end gap-1">
+                    {m.status !== "confirmed" && (
+                      <Button size="sm" variant="outline" className="h-7 text-xs">
+                        확정
+                      </Button>
+                    )}
+                    {m.status !== "rejected" && (
+                      <Button size="sm" variant="outline" className="h-7 text-xs text-destructive">
+                        거절
+                      </Button>
+                    )}
+                  </div>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
+    </>
   );
 }
 
@@ -96,10 +152,16 @@ export default async function MembersPage({ params }: { params: Promise<{ eventI
       />
 
       <Tabs defaultValue="confirmed">
-        <TabsList>
-          <TabsTrigger value="confirmed">확정 ({confirmed.length})</TabsTrigger>
-          <TabsTrigger value="waiting">대기 ({waiting.length})</TabsTrigger>
-          <TabsTrigger value="rejected">거절 ({rejected.length})</TabsTrigger>
+        <TabsList className="w-full sm:w-auto">
+          <TabsTrigger value="confirmed" className="flex-1 sm:flex-none">
+            확정 ({confirmed.length})
+          </TabsTrigger>
+          <TabsTrigger value="waiting" className="flex-1 sm:flex-none">
+            대기 ({waiting.length})
+          </TabsTrigger>
+          <TabsTrigger value="rejected" className="flex-1 sm:flex-none">
+            거절 ({rejected.length})
+          </TabsTrigger>
         </TabsList>
         <TabsContent value="confirmed">
           <MemberTable members={confirmed} />

@@ -91,14 +91,15 @@ export default function ProtectedLayout({ children }: { children: React.ReactNod
           <span className="text-xs font-medium">새 모임</span>
         </Link>
 
-        {/* 설정 링크 (Phase 5 예정, 현재는 대시보드로 연결) */}
-        <Link
-          href="/dashboard"
-          className="flex flex-1 flex-col items-center justify-center gap-1 py-2 text-muted-foreground transition-colors hover:text-foreground"
+        {/* 설정 링크 (Phase 5 예정) */}
+        <span
+          className="flex flex-1 cursor-not-allowed flex-col items-center justify-center gap-1 py-2 text-muted-foreground/40"
+          aria-disabled="true"
+          title="준비 중입니다"
         >
           <Settings className="h-5 w-5" aria-hidden="true" />
           <span className="text-xs font-medium">설정</span>
-        </Link>
+        </span>
       </nav>
     </div>
   );

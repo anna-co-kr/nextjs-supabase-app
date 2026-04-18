@@ -53,7 +53,8 @@ export default async function SettlementsPage({
         </CardHeader>
         <CardContent>
           {settlement?.bankAccount ? (
-            <div className="flex items-center gap-4 text-sm">
+            // 모바일: 세로 배치 / sm 이상: 가로 배치
+            <div className="flex flex-col gap-1 text-sm sm:flex-row sm:items-center sm:gap-4">
               <span className="font-medium">{settlement.bankAccount.bankName}</span>
               <code className="rounded bg-muted px-2 py-0.5">
                 {settlement.bankAccount.accountNumber}
@@ -77,13 +78,17 @@ export default async function SettlementsPage({
           </Card>
           <Card>
             <CardContent className="pt-5 text-center">
-              <p className="text-2xl font-bold text-green-600">{settlement.paidCount}명</p>
+              <p className="text-2xl font-bold text-green-600 dark:text-green-400">
+                {settlement.paidCount}명
+              </p>
               <p className="text-xs text-muted-foreground">납부 완료</p>
             </CardContent>
           </Card>
           <Card>
             <CardContent className="pt-5 text-center">
-              <p className="text-2xl font-bold text-orange-600">{settlement.unpaidCount}명</p>
+              <p className="text-2xl font-bold text-orange-600 dark:text-orange-400">
+                {settlement.unpaidCount}명
+              </p>
               <p className="text-xs text-muted-foreground">미납</p>
             </CardContent>
           </Card>
@@ -117,34 +122,59 @@ export default async function SettlementsPage({
                 </div>
               </CardHeader>
               <CardContent>
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>참여자</TableHead>
-                      <TableHead className="text-right">금액</TableHead>
-                      <TableHead>상태</TableHead>
-                      <TableHead className="text-right">납부 확인</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {item.payments.map((p) => (
-                      <TableRow key={p.id}>
-                        <TableCell className="text-sm">{p.member.user.name}</TableCell>
-                        <TableCell className="text-right text-sm">
+                {/* 모바일 결제 목록 — sm 이상에서 숨김 */}
+                <div className="flex flex-col gap-2 sm:hidden">
+                  {item.payments.map((p) => (
+                    <div key={p.id} className="flex items-center justify-between">
+                      {/* 왼쪽: 이름과 금액 */}
+                      <div>
+                        <p className="text-sm font-medium">{p.member.user.name}</p>
+                        <p className="text-sm text-muted-foreground">
                           {p.amount.toLocaleString()}원
-                        </TableCell>
-                        <TableCell>
-                          <PaymentStatusBadge status={p.status} />
-                        </TableCell>
-                        <TableCell className="text-right">
-                          <Button variant="outline" size="sm" className="h-7 text-xs">
-                            {p.status === "paid" ? "취소" : "확인"}
-                          </Button>
-                        </TableCell>
+                        </p>
+                      </div>
+                      {/* 오른쪽: 상태 뱃지와 확인/취소 버튼 */}
+                      <div className="flex items-center gap-2">
+                        <PaymentStatusBadge status={p.status} />
+                        <Button variant="outline" size="sm" className="h-7 text-xs">
+                          {p.status === "paid" ? "취소" : "확인"}
+                        </Button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* 데스크톱 테이블 — sm 미만에서 숨김 */}
+                <div className="hidden sm:block">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>참여자</TableHead>
+                        <TableHead className="text-right">금액</TableHead>
+                        <TableHead>상태</TableHead>
+                        <TableHead className="text-right">납부 확인</TableHead>
                       </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
+                    </TableHeader>
+                    <TableBody>
+                      {item.payments.map((p) => (
+                        <TableRow key={p.id}>
+                          <TableCell className="text-sm">{p.member.user.name}</TableCell>
+                          <TableCell className="text-right text-sm">
+                            {p.amount.toLocaleString()}원
+                          </TableCell>
+                          <TableCell>
+                            <PaymentStatusBadge status={p.status} />
+                          </TableCell>
+                          <TableCell className="text-right">
+                            <Button variant="outline" size="sm" className="h-7 text-xs">
+                              {p.status === "paid" ? "취소" : "확인"}
+                            </Button>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </div>
               </CardContent>
             </Card>
           ))}

@@ -36,8 +36,8 @@ export default function DashboardPage() {
       />
 
       <Tabs defaultValue="hosting">
-        <TabsList>
-          <TabsTrigger value="hosting">
+        <TabsList className="w-full sm:w-auto">
+          <TabsTrigger value="hosting" className="flex-1 sm:flex-none">
             주최 중인 모임
             {hostingEvents.length > 0 && (
               <span className="ml-1.5 rounded-full bg-primary/10 px-1.5 py-0.5 text-xs font-medium">
@@ -45,7 +45,7 @@ export default function DashboardPage() {
               </span>
             )}
           </TabsTrigger>
-          <TabsTrigger value="participating">
+          <TabsTrigger value="participating" className="flex-1 sm:flex-none">
             참여 중인 모임
             {participatingEvents.length > 0 && (
               <span className="ml-1.5 rounded-full bg-primary/10 px-1.5 py-0.5 text-xs font-medium">

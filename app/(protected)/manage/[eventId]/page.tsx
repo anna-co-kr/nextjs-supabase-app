@@ -63,9 +63,13 @@ export default async function EventManagePage({
         <CardHeader>
           <CardTitle className="text-base">참여 링크 공유</CardTitle>
         </CardHeader>
-        <CardContent className="flex items-center gap-2">
-          <code className="flex-1 truncate rounded bg-muted px-3 py-2 text-sm">{shareUrl}</code>
-          <CopyButton text={shareUrl} className="shrink-0" />
+        {/* 모바일: 세로 배치 / sm 이상: 가로 배치 */}
+        <CardContent className="flex flex-col gap-2 sm:flex-row sm:items-center">
+          {/* 모바일: break-all로 URL 줄바꿈 / sm 이상: truncate로 한 줄 표시 */}
+          <code className="flex-1 break-all rounded bg-muted px-3 py-2 text-sm sm:min-w-0 sm:truncate sm:break-normal">
+            {shareUrl}
+          </code>
+          <CopyButton text={shareUrl} className="sm:shrink-0" />
         </CardContent>
       </Card>
 

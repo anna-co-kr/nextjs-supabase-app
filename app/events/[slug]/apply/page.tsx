@@ -39,7 +39,7 @@ export default function ApplyPage({ params }: { params: Promise<{ slug: string }
 
   if (!event) {
     return (
-      <div className="mx-auto max-w-lg px-4 py-10">
+      <div className="mx-auto max-w-lg px-4 py-6 sm:py-10">
         <EmptyState title="존재하지 않는 모임입니다" description="링크를 다시 확인해주세요" />
       </div>
     );
@@ -48,11 +48,11 @@ export default function ApplyPage({ params }: { params: Promise<{ slug: string }
   const isFull = event.confirmedCount >= event.maxCapacity;
 
   return (
-    <div className="mx-auto max-w-lg px-4 py-10">
+    <div className="mx-auto max-w-lg px-4 py-6 sm:py-10">
       <Card>
         <CardHeader>
           <CardTitle>{isFull ? "대기자 신청" : "참여 신청"}</CardTitle>
-          {event && <p className="text-sm text-muted-foreground">{event.title}</p>}
+          <p className="text-sm text-muted-foreground">{event.title}</p>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
@@ -68,7 +68,7 @@ export default function ApplyPage({ params }: { params: Promise<{ slug: string }
             </div>
 
             {isFull && (
-              <p className="rounded-lg bg-yellow-50 p-3 text-sm text-yellow-700">
+              <p className="rounded-lg bg-yellow-50 p-3 text-sm text-yellow-700 dark:bg-yellow-900/20 dark:text-yellow-400">
                 현재 정원이 꽉 찼습니다. 대기자로 등록되며, 자리가 생기면 자동으로 확정됩니다.
               </p>
             )}
