@@ -7,86 +7,91 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
-import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { CheckCircle } from "lucide-react";
+
+const schema = z.object({
+  email: z.string().min(1, "이메일을 입력해주세요").email("올바른 이메일 형식이 아닙니다"),
+});
+
+type FormValues = z.infer<typeof schema>;
 
 export function ForgotPasswordForm({ className, ...props }: React.ComponentPropsWithoutRef<"div">) {
-  const [email, setEmail] = useState("");
-  const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const {
+    register,
+    handleSubmit,
+    setError,
+    formState: { errors, isSubmitting, isSubmitSuccessful },
+  } = useForm<FormValues>({ resolver: zodResolver(schema) });
 
-  const handleForgotPassword = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const onSubmit = async (values: FormValues) => {
     const supabase = createClient();
-    setIsLoading(true);
-    setError(null);
-
-    try {
-      // The url which will be included in the email. This URL needs to be configured in your redirect URLs in the Supabase dashboard at https://supabase.com/dashboard/project/_/auth/url-configuration
-      const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${window.location.origin}/auth/update-password`,
-      });
-      if (error) throw error;
-      setSuccess(true);
-    } catch (error: unknown) {
-      setError(error instanceof Error ? error.message : "An error occurred");
-    } finally {
-      setIsLoading(false);
+    const { error } = await supabase.auth.resetPasswordForEmail(values.email, {
+      redirectTo: `${window.location.origin}/auth/update-password`,
+    });
+    if (error) {
+      setError("root", { message: error.message });
     }
   };
 
+  if (isSubmitSuccessful) {
+    return (
+      <div className={cn("flex flex-col gap-6", className)} {...props}>
+        <Card>
+          <CardContent className="flex flex-col items-center gap-4 py-10 text-center">
+            <CheckCircle className="h-12 w-12 text-green-500" />
+            <div>
+              <p className="font-semibold">이메일을 확인해주세요</p>
+              <p className="mt-1 text-sm text-muted-foreground">
+                비밀번호 재설정 링크를 이메일로 발송했습니다.
+              </p>
+            </div>
+            <Link
+              href="/auth/login"
+              className="text-sm text-muted-foreground underline underline-offset-4"
+            >
+              로그인으로 돌아가기
+            </Link>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
-      {success ? (
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-2xl">Check Your Email</CardTitle>
-            <CardDescription>Password reset instructions sent</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <p className="text-sm text-muted-foreground">
-              If you registered using your email and password, you will receive a password reset
-              email.
-            </p>
-          </CardContent>
-        </Card>
-      ) : (
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-2xl">Reset Your Password</CardTitle>
-            <CardDescription>
-              Type in your email and we&apos;ll send you a link to reset your password
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <form onSubmit={handleForgotPassword}>
-              <div className="flex flex-col gap-6">
-                <div className="grid gap-2">
-                  <Label htmlFor="email">Email</Label>
-                  <Input
-                    id="email"
-                    type="email"
-                    placeholder="m@example.com"
-                    required
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                  />
-                </div>
-                {error && <p className="text-sm text-red-500">{error}</p>}
-                <Button type="submit" className="w-full" disabled={isLoading}>
-                  {isLoading ? "Sending..." : "Send reset email"}
-                </Button>
-              </div>
-              <div className="mt-4 text-center text-sm">
-                Already have an account?{" "}
-                <Link href="/auth/login" className="underline underline-offset-4">
-                  Login
-                </Link>
-              </div>
-            </form>
-          </CardContent>
-        </Card>
-      )}
+      <Card>
+        <CardHeader className="text-center">
+          <CardTitle className="text-2xl">비밀번호 재설정</CardTitle>
+          <CardDescription>가입한 이메일로 재설정 링크를 보내드립니다</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="email">이메일</Label>
+              <Input
+                id="email"
+                type="email"
+                placeholder="name@example.com"
+                autoComplete="email"
+                {...register("email")}
+              />
+              {errors.email && <p className="text-xs text-destructive">{errors.email.message}</p>}
+            </div>
+            {errors.root && <p className="text-sm text-destructive">{errors.root.message}</p>}
+            <Button type="submit" className="w-full" disabled={isSubmitting}>
+              {isSubmitting ? "발송 중..." : "재설정 링크 받기"}
+            </Button>
+          </form>
+          <p className="text-center text-sm text-muted-foreground">
+            <Link href="/auth/login" className="text-foreground underline underline-offset-4">
+              로그인으로 돌아가기
+            </Link>
+          </p>
+        </CardContent>
+      </Card>
     </div>
   );
 }

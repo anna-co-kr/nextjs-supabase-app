@@ -8,109 +8,107 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 import { GoogleAuthButton } from "@/components/google-auth-button";
 
+const signUpSchema = z
+  .object({
+    email: z.string().min(1, "이메일을 입력해주세요").email("올바른 이메일 형식이 아닙니다"),
+    password: z.string().min(8, "비밀번호는 최소 8자 이상이어야 합니다"),
+    confirmPassword: z.string().min(1, "비밀번호 확인을 입력해주세요"),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "비밀번호가 일치하지 않습니다",
+    path: ["confirmPassword"],
+  });
+
+type SignUpFormValues = z.infer<typeof signUpSchema>;
+
 export function SignUpForm({ className, ...props }: React.ComponentPropsWithoutRef<"div">) {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [repeatPassword, setRepeatPassword] = useState("");
-  const [error, setError] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+  const {
+    register,
+    handleSubmit,
+    setError,
+    formState: { errors, isSubmitting },
+  } = useForm<SignUpFormValues>({ resolver: zodResolver(signUpSchema) });
 
-  const handleSignUp = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const onSubmit = async (values: SignUpFormValues) => {
     const supabase = createClient();
-    setIsLoading(true);
-    setError(null);
-
-    if (password !== repeatPassword) {
-      setError("Passwords do not match");
-      setIsLoading(false);
+    const { error } = await supabase.auth.signUp({
+      email: values.email,
+      password: values.password,
+      options: { emailRedirectTo: `${window.location.origin}/auth/confirm` },
+    });
+    if (error) {
+      setError("root", { message: error.message });
       return;
     }
-
-    try {
-      const { error } = await supabase.auth.signUp({
-        email,
-        password,
-        options: {
-          emailRedirectTo: `${window.location.origin}/protected`,
-        },
-      });
-      if (error) throw error;
-      router.push("/auth/sign-up-success");
-    } catch (error: unknown) {
-      setError(error instanceof Error ? error.message : "An error occurred");
-    } finally {
-      setIsLoading(false);
-    }
+    router.push("/auth/sign-up-success");
   };
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card>
-        <CardHeader>
-          <CardTitle className="text-2xl">Sign up</CardTitle>
-          <CardDescription>Create a new account</CardDescription>
+        <CardHeader className="text-center">
+          <CardTitle className="text-2xl">회원가입</CardTitle>
+          <CardDescription>Gather 계정을 만들어보세요</CardDescription>
         </CardHeader>
-        <CardContent>
-          <div className="flex flex-col gap-4">
-            <GoogleAuthButton label="Google로 회원가입" />
-            <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">
-              <span className="relative z-10 bg-card px-2 text-muted-foreground">또는</span>
-            </div>
+        <CardContent className="space-y-4">
+          <GoogleAuthButton label="Google로 시작하기" />
+          <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">
+            <span className="relative z-10 bg-card px-2 text-muted-foreground">또는</span>
           </div>
-          <form onSubmit={handleSignUp}>
-            <div className="flex flex-col gap-6">
-              <div className="grid gap-2">
-                <Label htmlFor="email">Email</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="m@example.com"
-                  required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                />
-              </div>
-              <div className="grid gap-2">
-                <div className="flex items-center">
-                  <Label htmlFor="password">Password</Label>
-                </div>
-                <Input
-                  id="password"
-                  type="password"
-                  required
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
-              </div>
-              <div className="grid gap-2">
-                <div className="flex items-center">
-                  <Label htmlFor="repeat-password">Repeat Password</Label>
-                </div>
-                <Input
-                  id="repeat-password"
-                  type="password"
-                  required
-                  value={repeatPassword}
-                  onChange={(e) => setRepeatPassword(e.target.value)}
-                />
-              </div>
-              {error && <p className="text-sm text-red-500">{error}</p>}
-              <Button type="submit" className="w-full" disabled={isLoading}>
-                {isLoading ? "Creating an account..." : "Sign up"}
-              </Button>
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="email">이메일</Label>
+              <Input
+                id="email"
+                type="email"
+                placeholder="name@example.com"
+                autoComplete="email"
+                {...register("email")}
+              />
+              {errors.email && <p className="text-xs text-destructive">{errors.email.message}</p>}
             </div>
-            <div className="mt-4 text-center text-sm">
-              Already have an account?{" "}
-              <Link href="/auth/login" className="underline underline-offset-4">
-                Login
-              </Link>
+            <div className="space-y-2">
+              <Label htmlFor="password">비밀번호</Label>
+              <Input
+                id="password"
+                type="password"
+                placeholder="최소 8자 이상"
+                autoComplete="new-password"
+                {...register("password")}
+              />
+              {errors.password && (
+                <p className="text-xs text-destructive">{errors.password.message}</p>
+              )}
             </div>
+            <div className="space-y-2">
+              <Label htmlFor="confirmPassword">비밀번호 확인</Label>
+              <Input
+                id="confirmPassword"
+                type="password"
+                autoComplete="new-password"
+                {...register("confirmPassword")}
+              />
+              {errors.confirmPassword && (
+                <p className="text-xs text-destructive">{errors.confirmPassword.message}</p>
+              )}
+            </div>
+            {errors.root && <p className="text-sm text-destructive">{errors.root.message}</p>}
+            <Button type="submit" className="w-full" disabled={isSubmitting}>
+              {isSubmitting ? "가입 중..." : "회원가입"}
+            </Button>
           </form>
+          <p className="text-center text-sm text-muted-foreground">
+            이미 계정이 있으신가요?{" "}
+            <Link href="/auth/login" className="text-foreground underline underline-offset-4">
+              로그인
+            </Link>
+          </p>
         </CardContent>
       </Card>
     </div>

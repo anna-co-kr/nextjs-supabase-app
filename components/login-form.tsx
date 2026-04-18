@@ -8,94 +8,92 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 import { GoogleAuthButton } from "@/components/google-auth-button";
 
+const loginSchema = z.object({
+  email: z.string().min(1, "이메일을 입력해주세요").email("올바른 이메일 형식이 아닙니다"),
+  password: z.string().min(1, "비밀번호를 입력해주세요"),
+});
+
+type LoginFormValues = z.infer<typeof loginSchema>;
+
 export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRef<"div">) {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+  const {
+    register,
+    handleSubmit,
+    setError,
+    formState: { errors, isSubmitting },
+  } = useForm<LoginFormValues>({ resolver: zodResolver(loginSchema) });
 
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const onSubmit = async (values: LoginFormValues) => {
     const supabase = createClient();
-    setIsLoading(true);
-    setError(null);
-
-    try {
-      const { error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
-      if (error) throw error;
-      // Update this route to redirect to an authenticated route. The user already has an active session.
-      router.push("/dashboard");
-    } catch (error: unknown) {
-      setError(error instanceof Error ? error.message : "An error occurred");
-    } finally {
-      setIsLoading(false);
+    const { error } = await supabase.auth.signInWithPassword(values);
+    if (error) {
+      setError("root", { message: "이메일 또는 비밀번호가 올바르지 않습니다" });
+      return;
     }
+    router.push("/dashboard");
   };
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card>
-        <CardHeader>
-          <CardTitle className="text-2xl">Login</CardTitle>
-          <CardDescription>Enter your email below to login to your account</CardDescription>
+        <CardHeader className="text-center">
+          <CardTitle className="text-2xl">로그인</CardTitle>
+          <CardDescription>Gather에 오신 것을 환영합니다</CardDescription>
         </CardHeader>
-        <CardContent>
-          <div className="flex flex-col gap-4">
-            <GoogleAuthButton />
-            <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">
-              <span className="relative z-10 bg-card px-2 text-muted-foreground">또는</span>
-            </div>
+        <CardContent className="space-y-4">
+          <GoogleAuthButton label="Google로 계속하기" />
+          <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">
+            <span className="relative z-10 bg-card px-2 text-muted-foreground">또는</span>
           </div>
-          <form onSubmit={handleLogin}>
-            <div className="flex flex-col gap-6">
-              <div className="grid gap-2">
-                <Label htmlFor="email">Email</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="m@example.com"
-                  required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                />
-              </div>
-              <div className="grid gap-2">
-                <div className="flex items-center">
-                  <Label htmlFor="password">Password</Label>
-                  <Link
-                    href="/auth/forgot-password"
-                    className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
-                  >
-                    Forgot your password?
-                  </Link>
-                </div>
-                <Input
-                  id="password"
-                  type="password"
-                  required
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
-              </div>
-              {error && <p className="text-sm text-red-500">{error}</p>}
-              <Button type="submit" className="w-full" disabled={isLoading}>
-                {isLoading ? "Logging in..." : "Login"}
-              </Button>
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="email">이메일</Label>
+              <Input
+                id="email"
+                type="email"
+                placeholder="name@example.com"
+                autoComplete="email"
+                {...register("email")}
+              />
+              {errors.email && <p className="text-xs text-destructive">{errors.email.message}</p>}
             </div>
-            <div className="mt-4 text-center text-sm">
-              Don&apos;t have an account?{" "}
-              <Link href="/auth/sign-up" className="underline underline-offset-4">
-                Sign up
-              </Link>
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <Label htmlFor="password">비밀번호</Label>
+                <Link
+                  href="/auth/forgot-password"
+                  className="text-xs text-muted-foreground underline-offset-4 hover:underline"
+                >
+                  비밀번호를 잊으셨나요?
+                </Link>
+              </div>
+              <Input
+                id="password"
+                type="password"
+                autoComplete="current-password"
+                {...register("password")}
+              />
+              {errors.password && (
+                <p className="text-xs text-destructive">{errors.password.message}</p>
+              )}
             </div>
+            {errors.root && <p className="text-sm text-destructive">{errors.root.message}</p>}
+            <Button type="submit" className="w-full" disabled={isSubmitting}>
+              {isSubmitting ? "로그인 중..." : "로그인"}
+            </Button>
           </form>
+          <p className="text-center text-sm text-muted-foreground">
+            계정이 없으신가요?{" "}
+            <Link href="/auth/sign-up" className="text-foreground underline underline-offset-4">
+              회원가입
+            </Link>
+          </p>
         </CardContent>
       </Card>
     </div>
