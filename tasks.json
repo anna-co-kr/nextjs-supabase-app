@@ -398,14 +398,14 @@
       "name": "Task 010: 정산 관리 및 참여자 정산 현황 UI",
       "description": "주최자용 정산 관리 페이지와 참여자용 정산 현황 페이지 UI를 더미 데이터로 구현한다. 분담 방식 선택과 클라이언트 계산 프리뷰를 포함한다.",
       "notes": "'use client' 필요 (동적 항목 추가, RadioGroup, Checkbox, 계산). 분담 방식별 계산 로직은 클라이언트 유틸리티 함수로 분리 (lib/utils/settlement.ts).",
-      "status": "pending",
+      "status": "in_progress",
       "dependencies": [
         {
           "taskId": "75bb61cc-2130-48db-9d2a-ba345cd40b4d"
         }
       ],
       "createdAt": "2026-04-17T07:28:21.586Z",
-      "updatedAt": "2026-04-17T07:28:21.586Z",
+      "updatedAt": "2026-04-18T08:02:47.778Z",
       "relatedFiles": [
         {
           "path": "app/(protected)/events/[eventId]/settlements/page.tsx",
