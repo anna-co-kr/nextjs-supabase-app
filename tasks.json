@@ -330,14 +330,14 @@
       "name": "Task 008: 참여자 관리 페이지 UI",
       "description": "주최자가 참여 신청자를 확정/거절하고 대기자를 관리하는 페이지 UI를 더미 데이터로 구현한다.",
       "notes": "'use client' 필요 (탭 인터랙션, 버튼 클릭). CSV 버튼은 disabled 또는 '준비 중' 상태로 표시 가능.",
-      "status": "pending",
+      "status": "in_progress",
       "dependencies": [
         {
           "taskId": "75bb61cc-2130-48db-9d2a-ba345cd40b4d"
         }
       ],
       "createdAt": "2026-04-17T07:28:21.586Z",
-      "updatedAt": "2026-04-17T07:28:21.586Z",
+      "updatedAt": "2026-04-18T08:02:45.702Z",
       "relatedFiles": [
         {
           "path": "app/(protected)/events/[eventId]/members/page.tsx",
