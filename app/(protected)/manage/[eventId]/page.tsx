@@ -1,11 +1,11 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { Copy, Users, Megaphone, Receipt } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Users, Megaphone, Receipt } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { EventStatusBadge } from "@/components/event-status-badge";
 import { PageHeader } from "@/components/page-header";
+import { CopyButton } from "@/components/copy-button";
 import { DUMMY_EVENTS } from "@/lib/fixtures";
 
 export default async function EventManagePage({
@@ -65,10 +65,7 @@ export default async function EventManagePage({
         </CardHeader>
         <CardContent className="flex items-center gap-2">
           <code className="flex-1 truncate rounded bg-muted px-3 py-2 text-sm">{shareUrl}</code>
-          <Button variant="outline" size="sm" className="shrink-0">
-            <Copy className="mr-1.5 h-3.5 w-3.5" />
-            복사
-          </Button>
+          <CopyButton text={shareUrl} className="shrink-0" />
         </CardContent>
       </Card>
 

@@ -1,10 +1,9 @@
 import { notFound } from "next/navigation";
-import { Copy } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { PaymentStatusBadge } from "@/components/event-status-badge";
 import { EmptyState } from "@/components/empty-state";
 import { PageHeader } from "@/components/page-header";
+import { CopyButton } from "@/components/copy-button";
 import { DUMMY_EVENTS, DUMMY_SETTLEMENTS, CURRENT_USER } from "@/lib/fixtures";
 
 export default async function SettlementsStatusPage({
@@ -74,10 +73,7 @@ export default async function SettlementsStatusPage({
                     {settlement.bankAccount.accountHolder}
                   </span>
                 </div>
-                <Button variant="outline" size="sm">
-                  <Copy className="mr-1.5 h-3.5 w-3.5" />
-                  복사
-                </Button>
+                <CopyButton text={settlement.bankAccount.accountNumber} />
               </CardContent>
             </Card>
           )}

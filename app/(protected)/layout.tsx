@@ -3,6 +3,7 @@ import { ThemeSwitcher } from "@/components/theme-switcher";
 import { LogoutButton } from "@/components/logout-button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { CURRENT_USER } from "@/lib/fixtures";
+import { LayoutDashboard, PlusCircle, Settings } from "lucide-react";
 
 export default function ProtectedLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -50,19 +51,12 @@ export default function ProtectedLayout({ children }: { children: React.ReactNod
       </aside>
 
       <div className="flex flex-1 flex-col">
-        {/* 상단 헤더: 모바일에서는 로고 + 대시보드 링크 표시 */}
+        {/* 상단 헤더: 모바일에서는 로고만 표시 */}
         <header className="flex h-16 items-center justify-between border-b px-6">
-          <div className="flex items-center gap-3 md:hidden">
-            {/* 모바일에서 앱 로고 */}
+          <div className="md:hidden">
+            {/* 모바일 앱 로고 */}
             <Link href="/dashboard" className="text-lg font-bold tracking-tight">
               Gather
-            </Link>
-            {/* 모바일에서 대시보드로 돌아가는 링크 */}
-            <Link
-              href="/dashboard"
-              className="text-sm text-muted-foreground transition-colors hover:text-foreground"
-            >
-              모임 목록
             </Link>
           </div>
           <div className="ml-auto flex items-center gap-3">
@@ -70,8 +64,42 @@ export default function ProtectedLayout({ children }: { children: React.ReactNod
           </div>
         </header>
 
-        <main className="flex-1 p-6">{children}</main>
+        {/* 모바일 하단 네비게이션 공간 확보 */}
+        <main className="flex-1 p-6 pb-20 md:pb-6">{children}</main>
       </div>
+
+      {/* 모바일 하단 고정 네비게이션 */}
+      <nav
+        className="fixed bottom-0 left-0 right-0 z-50 flex border-t bg-background pb-2 md:hidden"
+        aria-label="모바일 하단 네비게이션"
+      >
+        {/* 대시보드 링크 */}
+        <Link
+          href="/dashboard"
+          className="flex flex-1 flex-col items-center justify-center gap-1 py-2 text-muted-foreground transition-colors hover:text-foreground"
+        >
+          <LayoutDashboard className="h-5 w-5" aria-hidden="true" />
+          <span className="text-xs font-medium">대시보드</span>
+        </Link>
+
+        {/* 새 모임 만들기 링크 */}
+        <Link
+          href="/dashboard/events/new"
+          className="flex flex-1 flex-col items-center justify-center gap-1 py-2 text-muted-foreground transition-colors hover:text-foreground"
+        >
+          <PlusCircle className="h-5 w-5" aria-hidden="true" />
+          <span className="text-xs font-medium">새 모임</span>
+        </Link>
+
+        {/* 설정 링크 (Phase 5 예정, 현재는 대시보드로 연결) */}
+        <Link
+          href="/dashboard"
+          className="flex flex-1 flex-col items-center justify-center gap-1 py-2 text-muted-foreground transition-colors hover:text-foreground"
+        >
+          <Settings className="h-5 w-5" aria-hidden="true" />
+          <span className="text-xs font-medium">설정</span>
+        </Link>
+      </nav>
     </div>
   );
 }
