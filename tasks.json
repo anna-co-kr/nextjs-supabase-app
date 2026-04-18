@@ -451,7 +451,7 @@
       "name": "Task 011: 랜딩 페이지 UI 및 Phase 1 통합 점검",
       "description": "Gather 서비스 랜딩 페이지를 구현하고, 13개 페이지 전체 네비게이션 흐름과 반응형을 점검한다.",
       "notes": "랜딩 페이지는 Server Component. 이미지 없이 텍스트+아이콘(lucide-react)만으로 구성. 스타터킷 잔재(tutorial 컴포넌트 등) 이 단계에서 최종 제거.",
-      "status": "pending",
+      "status": "in_progress",
       "dependencies": [
         {
           "taskId": "331bb4c7-83c1-4ada-8a2b-c0b02d211d81"
@@ -476,7 +476,7 @@
         }
       ],
       "createdAt": "2026-04-17T07:28:21.586Z",
-      "updatedAt": "2026-04-17T07:28:21.586Z",
+      "updatedAt": "2026-04-18T08:03:23.701Z",
       "relatedFiles": [
         {
           "path": "app/page.tsx",
