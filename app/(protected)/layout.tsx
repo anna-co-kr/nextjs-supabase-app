@@ -2,13 +2,7 @@ import Link from "next/link";
 import { ThemeSwitcher } from "@/components/theme-switcher";
 import { LogoutButton } from "@/components/logout-button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-
-// 더미 사용자 데이터 (추후 Supabase 인증 연동 시 실제 데이터로 교체)
-const DUMMY_USER = {
-  name: "김지수",
-  email: "jisoo@example.com",
-  initials: "김",
-};
+import { CURRENT_USER } from "@/lib/fixtures";
 
 export default function ProtectedLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -31,7 +25,7 @@ export default function ProtectedLayout({ children }: { children: React.ReactNod
             대시보드
           </Link>
           <Link
-            href="/events/new"
+            href="/dashboard/events/new"
             className="rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground"
           >
             새 모임 만들기
@@ -43,11 +37,11 @@ export default function ProtectedLayout({ children }: { children: React.ReactNod
           {/* 사용자 프로필 섹션 */}
           <div className="flex items-center gap-3 px-1">
             <Avatar size="default">
-              <AvatarFallback>{DUMMY_USER.initials}</AvatarFallback>
+              <AvatarFallback>{CURRENT_USER.name[0]}</AvatarFallback>
             </Avatar>
             <div className="flex min-w-0 flex-col">
-              <span className="truncate text-sm font-medium">{DUMMY_USER.name}</span>
-              <span className="truncate text-xs text-muted-foreground">{DUMMY_USER.email}</span>
+              <span className="truncate text-sm font-medium">{CURRENT_USER.name}</span>
+              <span className="truncate text-xs text-muted-foreground">{CURRENT_USER.email}</span>
             </div>
           </div>
           {/* 로그아웃 버튼 */}

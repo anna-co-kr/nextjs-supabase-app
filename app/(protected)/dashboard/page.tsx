@@ -5,11 +5,21 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { EventCard } from "@/components/event-card";
 import { EmptyState } from "@/components/empty-state";
 import { PageHeader } from "@/components/page-header";
-import { DUMMY_EVENTS, CURRENT_USER } from "@/lib/fixtures";
+import { DUMMY_EVENTS, DUMMY_MEMBERS, CURRENT_USER } from "@/lib/fixtures";
 
 export default function DashboardPage() {
   const hostingEvents = DUMMY_EVENTS.filter((e) => e.host.id === CURRENT_USER.id);
-  const participatingEvents = DUMMY_EVENTS.filter((e) => e.host.id !== CURRENT_USER.id);
+
+  const participatingEventIds = new Set(
+    Object.entries(DUMMY_MEMBERS)
+      .filter(([, members]) =>
+        members.some((m) => m.user.id === CURRENT_USER.id && m.status !== "rejected"),
+      )
+      .map(([eventId]) => eventId),
+  );
+  const participatingEvents = DUMMY_EVENTS.filter(
+    (e) => e.host.id !== CURRENT_USER.id && participatingEventIds.has(e.id),
+  );
 
   return (
     <div className="space-y-6">
@@ -18,7 +28,7 @@ export default function DashboardPage() {
         description="내가 주최하거나 참여 중인 모임 목록입니다"
         action={
           <Button asChild>
-            <Link href="/events/new">
+            <Link href="/dashboard/events/new">
               <Plus className="mr-2 h-4 w-4" />새 모임 만들기
             </Link>
           </Button>
@@ -52,7 +62,7 @@ export default function DashboardPage() {
               description="새 모임을 만들어 참여자를 초대해보세요"
               action={
                 <Button asChild>
-                  <Link href="/events/new">
+                  <Link href="/dashboard/events/new">
                     <Plus className="mr-2 h-4 w-4" />새 모임 만들기
                   </Link>
                 </Button>

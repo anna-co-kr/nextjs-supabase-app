@@ -14,8 +14,13 @@ import { PaymentStatusBadge } from "@/components/event-status-badge";
 import { EmptyState } from "@/components/empty-state";
 import { PageHeader } from "@/components/page-header";
 import { DUMMY_EVENTS, DUMMY_SETTLEMENTS } from "@/lib/fixtures";
+import type { SplitType } from "@/lib/types";
 
-const SPLIT_TYPE_LABEL = { equal: "균등 분할", individual: "개별 지정", ratio: "비율 분담" };
+const SPLIT_TYPE_LABEL: Record<SplitType, string> = {
+  equal: "균등 분할",
+  individual: "개별 지정",
+  ratio: "비율 분담",
+};
 
 export default async function SettlementsPage({
   params,

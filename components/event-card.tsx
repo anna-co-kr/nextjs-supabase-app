@@ -2,6 +2,7 @@ import Link from "next/link";
 import { CalendarDays, MapPin, Users } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { EventStatusBadge } from "@/components/event-status-badge";
+import { cn, formatEventDate } from "@/lib/utils";
 import type { Event } from "@/lib/types";
 
 interface EventCardProps {
@@ -9,16 +10,10 @@ interface EventCardProps {
   href: string;
 }
 
-function formatDate(dateString: string) {
-  return new Date(dateString).toLocaleDateString("ko-KR", {
-    month: "long",
-    day: "numeric",
-    weekday: "short",
-  });
-}
-
 export function EventCard({ event, href }: EventCardProps) {
-  const capacityPercent = Math.round((event.confirmedCount / event.maxCapacity) * 100);
+  const capacityPercent =
+    event.maxCapacity > 0 ? Math.round((event.confirmedCount / event.maxCapacity) * 100) : 0;
+  const isFull = capacityPercent >= 100;
 
   return (
     <Link href={href}>
@@ -32,7 +27,7 @@ export function EventCard({ event, href }: EventCardProps) {
         <CardContent className="space-y-2 text-sm text-muted-foreground">
           <div className="flex items-center gap-1.5">
             <CalendarDays className="h-3.5 w-3.5 shrink-0" />
-            <span>{formatDate(event.startDate)}</span>
+            <span>{formatEventDate(event.startDate)}</span>
           </div>
           {event.location && (
             <div className="flex items-center gap-1.5">
@@ -46,7 +41,9 @@ export function EventCard({ event, href }: EventCardProps) {
               <span>
                 {event.confirmedCount}/{event.maxCapacity}명
                 {event.waitingCount > 0 && (
-                  <span className="ml-1 text-yellow-600">(대기 {event.waitingCount})</span>
+                  <span className="ml-1 text-yellow-600 dark:text-yellow-400">
+                    (대기 {event.waitingCount})
+                  </span>
                 )}
               </span>
             </div>
@@ -54,7 +51,10 @@ export function EventCard({ event, href }: EventCardProps) {
           </div>
           <div className="h-1.5 w-full overflow-hidden rounded-full bg-secondary">
             <div
-              className="h-full rounded-full bg-primary transition-all"
+              className={cn(
+                "h-full rounded-full transition-all",
+                isFull ? "bg-destructive" : "bg-primary",
+              )}
               style={{ width: `${Math.min(capacityPercent, 100)}%` }}
             />
           </div>

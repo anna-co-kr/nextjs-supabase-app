@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
@@ -18,18 +18,23 @@ import {
 } from "@/components/ui/select";
 import { PageHeader } from "@/components/page-header";
 
-const schema = z.object({
-  title: z.string().min(1, "모임 이름을 입력해주세요").max(100, "100자 이내로 입력해주세요"),
-  description: z.string().max(1000, "1000자 이내로 입력해주세요").optional(),
-  type: z.enum(["one_time", "recurring"]),
-  maxCapacity: z
-    .number()
-    .min(2, "최소 2명 이상이어야 합니다")
-    .max(500, "최대 500명까지 가능합니다"),
-  startDate: z.string().min(1, "시작 일시를 선택해주세요"),
-  endDate: z.string().optional(),
-  location: z.string().max(200).optional(),
-});
+const schema = z
+  .object({
+    title: z.string().min(1, "모임 이름을 입력해주세요").max(100, "100자 이내로 입력해주세요"),
+    description: z.string().max(1000, "1000자 이내로 입력해주세요").optional(),
+    type: z.enum(["one_time", "recurring"]),
+    maxCapacity: z
+      .number()
+      .min(2, "최소 2명 이상이어야 합니다")
+      .max(500, "최대 500명까지 가능합니다"),
+    startDate: z.string().min(1, "시작 일시를 선택해주세요"),
+    endDate: z.string().optional(),
+    location: z.string().max(200).optional(),
+  })
+  .refine((data) => !data.endDate || !data.startDate || data.endDate >= data.startDate, {
+    message: "종료 일시는 시작 일시 이후여야 합니다",
+    path: ["endDate"],
+  });
 
 type FormValues = z.infer<typeof schema>;
 
@@ -38,7 +43,7 @@ export default function NewEventPage() {
   const {
     register,
     handleSubmit,
-    setValue,
+    control,
     formState: { errors, isSubmitting },
   } = useForm<FormValues>({
     resolver: zodResolver(schema),
@@ -86,18 +91,21 @@ export default function NewEventPage() {
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="space-y-2">
                 <Label>모임 유형</Label>
-                <Select
-                  defaultValue="one_time"
-                  onValueChange={(v) => setValue("type", v as "one_time" | "recurring")}
-                >
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="one_time">일회성</SelectItem>
-                    <SelectItem value="recurring">정기 모임</SelectItem>
-                  </SelectContent>
-                </Select>
+                <Controller
+                  name="type"
+                  control={control}
+                  render={({ field }) => (
+                    <Select value={field.value} onValueChange={field.onChange}>
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="one_time">일회성</SelectItem>
+                        <SelectItem value="recurring">정기 모임</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  )}
+                />
               </div>
 
               <div className="space-y-2">
@@ -129,6 +137,9 @@ export default function NewEventPage() {
               <div className="space-y-2">
                 <Label htmlFor="endDate">종료 일시</Label>
                 <Input id="endDate" type="datetime-local" {...register("endDate")} />
+                {errors.endDate && (
+                  <p className="text-xs text-destructive">{errors.endDate.message}</p>
+                )}
               </div>
             </div>
 

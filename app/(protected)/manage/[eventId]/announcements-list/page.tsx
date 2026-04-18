@@ -66,16 +66,17 @@ export default async function AnnouncementsListPage({
                 {a.reactions.length > 0 && (
                   <div className="flex flex-wrap gap-1.5">
                     {a.reactions.map((r) => (
-                      <button
+                      <span
                         key={r.emoji}
-                        className={`flex items-center gap-1 rounded-full border px-2 py-0.5 text-xs transition-colors ${
+                        title="Phase 3에서 리액션 기능이 추가됩니다"
+                        className={`flex cursor-default items-center gap-1 rounded-full border px-2 py-0.5 text-xs ${
                           r.reactedByMe
                             ? "border-primary/30 bg-primary/10 text-primary"
-                            : "border-border bg-muted hover:bg-accent"
+                            : "border-border bg-muted"
                         }`}
                       >
                         {r.emoji} {r.count}
-                      </button>
+                      </span>
                     ))}
                   </div>
                 )}
@@ -104,10 +105,13 @@ export default async function AnnouncementsListPage({
                   </div>
                 )}
 
-                <button className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground">
+                <span
+                  title="Phase 3에서 댓글 기능이 추가됩니다"
+                  className="flex cursor-default items-center gap-1 text-xs text-muted-foreground"
+                >
                   <MessageCircle className="h-3.5 w-3.5" />
                   댓글 달기
-                </button>
+                </span>
               </CardContent>
             </Card>
           ))}

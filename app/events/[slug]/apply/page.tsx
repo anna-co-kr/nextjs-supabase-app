@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { EmptyState } from "@/components/empty-state";
 import { DUMMY_EVENTS } from "@/lib/fixtures";
 
 const schema = z.object({
@@ -36,7 +37,15 @@ export default function ApplyPage({ params }: { params: Promise<{ slug: string }
     router.push(`/events/${slug}`);
   };
 
-  const isFull = event ? event.confirmedCount >= event.maxCapacity : false;
+  if (!event) {
+    return (
+      <div className="mx-auto max-w-lg px-4 py-10">
+        <EmptyState title="존재하지 않는 모임입니다" description="링크를 다시 확인해주세요" />
+      </div>
+    );
+  }
+
+  const isFull = event.confirmedCount >= event.maxCapacity;
 
   return (
     <div className="mx-auto max-w-lg px-4 py-10">

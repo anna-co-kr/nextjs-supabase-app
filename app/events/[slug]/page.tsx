@@ -4,6 +4,7 @@ import { CalendarDays, MapPin, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { EventStatusBadge } from "@/components/event-status-badge";
+import { formatEventDate } from "@/lib/utils";
 import { DUMMY_EVENTS } from "@/lib/fixtures";
 
 export default async function PublicEventPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -13,17 +14,6 @@ export default async function PublicEventPage({ params }: { params: Promise<{ sl
 
   const isFull = event.confirmedCount >= event.maxCapacity;
   const isClosed = event.status === "closed" || event.status === "cancelled";
-
-  function formatDate(dateString: string) {
-    return new Date(dateString).toLocaleDateString("ko-KR", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-      weekday: "long",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-  }
 
   return (
     <div className="mx-auto max-w-lg px-4 py-10">
@@ -41,7 +31,16 @@ export default async function PublicEventPage({ params }: { params: Promise<{ sl
           <div className="space-y-2 rounded-lg bg-muted/50 p-3 text-sm">
             <div className="flex items-center gap-2">
               <CalendarDays className="h-4 w-4 shrink-0 text-muted-foreground" />
-              <span>{formatDate(event.startDate)}</span>
+              <span>
+                {formatEventDate(event.startDate, {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                  weekday: "long",
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })}
+              </span>
             </div>
             {event.location && (
               <div className="flex items-center gap-2">
