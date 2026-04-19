@@ -956,14 +956,14 @@
       "name": "Task 027: Phase 3 E2E 통합 테스트 + 권한 경계 + 엣지 케이스",
       "description": "Phase 3에서 구현한 모든 기능을 주최자/참여자 두 페르소나의 전체 플로우로 검증하고, RLS 경계와 엣지 케이스를 점검한다. Phase 4 진입 전 품질 게이트이다.",
       "notes": "모든 시나리오를 Playwright MCP로 자동화. race condition 테스트는 mcp__supabase__execute_sql로 동시 INSERT 시도.",
-      "status": "pending",
+      "status": "in_progress",
       "dependencies": [
         {
           "taskId": "dea6c684-97b8-488d-bbe4-1e0f533ee3ca"
         }
       ],
       "createdAt": "2026-04-19T09:42:01.087Z",
-      "updatedAt": "2026-04-19T09:42:01.087Z",
+      "updatedAt": "2026-04-19T11:03:42.089Z",
       "relatedFiles": [
         {
           "path": "tasks/027-phase3-integration-test.md",
