@@ -900,14 +900,14 @@
       "name": "Task 026: D-1·D-3 자동 리마인더 (Vercel Cron + Resend)",
       "description": "매일 1회 실행되는 Vercel Cron Job이 D-1/D-3 이벤트의 확정 참여자에게 Resend로 이메일 리마인더를 발송한다. reminder_logs 테이블로 중복 발송을 방지한다.",
       "notes": "SUPABASE_SERVICE_ROLE_KEY는 절대 클라이언트에 노출 금지. reminder_logs RLS는 service_role만 접근. Resend 발송은 sandbox 도메인 또는 실계정으로 확인.",
-      "status": "pending",
+      "status": "in_progress",
       "dependencies": [
         {
           "taskId": "554e43f1-2baf-455b-861f-5565bb07ee30"
         }
       ],
       "createdAt": "2026-04-19T09:42:01.087Z",
-      "updatedAt": "2026-04-19T09:42:01.087Z",
+      "updatedAt": "2026-04-19T11:00:41.710Z",
       "relatedFiles": [
         {
           "path": "supabase/migrations/20260419000006_create_reminder_logs.sql",
