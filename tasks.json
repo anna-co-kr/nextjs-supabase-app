@@ -1176,14 +1176,14 @@
       "id": "a9341cf4-f8ba-4e5a-ac34-e7b54a28885c",
       "name": "Task 029: 호스트 계좌번호 등록 연동 (F009)",
       "description": "host_bank_accounts 테이블 CRUD를 구현하고 settlements/page.tsx의 계좌 등록/수정 버튼에 연결한다.\n\n구현 범위:\n1. lib/schemas/settlement.ts에 bankAccountSchema 추가 (bank_name, account_number, account_holder)\n2. lib/actions/settlement.ts에 upsertBankAccount(eventId, input) 추가\n3. lib/supabase/settlements.ts에 getBankAccount(eventId) 추가\n4. components/bank-account-form.tsx — Dialog + React Hook Form + zodResolver\n5. settlements/page.tsx — getBankAccount 호출, BankAccountForm 연결\n\n주의: host_bank_accounts에 UNIQUE(event_id) 제약이 없으므로 기존 레코드 조회 후 update/insert 분기 처리",
-      "status": "pending",
+      "status": "in_progress",
       "dependencies": [
         {
           "taskId": "91ad2e5d-dc9c-485d-b4da-241707966f6f"
         }
       ],
       "createdAt": "2026-04-19T15:20:06.064Z",
-      "updatedAt": "2026-04-19T15:20:06.064Z",
+      "updatedAt": "2026-04-19T15:33:39.649Z",
       "relatedFiles": [
         {
           "path": "lib/schemas/settlement.ts",
