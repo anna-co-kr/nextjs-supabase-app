@@ -537,14 +537,14 @@
       "name": "Task 018: Supabase 마이그레이션 및 RLS 정책 적용",
       "description": "Task 017의 ERD를 기반으로 Supabase 마이그레이션 파일을 작성하고, RLS 정책을 적용한 뒤 TypeScript 타입을 재생성한다. 이 태스크 완료 후 다음 태스크부터 Supabase 쿼리로 더미 데이터를 교체할 수 있다.",
       "notes": "mcp__supabase__apply_migration 사용. 마이그레이션 적용 후 mcp__supabase__list_tables로 확인. 자동 updated_at 트리거는 handle_updated_at() 함수로 events, announcements에 적용.",
-      "status": "pending",
+      "status": "in_progress",
       "dependencies": [
         {
           "taskId": "d129e700-e460-4df9-9532-a14a8e1b711c"
         }
       ],
       "createdAt": "2026-04-19T09:42:01.087Z",
-      "updatedAt": "2026-04-19T09:42:01.087Z",
+      "updatedAt": "2026-04-19T09:47:57.021Z",
       "relatedFiles": [
         {
           "path": "supabase/migrations/20260419000001_create_enums.sql",
