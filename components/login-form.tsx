@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -21,6 +22,9 @@ type LoginFormValues = z.infer<typeof loginSchema>;
 
 export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRef<"div">) {
   const router = useRouter();
+  // 로그인 후 리디렉션 대상 (미설정 시 /dashboard)
+  const searchParams = useSearchParams();
+  const redirectTo = searchParams.get("redirectTo") ?? "/dashboard";
   const {
     register,
     handleSubmit,
@@ -35,7 +39,7 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
       setError("root", { message: "이메일 또는 비밀번호가 올바르지 않습니다" });
       return;
     }
-    router.push("/dashboard");
+    router.push(redirectTo);
   };
 
   return (

@@ -1,11 +1,15 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { ThemeSwitcher } from "@/components/theme-switcher";
 import { LogoutButton } from "@/components/logout-button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { CURRENT_USER } from "@/lib/fixtures";
+import { getProfile } from "@/lib/supabase/profile";
 import { LayoutDashboard, PlusCircle, Settings } from "lucide-react";
 
-export default function ProtectedLayout({ children }: { children: React.ReactNode }) {
+export default async function ProtectedLayout({ children }: { children: React.ReactNode }) {
+  // 인증된 사용자의 프로필을 조회하고, 없으면 로그인 페이지로 리디렉션
+  const profile = await getProfile();
+  if (!profile) redirect("/auth/login");
   return (
     <div className="flex min-h-screen bg-background">
       {/* ─── 데스크톱 사이드바 ──────────────────────────────────────── */}
@@ -52,14 +56,14 @@ export default function ProtectedLayout({ children }: { children: React.ReactNod
             {/* 아바타: 시맨틱 muted 배경 */}
             <Avatar size="default">
               <AvatarFallback className="bg-muted text-xs font-semibold text-foreground">
-                {CURRENT_USER.name[0]}
+                {(profile.full_name?.[0] ?? profile.email[0] ?? "U").toUpperCase()}
               </AvatarFallback>
             </Avatar>
             <div className="flex min-w-0 flex-col">
               <span className="truncate text-sm font-medium text-foreground">
-                {CURRENT_USER.name}
+                {profile.full_name ?? profile.email}
               </span>
-              <span className="truncate text-xs text-muted-foreground">{CURRENT_USER.email}</span>
+              <span className="truncate text-xs text-muted-foreground">{profile.email}</span>
             </div>
           </div>
           {/* 로그아웃 버튼 */}

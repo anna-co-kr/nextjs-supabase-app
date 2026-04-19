@@ -74,3 +74,40 @@ export async function updateProfile(
 
   return { data, error: null };
 }
+
+/**
+ * 트리거 실패 시 백업용 — profiles 레코드가 없으면 생성합니다.
+ * 회원가입 직후 트리거가 실패했을 때 호출하여 프로필을 보장합니다.
+ */
+export async function ensureProfile(): Promise<Profile | null> {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return null;
+
+  // 이미 프로필이 존재하면 그대로 반환
+  const existing = await getProfile();
+  if (existing) return existing;
+
+  // 프로필이 없으면 새로 생성
+  const { data, error } = await supabase
+    .from("profiles")
+    .insert({
+      id: user.id,
+      email: user.email ?? "",
+      full_name:
+        (user.user_metadata?.full_name as string | undefined) ??
+        (user.user_metadata?.name as string | undefined) ??
+        user.email?.split("@")[0] ??
+        "",
+    })
+    .select()
+    .single();
+
+  if (error) {
+    console.error("[ensureProfile] error:", error.message);
+    return null;
+  }
+  return data;
+}
