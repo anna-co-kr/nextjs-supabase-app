@@ -1226,14 +1226,14 @@
       "id": "23e6bbc7-3744-4819-90f3-4240fcf4f641",
       "name": "Task 030: 납부 확인 및 상태 관리 연동 (F009)",
       "description": "settlement_payments의 is_paid 상태 토글 Server Action을 구현하고 납부 완료율 요약 카드를 실데이터로 연동한다.\n\n구현 범위:\n1. lib/actions/settlement.ts에 togglePaymentStatus(paymentId, isPaid) 추가\n   - is_paid=true → paid_at=now(), is_paid=false → paid_at=null\n2. lib/supabase/settlements.ts에 getSettlementSummary(eventId) 추가\n   - totalAmount, paidCount, unpaidCount 집계\n3. components/payment-toggle-button.tsx — useTransition + Loader2 스피너, 확인/취소 토글\n4. settlements/page.tsx — PaymentToggleButton 연결, 요약 카드 실데이터 반영\n5. 모바일 카드 + 데스크톱 테이블 양쪽에 PaymentToggleButton 적용",
-      "status": "pending",
+      "status": "in_progress",
       "dependencies": [
         {
           "taskId": "a9341cf4-f8ba-4e5a-ac34-e7b54a28885c"
         }
       ],
       "createdAt": "2026-04-19T15:20:06.064Z",
-      "updatedAt": "2026-04-19T15:20:06.064Z",
+      "updatedAt": "2026-04-19T15:36:40.171Z",
       "relatedFiles": [
         {
           "path": "lib/actions/settlement.ts",
