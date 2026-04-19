@@ -1,24 +1,56 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { CalendarDays, MapPin, Users } from "lucide-react";
+import type { Metadata } from "next";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { EventStatusBadge } from "@/components/event-status-badge";
 import { ThemeSwitcher } from "@/components/theme-switcher";
 import { formatEventDate } from "@/lib/utils";
-import { DUMMY_EVENTS } from "@/lib/fixtures";
+import { getPublicEventByToken, getMyMembershipForEvent } from "@/lib/supabase/events";
+import { mapEventRowToView } from "@/lib/mappers/event";
 
-export default async function PublicEventPage({ params }: { params: Promise<{ slug: string }> }) {
+type PageProps = { params: Promise<{ slug: string }> };
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
-  const event = DUMMY_EVENTS.find((e) => e.shareToken === slug);
-  if (!event) notFound();
+  const row = await getPublicEventByToken(slug);
+  if (!row) return { title: "모임을 찾을 수 없습니다" };
+
+  const event = mapEventRowToView(row);
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+
+  return {
+    title: `${event.title} — Gather`,
+    description: event.description || `${event.host.name}님이 주최하는 모임입니다.`,
+    openGraph: {
+      title: event.title,
+      description: event.description || `${event.host.name}님이 주최하는 모임입니다.`,
+      url: `${siteUrl}/events/${slug}`,
+      type: "website",
+    },
+  };
+}
+
+const MEMBER_STATUS_LABEL: Record<string, string> = {
+  confirmed: "참여 확정",
+  waiting: "대기 중",
+  rejected: "거절됨",
+};
+
+export default async function PublicEventPage({ params }: PageProps) {
+  const { slug } = await params;
+  const row = await getPublicEventByToken(slug);
+  if (!row) notFound();
+
+  const event = mapEventRowToView(row);
+  const membership = await getMyMembershipForEvent(row.id);
 
   const isFull = event.confirmedCount >= event.maxCapacity;
   const isClosed = event.status === "closed" || event.status === "cancelled";
 
   return (
     <div className="flex min-h-screen flex-col">
-      {/* 공개 헤더 */}
       <header className="sticky top-0 z-50 flex h-14 items-center justify-between border-b border-border bg-background/80 px-6 backdrop-blur-xl">
         <Link href="/" className="text-base font-semibold tracking-tight">
           Gather
@@ -76,7 +108,16 @@ export default async function PublicEventPage({ params }: { params: Promise<{ sl
                 </div>
               </div>
 
-              {isClosed ? (
+              {membership ? (
+                <div className="rounded-lg border border-border p-3 text-center">
+                  <p className="text-sm font-medium">
+                    신청 상태:{" "}
+                    <span className="text-primary">
+                      {MEMBER_STATUS_LABEL[membership.status] ?? membership.status}
+                    </span>
+                  </p>
+                </div>
+              ) : isClosed ? (
                 <Button className="w-full" disabled>
                   모집이 마감된 모임입니다
                 </Button>

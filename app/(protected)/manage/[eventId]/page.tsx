@@ -6,7 +6,8 @@ import { Separator } from "@/components/ui/separator";
 import { EventStatusBadge } from "@/components/event-status-badge";
 import { PageHeader } from "@/components/page-header";
 import { CopyButton } from "@/components/copy-button";
-import { DUMMY_EVENTS } from "@/lib/fixtures";
+import { getEventById } from "@/lib/supabase/events";
+import { mapEventRowToView } from "@/lib/mappers/event";
 
 export default async function EventManagePage({
   params,
@@ -14,9 +15,10 @@ export default async function EventManagePage({
   params: Promise<{ eventId: string }>;
 }) {
   const { eventId } = await params;
-  const event = DUMMY_EVENTS.find((e) => e.id === eventId);
-  if (!event) notFound();
+  const row = await getEventById(eventId);
+  if (!row) notFound();
 
+  const event = mapEventRowToView(row);
   const shareUrl = `${process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"}/events/${event.shareToken}`;
 
   const navItems = [
@@ -68,9 +70,7 @@ export default async function EventManagePage({
         <CardHeader>
           <CardTitle className="text-base">참여 링크 공유</CardTitle>
         </CardHeader>
-        {/* 모바일: 세로 배치 / sm 이상: 가로 배치 */}
         <CardContent className="flex flex-col gap-2 sm:flex-row sm:items-center">
-          {/* 모바일: break-all로 URL 줄바꿈 / sm 이상: truncate로 한 줄 표시 */}
           <code className="flex-1 break-all rounded bg-muted px-3 py-2 text-sm sm:min-w-0 sm:truncate sm:break-normal">
             {shareUrl}
           </code>

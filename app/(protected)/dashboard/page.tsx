@@ -5,21 +5,17 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { EventCard } from "@/components/event-card";
 import { EmptyState } from "@/components/empty-state";
 import { PageHeader } from "@/components/page-header";
-import { DUMMY_EVENTS, DUMMY_MEMBERS, CURRENT_USER } from "@/lib/fixtures";
+import { getMyHostingEvents, getMyParticipatingEvents } from "@/lib/supabase/events";
+import { mapEventRowToView } from "@/lib/mappers/event";
 
-export default function DashboardPage() {
-  const hostingEvents = DUMMY_EVENTS.filter((e) => e.host.id === CURRENT_USER.id);
+export default async function DashboardPage() {
+  const [hostingRows, participatingRows] = await Promise.all([
+    getMyHostingEvents(),
+    getMyParticipatingEvents(),
+  ]);
 
-  const participatingEventIds = new Set(
-    Object.entries(DUMMY_MEMBERS)
-      .filter(([, members]) =>
-        members.some((m) => m.user.id === CURRENT_USER.id && m.status !== "rejected"),
-      )
-      .map(([eventId]) => eventId),
-  );
-  const participatingEvents = DUMMY_EVENTS.filter(
-    (e) => e.host.id !== CURRENT_USER.id && participatingEventIds.has(e.id),
-  );
+  const hostingEvents = hostingRows.map(mapEventRowToView);
+  const participatingEvents = participatingRows.map(mapEventRowToView);
 
   return (
     <div className="space-y-6">

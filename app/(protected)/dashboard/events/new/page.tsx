@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -17,26 +17,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { PageHeader } from "@/components/page-header";
-
-const schema = z
-  .object({
-    title: z.string().min(1, "모임 이름을 입력해주세요").max(100, "100자 이내로 입력해주세요"),
-    description: z.string().max(1000, "1000자 이내로 입력해주세요").optional(),
-    type: z.enum(["one_time", "recurring"]),
-    maxCapacity: z
-      .number()
-      .min(2, "최소 2명 이상이어야 합니다")
-      .max(500, "최대 500명까지 가능합니다"),
-    startDate: z.string().min(1, "시작 일시를 선택해주세요"),
-    endDate: z.string().optional(),
-    location: z.string().max(200).optional(),
-  })
-  .refine((data) => !data.endDate || !data.startDate || data.endDate >= data.startDate, {
-    message: "종료 일시는 시작 일시 이후여야 합니다",
-    path: ["endDate"],
-  });
-
-type FormValues = z.infer<typeof schema>;
+import { eventCreateSchema, type EventCreateInput } from "@/lib/schemas/event";
+import { createEvent } from "@/lib/actions/event";
 
 export default function NewEventPage() {
   const router = useRouter();
@@ -45,16 +27,19 @@ export default function NewEventPage() {
     handleSubmit,
     control,
     formState: { errors, isSubmitting },
-  } = useForm<FormValues>({
-    resolver: zodResolver(schema),
-    defaultValues: { type: "one_time", maxCapacity: 10 },
+  } = useForm<EventCreateInput>({
+    resolver: zodResolver(eventCreateSchema),
+    defaultValues: { eventType: "one_time", approvalType: "auto", maxParticipants: 10 },
   });
 
-  const onSubmit = async (values: FormValues) => {
-    // Phase 3에서 실제 API 연동 예정
-    console.log("새 모임 생성:", values);
-    await new Promise((r) => setTimeout(r, 500));
-    router.push("/dashboard");
+  const onSubmit = async (values: EventCreateInput) => {
+    const result = await createEvent(values);
+    if (!result.success) {
+      toast.error(result.error);
+      return;
+    }
+    toast.success("모임이 생성되었습니다");
+    router.push(`/manage/${result.data.id}`);
   };
 
   return (
@@ -92,7 +77,7 @@ export default function NewEventPage() {
               <div className="space-y-2">
                 <Label>모임 유형</Label>
                 <Controller
-                  name="type"
+                  name="eventType"
                   control={control}
                   render={({ field }) => (
                     <Select value={field.value} onValueChange={field.onChange}>
@@ -109,36 +94,55 @@ export default function NewEventPage() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="maxCapacity">
-                  최대 인원 <span className="text-destructive">*</span>
-                </Label>
-                <Input
-                  id="maxCapacity"
-                  type="number"
-                  min={2}
-                  {...register("maxCapacity", { valueAsNumber: true })}
+                <Label>신청 승인 방식</Label>
+                <Controller
+                  name="approvalType"
+                  control={control}
+                  render={({ field }) => (
+                    <Select value={field.value} onValueChange={field.onChange}>
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="auto">자동 승인</SelectItem>
+                        <SelectItem value="manual">수동 승인</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  )}
                 />
-                {errors.maxCapacity && (
-                  <p className="text-xs text-destructive">{errors.maxCapacity.message}</p>
-                )}
               </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="maxParticipants">
+                최대 인원 <span className="text-destructive">*</span>
+              </Label>
+              <Input
+                id="maxParticipants"
+                type="number"
+                min={2}
+                {...register("maxParticipants", { valueAsNumber: true })}
+              />
+              {errors.maxParticipants && (
+                <p className="text-xs text-destructive">{errors.maxParticipants.message}</p>
+              )}
             </div>
 
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="space-y-2">
-                <Label htmlFor="startDate">
+                <Label htmlFor="startsAt">
                   시작 일시 <span className="text-destructive">*</span>
                 </Label>
-                <Input id="startDate" type="datetime-local" {...register("startDate")} />
-                {errors.startDate && (
-                  <p className="text-xs text-destructive">{errors.startDate.message}</p>
+                <Input id="startsAt" type="datetime-local" {...register("startsAt")} />
+                {errors.startsAt && (
+                  <p className="text-xs text-destructive">{errors.startsAt.message}</p>
                 )}
               </div>
               <div className="space-y-2">
-                <Label htmlFor="endDate">종료 일시</Label>
-                <Input id="endDate" type="datetime-local" {...register("endDate")} />
-                {errors.endDate && (
-                  <p className="text-xs text-destructive">{errors.endDate.message}</p>
+                <Label htmlFor="endsAt">종료 일시</Label>
+                <Input id="endsAt" type="datetime-local" {...register("endsAt")} />
+                {errors.endsAt && (
+                  <p className="text-xs text-destructive">{errors.endsAt.message}</p>
                 )}
               </div>
             </div>
@@ -146,6 +150,15 @@ export default function NewEventPage() {
             <div className="space-y-2">
               <Label htmlFor="location">장소</Label>
               <Input id="location" placeholder="예: 강남구청 수영장" {...register("location")} />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="registrationDeadline">신청 마감일</Label>
+              <Input
+                id="registrationDeadline"
+                type="datetime-local"
+                {...register("registrationDeadline")}
+              />
             </div>
 
             <div className="flex gap-3 pt-2">
