@@ -286,6 +286,7 @@ export type Database = {
         Row: {
           event_id: string
           id: string
+          member_id: string | null
           reminder_type: string
           sent_at: string
           sent_date: string
@@ -294,6 +295,7 @@ export type Database = {
         Insert: {
           event_id: string
           id?: string
+          member_id?: string | null
           reminder_type: string
           sent_at?: string
           sent_date?: string
@@ -302,6 +304,7 @@ export type Database = {
         Update: {
           event_id?: string
           id?: string
+          member_id?: string | null
           reminder_type?: string
           sent_at?: string
           sent_date?: string
@@ -313,6 +316,13 @@ export type Database = {
             columns: ["event_id"]
             isOneToOne: false
             referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reminder_logs_member_id_fkey"
+            columns: ["member_id"]
+            isOneToOne: false
+            referencedRelation: "event_members"
             referencedColumns: ["id"]
           },
         ]
@@ -537,26 +547,17 @@ export type CompositeTypes<
     ? DefaultSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
     : never
 
-// ---------------------------------------------------------------
-// 편의 타입 (자주 사용하는 테이블의 Row/Insert/Update 별칭)
-// ---------------------------------------------------------------
+// ---------------------------------------------------------------------------
+// 편의 타입 — 자주 사용하는 테이블 Row/Insert/Update 별칭
+// ---------------------------------------------------------------------------
 
-/** profiles 테이블 Row 타입 */
 export type Profile = Tables<"profiles">
-/** profiles 테이블 Insert 타입 */
 export type ProfileInsert = TablesInsert<"profiles">
-/** profiles 테이블 Update 타입 */
 export type ProfileUpdate = TablesUpdate<"profiles">
 
-/** events 테이블 Row 타입 */
 export type EventRow = Tables<"events">
-/** events 테이블 Insert 타입 */
 export type EventInsert = TablesInsert<"events">
-/** events 테이블 Update 타입 */
 export type EventUpdate = TablesUpdate<"events">
-
-/** event_members 테이블 Row 타입 */
-export type EventMemberRow = Tables<"event_members">
 
 export const Constants = {
   public: {

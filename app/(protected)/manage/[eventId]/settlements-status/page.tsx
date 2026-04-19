@@ -1,10 +1,12 @@
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { PaymentStatusBadge } from "@/components/event-status-badge";
 import { EmptyState } from "@/components/empty-state";
 import { PageHeader } from "@/components/page-header";
 import { CopyButton } from "@/components/copy-button";
-import { DUMMY_EVENTS, DUMMY_SETTLEMENTS, CURRENT_USER } from "@/lib/fixtures";
+import { createClient } from "@/lib/supabase/server";
+import { getEventById } from "@/lib/supabase/events";
+import { getMySettlementStatus } from "@/lib/supabase/settlements";
 
 export default async function SettlementsStatusPage({
   params,
@@ -12,27 +14,33 @@ export default async function SettlementsStatusPage({
   params: Promise<{ eventId: string }>;
 }) {
   const { eventId } = await params;
-  const event = DUMMY_EVENTS.find((e) => e.id === eventId);
+
+  // 인증 확인 — 비로그인 시 로그인 페이지로 리디렉션
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) redirect("/auth/login");
+
+  // 이벤트 정보 조회
+  const event = await getEventById(eventId);
   if (!event) notFound();
 
-  const settlement = DUMMY_SETTLEMENTS[eventId];
-  const myPayments =
-    settlement?.items.flatMap((item) =>
-      item.payments
-        .filter((p) => p.member.user.id === CURRENT_USER.id)
-        .map((p) => ({ item, payment: p })),
-    ) ?? [];
+  // 본인 정산 현황 조회 — 확정 참여자가 아니면 notFound
+  const myStatus = await getMySettlementStatus(eventId, user.id);
+  if (!myStatus) notFound();
 
-  const totalMyAmount = myPayments.reduce((sum, { payment }) => sum + payment.amount, 0);
-  const paidAmount = myPayments
-    .filter(({ payment }) => payment.status === "paid")
-    .reduce((sum, { payment }) => sum + payment.amount, 0);
+  const { payments, bankAccount, totalDue, allPaid } = myStatus;
+
+  // 미납 금액 계산
+  const paidAmount = payments.filter((p) => p.is_paid).reduce((sum, p) => sum + p.amount, 0);
+  const unpaidAmount = totalDue - paidAmount;
 
   return (
     <div className="space-y-6">
       <PageHeader title="정산 현황" description={event.title} />
 
-      {!settlement || myPayments.length === 0 ? (
+      {payments.length === 0 ? (
         <EmptyState
           title="정산 항목이 없습니다"
           description="주최자가 정산을 등록하면 여기에 표시됩니다"
@@ -43,14 +51,20 @@ export default async function SettlementsStatusPage({
           <div className="grid gap-3 sm:grid-cols-2">
             <Card>
               <CardContent className="pt-5 text-center">
-                <p className="text-2xl font-bold">{totalMyAmount.toLocaleString()}원</p>
+                <p className="text-2xl font-bold">{totalDue.toLocaleString()}원</p>
                 <p className="text-xs text-muted-foreground">내 총 납부 금액</p>
               </CardContent>
             </Card>
             <Card>
               <CardContent className="pt-5 text-center">
-                <p className="text-2xl font-bold text-orange-600">
-                  {(totalMyAmount - paidAmount).toLocaleString()}원
+                <p
+                  className={`text-2xl font-bold ${
+                    allPaid
+                      ? "text-green-600 dark:text-green-400"
+                      : "text-orange-600 dark:text-orange-400"
+                  }`}
+                >
+                  {unpaidAmount.toLocaleString()}원
                 </p>
                 <p className="text-xs text-muted-foreground">미납 금액</p>
               </CardContent>
@@ -58,38 +72,34 @@ export default async function SettlementsStatusPage({
           </div>
 
           {/* 계좌 정보 */}
-          {settlement.bankAccount && (
+          {bankAccount && (
             <Card>
               <CardHeader>
                 <CardTitle className="text-sm">입금 계좌</CardTitle>
               </CardHeader>
               <CardContent className="flex items-center justify-between">
                 <div className="text-sm">
-                  <span className="font-medium">{settlement.bankAccount.bankName}</span>
-                  <span className="ml-2 text-muted-foreground">
-                    {settlement.bankAccount.accountNumber}
-                  </span>
-                  <span className="ml-2 text-muted-foreground">
-                    {settlement.bankAccount.accountHolder}
-                  </span>
+                  <span className="font-medium">{bankAccount.bank_name}</span>
+                  <span className="ml-2 text-muted-foreground">{bankAccount.account_number}</span>
+                  <span className="ml-2 text-muted-foreground">{bankAccount.account_holder}</span>
                 </div>
-                <CopyButton text={settlement.bankAccount.accountNumber} />
+                <CopyButton text={bankAccount.account_number} />
               </CardContent>
             </Card>
           )}
 
-          {/* 항목별 내역 */}
+          {/* 항목별 납부 내역 */}
           <div className="space-y-3">
-            {myPayments.map(({ item, payment }) => (
+            {payments.map((payment) => (
               <Card key={payment.id}>
                 <CardContent className="flex items-center justify-between pt-5">
                   <div>
-                    <p className="font-medium">{item.name}</p>
+                    <p className="font-medium">{payment.settlement_item.name}</p>
                     <p className="text-sm text-muted-foreground">
                       {payment.amount.toLocaleString()}원
                     </p>
                   </div>
-                  <PaymentStatusBadge status={payment.status} />
+                  <PaymentStatusBadge status={payment.is_paid ? "paid" : "pending"} />
                 </CardContent>
               </Card>
             ))}

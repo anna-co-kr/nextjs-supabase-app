@@ -13,14 +13,18 @@ import { Separator } from "@/components/ui/separator";
 import { PaymentStatusBadge } from "@/components/event-status-badge";
 import { EmptyState } from "@/components/empty-state";
 import { PageHeader } from "@/components/page-header";
-import { DUMMY_EVENTS, DUMMY_SETTLEMENTS } from "@/lib/fixtures";
-import type { SplitType } from "@/lib/types";
-
-const SPLIT_TYPE_LABEL: Record<SplitType, string> = {
-  equal: "균등 분할",
-  individual: "개별 지정",
-  ratio: "비율 분담",
-};
+import { SettlementItemForm } from "@/components/settlement-item-form";
+import { BankAccountForm } from "@/components/bank-account-form";
+import { getEventById } from "@/lib/supabase/events";
+import {
+  getSettlementsByEventId,
+  getConfirmedMembers,
+  getBankAccount,
+} from "@/lib/supabase/settlements";
+import { deleteSettlementItem } from "@/lib/actions/settlement";
+import { PaymentToggleButton } from "@/components/payment-toggle-button";
+import { SendReminderButton } from "@/components/send-reminder-button";
+import { SPLIT_TYPE_LABEL } from "@/lib/utils/settlement";
 
 export default async function SettlementsPage({
   params,
@@ -28,38 +32,60 @@ export default async function SettlementsPage({
   params: Promise<{ eventId: string }>;
 }) {
   const { eventId } = await params;
-  const event = DUMMY_EVENTS.find((e) => e.id === eventId);
+
+  // 이벤트 정보 조회 (권한 검사 포함)
+  const event = await getEventById(eventId);
   if (!event) notFound();
 
-  const settlement = DUMMY_SETTLEMENTS[eventId];
+  // 정산 항목, 확정 멤버, 계좌 정보 병렬 조회
+  const [settlementItems, confirmedMembers, bankAccount] = await Promise.all([
+    getSettlementsByEventId(eventId),
+    getConfirmedMembers(eventId),
+    getBankAccount(eventId),
+  ]);
+
+  // 요약 집계 계산
+  const totalAmount = settlementItems.reduce((sum, item) => sum + item.total_amount, 0);
+  const allPayments = settlementItems.flatMap((item) => item.payments);
+  const paidCount = allPayments.filter((p) => p.is_paid).length;
+  const unpaidCount = allPayments.filter((p) => !p.is_paid).length;
 
   return (
     <div className="space-y-6">
       <PageHeader
         title="정산 관리"
-        description={`${event.title}`}
-        action={<Button size="sm">항목 추가</Button>}
+        description={event.title}
+        action={
+          <div className="flex items-center gap-2">
+            <SendReminderButton eventId={eventId} />
+            <SettlementItemForm eventId={eventId} confirmedMembers={confirmedMembers} />
+          </div>
+        }
       />
 
-      {/* 계좌 정보 */}
+      {/* 입금 계좌 */}
       <Card>
         <CardHeader className="pb-3">
           <div className="flex items-center justify-between">
             <CardTitle className="text-base">입금 계좌</CardTitle>
-            <Button variant="outline" size="sm">
-              {settlement?.bankAccount ? "수정" : "등록"}
-            </Button>
+            <BankAccountForm eventId={eventId} existingAccount={bankAccount} />
           </div>
         </CardHeader>
         <CardContent>
-          {settlement?.bankAccount ? (
-            // 모바일: 세로 배치 / sm 이상: 가로 배치
-            <div className="flex flex-col gap-1 text-sm sm:flex-row sm:items-center sm:gap-4">
-              <span className="font-medium">{settlement.bankAccount.bankName}</span>
-              <code className="rounded bg-muted px-2 py-0.5">
-                {settlement.bankAccount.accountNumber}
-              </code>
-              <span className="text-muted-foreground">{settlement.bankAccount.accountHolder}</span>
+          {bankAccount ? (
+            <div className="space-y-1 text-sm">
+              <p>
+                <span className="text-muted-foreground">은행명</span>{" "}
+                <span className="font-medium">{bankAccount.bank_name}</span>
+              </p>
+              <p>
+                <span className="text-muted-foreground">계좌번호</span>{" "}
+                <span className="font-medium">{bankAccount.account_number}</span>
+              </p>
+              <p>
+                <span className="text-muted-foreground">예금주</span>{" "}
+                <span className="font-medium">{bankAccount.account_holder}</span>
+              </p>
             </div>
           ) : (
             <p className="text-sm text-muted-foreground">등록된 계좌가 없습니다</p>
@@ -67,27 +93,25 @@ export default async function SettlementsPage({
         </CardContent>
       </Card>
 
-      {/* 정산 요약 */}
-      {settlement && (
+      {/* 정산 요약 — 항목이 있을 때만 표시 */}
+      {settlementItems.length > 0 && (
         <div className="grid gap-3 sm:grid-cols-3">
           <Card>
             <CardContent className="pt-5 text-center">
-              <p className="text-2xl font-bold">{settlement.totalAmount.toLocaleString()}원</p>
+              <p className="text-2xl font-bold">{totalAmount.toLocaleString()}원</p>
               <p className="text-xs text-muted-foreground">총 정산 금액</p>
             </CardContent>
           </Card>
           <Card>
             <CardContent className="pt-5 text-center">
-              <p className="text-2xl font-bold text-green-600 dark:text-green-400">
-                {settlement.paidCount}명
-              </p>
+              <p className="text-2xl font-bold text-green-600 dark:text-green-400">{paidCount}명</p>
               <p className="text-xs text-muted-foreground">납부 완료</p>
             </CardContent>
           </Card>
           <Card>
             <CardContent className="pt-5 text-center">
               <p className="text-2xl font-bold text-orange-600 dark:text-orange-400">
-                {settlement.unpaidCount}명
+                {unpaidCount}명
               </p>
               <p className="text-xs text-muted-foreground">미납</p>
             </CardContent>
@@ -97,84 +121,128 @@ export default async function SettlementsPage({
 
       <Separator />
 
-      {/* 정산 항목 */}
-      {!settlement || settlement.items.length === 0 ? (
+      {/* 정산 항목 목록 */}
+      {settlementItems.length === 0 ? (
         <EmptyState
           title="등록된 정산 항목이 없습니다"
           description="비용 항목을 추가해주세요"
-          action={<Button size="sm">항목 추가</Button>}
+          action={<SettlementItemForm eventId={eventId} confirmedMembers={confirmedMembers} />}
         />
       ) : (
         <div className="space-y-4">
-          {settlement.items.map((item) => (
+          {settlementItems.map((item) => (
             <Card key={item.id}>
               <CardHeader className="pb-2">
                 <div className="flex items-center justify-between">
                   <div>
                     <CardTitle className="text-base">{item.name}</CardTitle>
                     <p className="text-sm text-muted-foreground">
-                      {item.totalAmount.toLocaleString()}원 · {SPLIT_TYPE_LABEL[item.splitType]}
+                      {item.total_amount.toLocaleString()}원 · {SPLIT_TYPE_LABEL[item.split_type]}
                     </p>
                   </div>
-                  <Button variant="ghost" size="sm" className="text-xs">
-                    수정
-                  </Button>
+                  {/* 삭제 버튼 — Server Action 바인딩 */}
+                  <form
+                    action={async () => {
+                      "use server";
+                      await deleteSettlementItem(item.id, eventId);
+                    }}
+                  >
+                    <Button
+                      type="submit"
+                      variant="ghost"
+                      size="sm"
+                      className="text-xs text-destructive hover:text-destructive"
+                    >
+                      삭제
+                    </Button>
+                  </form>
                 </div>
               </CardHeader>
-              <CardContent>
-                {/* 모바일 결제 목록 — sm 이상에서 숨김 */}
-                <div className="flex flex-col gap-2 sm:hidden">
-                  {item.payments.map((p) => (
-                    <div key={p.id} className="flex items-center justify-between">
-                      {/* 왼쪽: 이름과 금액 */}
-                      <div>
-                        <p className="text-sm font-medium">{p.member.user.name}</p>
-                        <p className="text-sm text-muted-foreground">
-                          {p.amount.toLocaleString()}원
-                        </p>
-                      </div>
-                      {/* 오른쪽: 상태 뱃지와 확인/취소 버튼 */}
-                      <div className="flex items-center gap-2">
-                        <PaymentStatusBadge status={p.status} />
-                        <Button variant="outline" size="sm" className="h-7 text-xs">
-                          {p.status === "paid" ? "취소" : "확인"}
-                        </Button>
-                      </div>
-                    </div>
-                  ))}
-                </div>
 
-                {/* 데스크톱 테이블 — sm 미만에서 숨김 */}
-                <div className="hidden sm:block">
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead>참여자</TableHead>
-                        <TableHead className="text-right">금액</TableHead>
-                        <TableHead>상태</TableHead>
-                        <TableHead className="text-right">납부 확인</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {item.payments.map((p) => (
-                        <TableRow key={p.id}>
-                          <TableCell className="text-sm">{p.member.user.name}</TableCell>
-                          <TableCell className="text-right text-sm">
-                            {p.amount.toLocaleString()}원
-                          </TableCell>
-                          <TableCell>
-                            <PaymentStatusBadge status={p.status} />
-                          </TableCell>
-                          <TableCell className="text-right">
-                            <Button variant="outline" size="sm" className="h-7 text-xs">
-                              {p.status === "paid" ? "취소" : "확인"}
-                            </Button>
-                          </TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </div>
+              <CardContent>
+                {item.payments.length === 0 ? (
+                  <p className="text-sm text-muted-foreground">결제 정보가 없습니다</p>
+                ) : (
+                  <>
+                    {/* 모바일 결제 목록 */}
+                    <div className="flex flex-col gap-2 sm:hidden">
+                      {item.payments.map((payment) => {
+                        const memberName =
+                          payment.member.profile.full_name ??
+                          payment.member.profile.email ??
+                          "알 수 없음";
+                        return (
+                          <div key={payment.id} className="flex items-center justify-between">
+                            {/* 왼쪽: 이름과 금액 */}
+                            <div>
+                              <p className="text-sm font-medium">{memberName}</p>
+                              <p className="text-sm text-muted-foreground">
+                                {payment.amount.toLocaleString()}원
+                                {payment.ratio !== null && (
+                                  <span className="ml-1 text-xs">({payment.ratio}%)</span>
+                                )}
+                              </p>
+                            </div>
+                            {/* 오른쪽: 상태 뱃지와 납부 확인 버튼 */}
+                            <div className="flex items-center gap-2">
+                              <PaymentStatusBadge status={payment.is_paid ? "paid" : "pending"} />
+                              <PaymentToggleButton
+                                paymentId={payment.id}
+                                isPaid={payment.is_paid}
+                              />
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+
+                    {/* 데스크톱 테이블 */}
+                    <div className="hidden sm:block">
+                      <Table>
+                        <TableHeader>
+                          <TableRow>
+                            <TableHead>참여자</TableHead>
+                            <TableHead className="text-right">금액</TableHead>
+                            <TableHead>상태</TableHead>
+                            <TableHead className="text-right">납부 확인</TableHead>
+                          </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                          {item.payments.map((payment) => {
+                            const memberName =
+                              payment.member.profile.full_name ??
+                              payment.member.profile.email ??
+                              "알 수 없음";
+                            return (
+                              <TableRow key={payment.id}>
+                                <TableCell className="text-sm">{memberName}</TableCell>
+                                <TableCell className="text-right text-sm">
+                                  {payment.amount.toLocaleString()}원
+                                  {payment.ratio !== null && (
+                                    <span className="ml-1 text-xs text-muted-foreground">
+                                      ({payment.ratio}%)
+                                    </span>
+                                  )}
+                                </TableCell>
+                                <TableCell>
+                                  <PaymentStatusBadge
+                                    status={payment.is_paid ? "paid" : "pending"}
+                                  />
+                                </TableCell>
+                                <TableCell className="text-right">
+                                  <PaymentToggleButton
+                                    paymentId={payment.id}
+                                    isPaid={payment.is_paid}
+                                  />
+                                </TableCell>
+                              </TableRow>
+                            );
+                          })}
+                        </TableBody>
+                      </Table>
+                    </div>
+                  </>
+                )}
               </CardContent>
             </Card>
           ))}
