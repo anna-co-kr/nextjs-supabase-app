@@ -1226,14 +1226,14 @@
       "id": "23e6bbc7-3744-4819-90f3-4240fcf4f641",
       "name": "Task 030: 납부 확인 및 상태 관리 연동 (F009)",
       "description": "settlement_payments의 is_paid 상태 토글 Server Action을 구현하고 납부 완료율 요약 카드를 실데이터로 연동한다.\n\n구현 범위:\n1. lib/actions/settlement.ts에 togglePaymentStatus(paymentId, isPaid) 추가\n   - is_paid=true → paid_at=now(), is_paid=false → paid_at=null\n2. lib/supabase/settlements.ts에 getSettlementSummary(eventId) 추가\n   - totalAmount, paidCount, unpaidCount 집계\n3. components/payment-toggle-button.tsx — useTransition + Loader2 스피너, 확인/취소 토글\n4. settlements/page.tsx — PaymentToggleButton 연결, 요약 카드 실데이터 반영\n5. 모바일 카드 + 데스크톱 테이블 양쪽에 PaymentToggleButton 적용",
-      "status": "in_progress",
+      "status": "completed",
       "dependencies": [
         {
           "taskId": "a9341cf4-f8ba-4e5a-ac34-e7b54a28885c"
         }
       ],
       "createdAt": "2026-04-19T15:20:06.064Z",
-      "updatedAt": "2026-04-19T15:39:12.608Z",
+      "updatedAt": "2026-04-19T15:39:13.809Z",
       "relatedFiles": [
         {
           "path": "lib/actions/settlement.ts",
@@ -1264,7 +1264,8 @@
       "implementationGuide": "// lib/actions/settlement.ts\nasync function togglePaymentStatus(paymentId, isPaid):\n  verify host (payment -> settlement_item -> event -> host_id)\n  update settlement_payments set is_paid=isPaid, paid_at=(isPaid ? now() : null)\n  revalidatePath\n  return ActionResult\n\n// components/payment-toggle-button.tsx\n'use client'\nconst [isPending, startTransition] = useTransition()\nonClick: startTransition(() => togglePaymentStatus(id, !currentIsPaid))\nrender: isPending ? <Loader2 animate-spin /> : (isPaid ? '취소' : '확인')",
       "verificationCriteria": "1. '확인' 클릭 → is_paid=true, paid_at 기록, 버튼 → '취소'로 전환\n2. '취소' 클릭 → is_paid=false, paid_at=null, 버튼 → '확인'으로 전환\n3. 요약 카드: 납부 완료 명수/미납 명수 실데이터 반영\n4. Playwright MCP: localhost:3001 납부 토글 동작 확인\n5. lint/type-check 0 에러",
       "analysisResult": "Phase 4 정산 기능: settlement_items/settlement_payments/host_bank_accounts DB 테이블(이미 존재) 연동. 기존 Phase 3 패턴 준수 — \"use server\" + createClient() + auth.getUser() + Zod safeParse + ActionResult 반환 + revalidatePath. 더미 데이터(DUMMY_SETTLEMENTS) 완전 제거. 신규 파일: lib/schemas/settlement.ts, lib/utils/settlement.ts, lib/supabase/settlements.ts, lib/actions/settlement.ts, lib/email/settlement-reminder.ts(or resend.ts 확장), components/settlement-item-form.tsx, components/bank-account-form.tsx, components/payment-toggle-button.tsx, components/copy-button.tsx.",
-      "summary": "togglePaymentStatus Server Action(권한 체인 검증+paid_at 자동 기록), PaymentToggleButton 컴포넌트(useTransition+Loader2), 모바일/데스크톱 양쪽 연결 완료. 요약 카드 flatMap 집계로 실데이터 반영. lint/type-check 0 에러."
+      "summary": "togglePaymentStatus Server Action(권한 체인 검증+paid_at 자동 기록), PaymentToggleButton 컴포넌트(useTransition+Loader2), 모바일/데스크톱 양쪽 연결 완료. 요약 카드 flatMap 집계로 실데이터 반영. lint/type-check 0 에러.",
+      "completedAt": "2026-04-19T15:39:13.806Z"
     },
     {
       "id": "7d3d2b69-75ea-4dce-98d7-b441d8f9dbcf",
