@@ -1080,14 +1080,14 @@
       "name": "Task 016: Phase 2 최종 UI 검수 (Playwright MCP)",
       "description": "Task 014~015 개선사항 반영 여부를 Playwright MCP로 검증. 주요 페이지 스냅샷, toast 동작, 반응형 뷰포트 확인. tasks/016-phase2-ui-review.md에 결과 기록.",
       "notes": "테스트는 반드시 Playwright MCP 사용.",
-      "status": "pending",
+      "status": "in_progress",
       "dependencies": [
         {
           "taskId": "50fdcf3a-860b-4934-aa75-b73e4ed6b25c"
         }
       ],
       "createdAt": "2026-04-19T14:58:34.339Z",
-      "updatedAt": "2026-04-19T14:58:34.339Z",
+      "updatedAt": "2026-04-19T15:05:10.165Z",
       "relatedFiles": [
         {
           "path": "tasks/016-phase2-ui-review.md",
