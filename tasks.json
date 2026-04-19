@@ -1176,14 +1176,14 @@
       "id": "a9341cf4-f8ba-4e5a-ac34-e7b54a28885c",
       "name": "Task 029: 호스트 계좌번호 등록 연동 (F009)",
       "description": "host_bank_accounts 테이블 CRUD를 구현하고 settlements/page.tsx의 계좌 등록/수정 버튼에 연결한다.\n\n구현 범위:\n1. lib/schemas/settlement.ts에 bankAccountSchema 추가 (bank_name, account_number, account_holder)\n2. lib/actions/settlement.ts에 upsertBankAccount(eventId, input) 추가\n3. lib/supabase/settlements.ts에 getBankAccount(eventId) 추가\n4. components/bank-account-form.tsx — Dialog + React Hook Form + zodResolver\n5. settlements/page.tsx — getBankAccount 호출, BankAccountForm 연결\n\n주의: host_bank_accounts에 UNIQUE(event_id) 제약이 없으므로 기존 레코드 조회 후 update/insert 분기 처리",
-      "status": "in_progress",
+      "status": "completed",
       "dependencies": [
         {
           "taskId": "91ad2e5d-dc9c-485d-b4da-241707966f6f"
         }
       ],
       "createdAt": "2026-04-19T15:20:06.064Z",
-      "updatedAt": "2026-04-19T15:36:32.264Z",
+      "updatedAt": "2026-04-19T15:36:33.496Z",
       "relatedFiles": [
         {
           "path": "lib/schemas/settlement.ts",
@@ -1219,7 +1219,8 @@
       "implementationGuide": "// lib/actions/settlement.ts\nasync function upsertBankAccount(eventId, input):\n  validate Zod\n  verify host\n  existing = getBankAccount(eventId)\n  if existing: update where id=existing.id\n  else: insert {event_id, host_id, ...input}\n  revalidatePath\n  return ActionResult\n\n// components/bank-account-form.tsx\nDialog trigger = '등록' or '수정' button\nform fields: bank_name(은행명), account_number(계좌번호), account_holder(예금주)\nonSubmit: call upsertBankAccount Server Action + toast",
       "verificationCriteria": "1. 계좌 미등록 상태에서 '등록' 버튼 클릭 → Dialog 열림 → 저장 → 계좌 표시\n2. 계좌 등록 후 '수정' 클릭 → 기존값 채워진 폼 → 수정 저장\n3. 다른 이벤트의 계좌가 노출되지 않음 (RLS)\n4. lint/type-check 0 에러",
       "analysisResult": "Phase 4 정산 기능: settlement_items/settlement_payments/host_bank_accounts DB 테이블(이미 존재) 연동. 기존 Phase 3 패턴 준수 — \"use server\" + createClient() + auth.getUser() + Zod safeParse + ActionResult 반환 + revalidatePath. 더미 데이터(DUMMY_SETTLEMENTS) 완전 제거. 신규 파일: lib/schemas/settlement.ts, lib/utils/settlement.ts, lib/supabase/settlements.ts, lib/actions/settlement.ts, lib/email/settlement-reminder.ts(or resend.ts 확장), components/settlement-item-form.tsx, components/bank-account-form.tsx, components/payment-toggle-button.tsx, components/copy-button.tsx.",
-      "summary": "bankAccountSchema/BankAccountInput 추가, getBankAccount 쿼리 레이어, upsertBankAccount Server Action(insert/update 분기), BankAccountForm 클라이언트 컴포넌트(등록/수정 모드 자동 전환) 구현. settlements/page.tsx에 연결 완료. lint/type-check 0 에러."
+      "summary": "bankAccountSchema/BankAccountInput 추가, getBankAccount 쿼리 레이어, upsertBankAccount Server Action(insert/update 분기), BankAccountForm 클라이언트 컴포넌트(등록/수정 모드 자동 전환) 구현. settlements/page.tsx에 연결 완료. lint/type-check 0 에러.",
+      "completedAt": "2026-04-19T15:36:33.492Z"
     },
     {
       "id": "23e6bbc7-3744-4819-90f3-4240fcf4f641",
