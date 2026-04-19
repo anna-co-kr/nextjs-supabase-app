@@ -813,14 +813,14 @@
       "name": "Task 024: 참여자 목록 CSV 내보내기 (F005, UTF-8 BOM)",
       "description": "주최자가 참여자 목록을 CSV로 다운로드하는 기능을 Route Handler로 구현한다. 한글 깨짐 방지를 위해 UTF-8 BOM을 포함한다.",
       "notes": "날짜 포맷은 toLocaleDateString('ko-KR') 사용. CSV 이스케이프 처리 철저히 (쉼표/따옴표/개행).",
-      "status": "in_progress",
+      "status": "completed",
       "dependencies": [
         {
           "taskId": "554e43f1-2baf-455b-861f-5565bb07ee30"
         }
       ],
       "createdAt": "2026-04-19T09:42:01.087Z",
-      "updatedAt": "2026-04-19T10:55:06.373Z",
+      "updatedAt": "2026-04-19T10:55:07.848Z",
       "relatedFiles": [
         {
           "path": "lib/utils/csv.ts",
@@ -846,7 +846,8 @@
       "implementationGuide": "1. lib/utils/csv.ts: toCSV<T>(rows, columns) + withBOM(csv) 순수 유틸리티\n2. app/api/events/[eventId]/members/export/route.ts (Route Handler GET):\n   - params await (Next.js 15)\n   - 주최자 권한 체크: event.host_id === user.id → 아니면 403\n   - getMembersByEventId(eventId) 호출\n   - 컬럼: 이름, 이메일, 상태(한글), 신청일시, 확정일시 (ko-KR 포맷)\n   - Response with Content-Type: text/csv + Content-Disposition: attachment\n3. manage/members/page.tsx에 <a href='/api/.../export' download> 버튼 연결\n4. Playwright: 다운로드 확인, 비주최자 403, UTF-8 BOM 검증",
       "verificationCriteria": "- 응답 헤더: text/csv; charset=utf-8 + Content-Disposition: attachment\n- 파일 첫 3바이트가 EF BB BF (UTF-8 BOM)\n- 비주최자 접근 시 403\n- Playwright 3개 시나리오 통과",
       "analysisResult": "Gather 프로젝트 Phase 3 목표: Phase 1~2에서 확정된 UI와 View 모델을 근거로 DB 스키마를 설계하고, 더미 데이터를 실제 Supabase 연동으로 교체한다. 8개 테이블(profiles, events, event_members, announcements, announcement_comments, announcement_reactions, settlement_items, settlement_payments + host_bank_accounts), 6개 ENUM, RLS 정책 전 테이블 적용, Server Actions + Supabase @supabase/ssr 패턴 준수, Next.js 15 App Router (Server Components, params await, Server Actions), TypeScript any 금지, Playwright MCP 테스트 필수.",
-      "summary": "lib/utils/csv.ts (toCSV/withBOM 순수 유틸, CSV 이스케이프 처리), app/api/events/[eventId]/members/export/route.ts (주최자 권한 체크, UTF-8 BOM 포함, Content-Disposition attachment), members/page.tsx에 CSV 내보내기 버튼 연결. type-check 통과."
+      "summary": "lib/utils/csv.ts (toCSV/withBOM 순수 유틸, CSV 이스케이프 처리), app/api/events/[eventId]/members/export/route.ts (주최자 권한 체크, UTF-8 BOM 포함, Content-Disposition attachment), members/page.tsx에 CSV 내보내기 버튼 연결. type-check 통과.",
+      "completedAt": "2026-04-19T10:55:07.846Z"
     },
     {
       "id": "fed4d488-0c82-4da4-ae19-a7e0eb94376c",
