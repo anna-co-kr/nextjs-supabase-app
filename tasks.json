@@ -1271,14 +1271,14 @@
       "id": "7d3d2b69-75ea-4dce-98d7-b441d8f9dbcf",
       "name": "Task 031: 참여자용 정산 현황 연동",
       "description": "settlements-status/page.tsx의 더미 데이터를 Supabase 연동으로 교체하고 계좌번호 복사 기능을 연결한다.\n\n구현 범위:\n1. lib/supabase/settlements.ts에 getMySettlementStatus(eventId, userId) 추가\n   - 현재 사용자의 event_member_id 조회\n   - settlement_payments + settlement_items 조인으로 본인 납부 내역 조회\n   - host_bank_accounts 조회\n2. components/copy-button.tsx — 'use client', navigator.clipboard.writeText + toast.success\n3. settlements-status/page.tsx — DUMMY 제거, getMySettlementStatus 호출, CopyButton 연결\n   - 확정 참여자가 아닌 경우 접근 차단 (notFound or redirect)\n4. RLS 정책: payments_select는 em.user_id = auth.uid() OR host — 참여자 본인 데이터만 노출 확인",
-      "status": "pending",
+      "status": "in_progress",
       "dependencies": [
         {
           "taskId": "23e6bbc7-3744-4819-90f3-4240fcf4f641"
         }
       ],
       "createdAt": "2026-04-19T15:20:06.064Z",
-      "updatedAt": "2026-04-19T15:20:06.064Z",
+      "updatedAt": "2026-04-19T15:39:20.706Z",
       "relatedFiles": [
         {
           "path": "lib/supabase/settlements.ts",
