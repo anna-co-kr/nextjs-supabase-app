@@ -682,7 +682,7 @@
         }
       ],
       "createdAt": "2026-04-19T09:42:01.087Z",
-      "updatedAt": "2026-04-19T09:57:55.805Z",
+      "updatedAt": "2026-04-19T10:01:49.185Z",
       "relatedFiles": [
         {
           "path": "lib/schemas/event.ts",
@@ -712,7 +712,8 @@
       ],
       "implementationGuide": "1. lib/schemas/event.ts: eventCreateSchema (title, description, eventType, approvalType, maxParticipants, startsAt, endsAt, location, registrationDeadline)\n2. lib/actions/event.ts ('use server'):\n   - createEvent(input): ActionResult<{id, shareToken}> — INSERT + revalidateTag('events')\n   - updateEvent(input): ActionResult<EventRow> — UPDATE + revalidateTag\n   - deleteEvent(id): ActionResult<{id}> — DELETE + revalidateTag\n3. 이벤트 생성 폼 onSubmit → createEvent(values) → 성공 시 router.push('/manage/${id}')\n4. 이벤트 수정 폼 → updateEvent 연결\n5. 삭제 버튼 → AlertDialog + deleteEvent → router.push('/dashboard')\n6. lib/supabase/events.ts에 getEventById(id) 추가\n7. Playwright: CRUD 5개 시나리오 (생성/수정/삭제/RLS차단/Zod에러)",
       "verificationCriteria": "- 이벤트 생성 → DB events INSERT + share_token 자동 UUID 생성\n- 이벤트 수정 시 updated_at 트리거 자동 갱신\n- 이벤트 삭제 시 CASCADE로 관련 레코드 삭제\n- 타 사용자 UPDATE/DELETE → RLS 차단\n- Zod 검증 실패 → 폼 에러 메시지\n- Playwright 5개 시나리오 통과",
-      "analysisResult": "Gather 프로젝트 Phase 3 목표: Phase 1~2에서 확정된 UI와 View 모델을 근거로 DB 스키마를 설계하고, 더미 데이터를 실제 Supabase 연동으로 교체한다. 8개 테이블(profiles, events, event_members, announcements, announcement_comments, announcement_reactions, settlement_items, settlement_payments + host_bank_accounts), 6개 ENUM, RLS 정책 전 테이블 적용, Server Actions + Supabase @supabase/ssr 패턴 준수, Next.js 15 App Router (Server Components, params await, Server Actions), TypeScript any 금지, Playwright MCP 테스트 필수."
+      "analysisResult": "Gather 프로젝트 Phase 3 목표: Phase 1~2에서 확정된 UI와 View 모델을 근거로 DB 스키마를 설계하고, 더미 데이터를 실제 Supabase 연동으로 교체한다. 8개 테이블(profiles, events, event_members, announcements, announcement_comments, announcement_reactions, settlement_items, settlement_payments + host_bank_accounts), 6개 ENUM, RLS 정책 전 테이블 적용, Server Actions + Supabase @supabase/ssr 패턴 준수, Next.js 15 App Router (Server Components, params await, Server Actions), TypeScript any 금지, Playwright MCP 테스트 필수.",
+      "summary": "lib/schemas/event.ts (Zod schema), lib/actions/event.ts (createEvent/updateEvent/deleteEvent Server Actions), lib/supabase/events.ts (getEventById/getPublicEventByToken 추가) 구현 완료. 이벤트 생성 폼을 실제 Server Action 연동, manage/[eventId]/page.tsx DUMMY_EVENTS 제거. type-check 통과."
     },
     {
       "id": "ce85dc84-97b1-418d-82d1-8be5ff0fe20e",
