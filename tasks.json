@@ -728,7 +728,7 @@
         }
       ],
       "createdAt": "2026-04-19T09:42:01.087Z",
-      "updatedAt": "2026-04-19T10:01:55.589Z",
+      "updatedAt": "2026-04-19T10:02:50.242Z",
       "relatedFiles": [
         {
           "path": "lib/supabase/events.ts",
@@ -753,7 +753,8 @@
       ],
       "implementationGuide": "1. lib/supabase/events.ts 확장:\n   - getEventByShareToken(token): events WHERE share_token=token AND status!='draft' + profiles JOIN + count 집계\n   - getMyMembershipForEvent(eventId): 로그인 사용자의 event_members 조회\n2. app/events/[token]/page.tsx 수정:\n   - params: Promise<{token: string}> + await params (Next.js 15)\n   - getEventByShareToken(token) → null이면 notFound()\n   - 본인 멤버십 조회 → 상태 배지 표시\n3. generateMetadata({ params }): title, description, openGraph\n4. lib/supabase/proxy.ts 확인 — /events/* 공개 경로 포함 여부\n5. Playwright: 비로그인 접근(200), 잘못된 토큰(404), draft 이벤트(404), 본인 신청 상태 배지, OG 메타태그",
       "verificationCriteria": "- 비로그인 /events/[token] → 200 + 이벤트 정보 표시\n- 잘못된 토큰 → 404\n- OG 메타태그가 HTML head에 렌더링\n- 본인 신청 이벤트 방문 시 상태 배지 표시\n- Playwright 5개 시나리오 통과",
-      "analysisResult": "Gather 프로젝트 Phase 3 목표: Phase 1~2에서 확정된 UI와 View 모델을 근거로 DB 스키마를 설계하고, 더미 데이터를 실제 Supabase 연동으로 교체한다. 8개 테이블(profiles, events, event_members, announcements, announcement_comments, announcement_reactions, settlement_items, settlement_payments + host_bank_accounts), 6개 ENUM, RLS 정책 전 테이블 적용, Server Actions + Supabase @supabase/ssr 패턴 준수, Next.js 15 App Router (Server Components, params await, Server Actions), TypeScript any 금지, Playwright MCP 테스트 필수."
+      "analysisResult": "Gather 프로젝트 Phase 3 목표: Phase 1~2에서 확정된 UI와 View 모델을 근거로 DB 스키마를 설계하고, 더미 데이터를 실제 Supabase 연동으로 교체한다. 8개 테이블(profiles, events, event_members, announcements, announcement_comments, announcement_reactions, settlement_items, settlement_payments + host_bank_accounts), 6개 ENUM, RLS 정책 전 테이블 적용, Server Actions + Supabase @supabase/ssr 패턴 준수, Next.js 15 App Router (Server Components, params await, Server Actions), TypeScript any 금지, Playwright MCP 테스트 필수.",
+      "summary": "공개 이벤트 페이지를 DUMMY_EVENTS에서 share_token 기반 Supabase 조회로 교체 완료. generateMetadata + OG 메타태그 추가, 본인 멤버십 조회 후 상태 배지 표시, getMyMembershipForEvent 추가. proxy.ts /events/* 공개 경로 확인 완료. type-check 통과."
     },
     {
       "id": "554e43f1-2baf-455b-861f-5565bb07ee30",
