@@ -995,7 +995,7 @@
       "status": "in_progress",
       "dependencies": [],
       "createdAt": "2026-04-19T14:58:34.339Z",
-      "updatedAt": "2026-04-19T14:58:39.482Z",
+      "updatedAt": "2026-04-19T15:03:09.843Z",
       "relatedFiles": [
         {
           "path": "app/(protected)/manage/[eventId]/page.tsx",
@@ -1030,7 +1030,8 @@
       ],
       "implementationGuide": "1. app/(protected)/manage/[eventId]/page.tsx - 이벤트 삭제/수정 결과에 toast 추가\n2. components/announcement-actions.tsx - 공지 삭제/핀 토글 toast\n3. components/announcement-form.tsx - 공지 저장 toast\n4. components/comment-form.tsx - 댓글 등록 toast\n5. components/login-form.tsx - 로그인 성공 toast (에러는 현재 인라인 표시됨)\n6. 버튼 disabled + spinner: Server Action 호출 중 버튼에 isPending 상태로 Loader2 아이콘 표시 (useTransition 또는 useFormStatus)\n7. 모바일 터치 타깃: 주요 인터랙티브 요소 min-h-[44px] min-w-[44px] 확인 및 적용",
       "verificationCriteria": "1. 이벤트 삭제/수정 성공/실패 시 toast 표시\n2. 공지 작성/수정/삭제/핀 토글 시 toast\n3. 댓글 등록/삭제 시 toast\n4. Server Action 진행 중 버튼 비활성화 + 스피너\n5. npm run lint && npm run type-check 0 에러",
-      "analysisResult": "Phase 2 미완료 태스크 014~016 구현. Sonner/toast 이미 설치됨. skeleton/aria 일부 적용됨. Phase 3 백엔드 연동 완료 상태. 테스트는 Playwright MCP 활용."
+      "analysisResult": "Phase 2 미완료 태스크 014~016 구현. Sonner/toast 이미 설치됨. skeleton/aria 일부 적용됨. Phase 3 백엔드 연동 완료 상태. 테스트는 Playwright MCP 활용.",
+      "summary": "announcement-actions.tsx: onError 제거 + toast.success/error + Loader2 스피너 적용. announcement-form.tsx: serverError 제거 + toast 통합 + 버튼 스피너. comment-form.tsx: toast 통합 + deleteComment 결과 처리 + min-h-[44px] 터치 타깃. login-form.tsx: Loader2 스피너 추가. lint/type-check 0 에러."
     },
     {
       "id": "50fdcf3a-860b-4934-aa75-b73e4ed6b25c",
