@@ -1039,14 +1039,14 @@
       "name": "Task 015: 접근성 및 반응형 보완",
       "description": "aria-label/role/alt 속성 보강, 키보드 네비게이션(Tab/Enter/Esc) 점검, 모바일 반응형 개선. 멤버 관리 테이블, 공지 리액션 버튼, 다이얼로그 포커스 트랩 등.",
       "notes": "WCAG AA 기준 목표. 완벽한 스크린리더 지원보다 핵심 인터랙션 위주 개선.",
-      "status": "pending",
+      "status": "in_progress",
       "dependencies": [
         {
           "taskId": "7b860fbb-47a5-4ba3-bfa4-bd46a6edb920"
         }
       ],
       "createdAt": "2026-04-19T14:58:34.339Z",
-      "updatedAt": "2026-04-19T14:58:34.339Z",
+      "updatedAt": "2026-04-19T15:03:20.357Z",
       "relatedFiles": [
         {
           "path": "app/(protected)/manage/[eventId]/members/page.tsx",
