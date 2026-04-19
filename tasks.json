@@ -588,14 +588,14 @@
       "name": "Task 019: 인증 시스템 연동 강화 (CURRENT_USER 더미 제거 + 회원가입 자동 프로필 생성)",
       "description": "app/(protected)/layout.tsx의 CURRENT_USER 더미를 getProfile() 호출로 교체하고, 회원가입 시 profiles 레코드가 자동 생성되도록 handle_new_user 트리거를 적용한다.",
       "notes": "layout.tsx 외 CURRENT_USER 사용처(dashboard, manage 페이지 등)는 Task 020~025에서 순차 교체. 이 태스크에서는 layout만 교체.",
-      "status": "pending",
+      "status": "in_progress",
       "dependencies": [
         {
           "taskId": "d43746ef-821c-4a8d-95a8-a570a80411b0"
         }
       ],
       "createdAt": "2026-04-19T09:42:01.087Z",
-      "updatedAt": "2026-04-19T09:42:01.087Z",
+      "updatedAt": "2026-04-19T09:52:31.584Z",
       "relatedFiles": [
         {
           "path": "supabase/migrations/20260419000004_handle_new_user_trigger.sql",
