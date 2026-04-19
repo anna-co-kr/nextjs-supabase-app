@@ -1039,14 +1039,14 @@
       "name": "Task 015: 접근성 및 반응형 보완",
       "description": "aria-label/role/alt 속성 보강, 키보드 네비게이션(Tab/Enter/Esc) 점검, 모바일 반응형 개선. 멤버 관리 테이블, 공지 리액션 버튼, 다이얼로그 포커스 트랩 등.",
       "notes": "WCAG AA 기준 목표. 완벽한 스크린리더 지원보다 핵심 인터랙션 위주 개선.",
-      "status": "in_progress",
+      "status": "completed",
       "dependencies": [
         {
           "taskId": "7b860fbb-47a5-4ba3-bfa4-bd46a6edb920"
         }
       ],
       "createdAt": "2026-04-19T14:58:34.339Z",
-      "updatedAt": "2026-04-19T15:05:02.722Z",
+      "updatedAt": "2026-04-19T15:05:03.873Z",
       "relatedFiles": [
         {
           "path": "app/(protected)/manage/[eventId]/members/page.tsx",
@@ -1072,7 +1072,8 @@
       "implementationGuide": "1. 테이블 접근성: app/(protected)/manage/[eventId]/members/page.tsx Table에 scope='col' 추가, 상태 배지에 aria-label\n2. 리액션 버튼: components/announcement-reaction-button.tsx에 aria-label='이모지 리액션 토글', aria-pressed 추가\n3. 다이얼로그: 기존 Dialog 컴포넌트에 DialogTitle이 없는 경우 추가 (스크린리더용)\n4. 이미지/아이콘: 장식용 아이콘 aria-hidden='true', 의미있는 아이콘에 aria-label\n5. 폼 필드: label htmlFor 연결 확인, 필수 필드 aria-required='true'\n6. 포커스 스타일: focus-visible:ring-2 클래스 누락 버튼 확인\n7. 반응형: 모바일에서 사이드바 오버레이 접근성 (aria-modal, aria-expanded)",
       "verificationCriteria": "1. 테이블 헤더 scope 속성 적용\n2. 리액션 버튼 aria-label, aria-pressed 적용\n3. 장식 아이콘 aria-hidden='true' 전반 적용\n4. 폼 필드 label 연결 확인\n5. npm run lint && npm run type-check 0 에러",
       "analysisResult": "Phase 2 미완료 태스크 014~016 구현. Sonner/toast 이미 설치됨. skeleton/aria 일부 적용됨. Phase 3 백엔드 연동 완료 상태. 테스트는 Playwright MCP 활용.",
-      "summary": "ReactionButton에 aria-label + aria-pressed 적용. 이모지 span aria-hidden 처리. AddReactionButton 각 버튼에 aria-label 추가. members/page.tsx TableHead에 scope=\"col\" 적용. layout.tsx 모바일 네비 링크 aria-label 추가. EventStatusBadge role=\"status\" + aria-label, MemberStatusBadge aria-label 추가. lint/type-check 0 에러."
+      "summary": "ReactionButton에 aria-label + aria-pressed 적용. 이모지 span aria-hidden 처리. AddReactionButton 각 버튼에 aria-label 추가. members/page.tsx TableHead에 scope=\"col\" 적용. layout.tsx 모바일 네비 링크 aria-label 추가. EventStatusBadge role=\"status\" + aria-label, MemberStatusBadge aria-label 추가. lint/type-check 0 에러.",
+      "completedAt": "2026-04-19T15:05:03.871Z"
     },
     {
       "id": "969b4afc-419f-441c-a0b1-1dd638c2537d",
