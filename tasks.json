@@ -769,7 +769,7 @@
         }
       ],
       "createdAt": "2026-04-19T09:42:01.087Z",
-      "updatedAt": "2026-04-19T10:02:55.851Z",
+      "updatedAt": "2026-04-19T10:08:55.561Z",
       "relatedFiles": [
         {
           "path": "lib/actions/member.ts",
@@ -804,7 +804,8 @@
       ],
       "implementationGuide": "1. lib/actions/member.ts ('use server'):\n   - applyToEvent(eventId): 중복/마감일/정원 체크 → confirmed(자동승인+정원여유) 또는 waiting INSERT\n   - updateMemberStatus(memberId, newStatus): 주최자 권한 + confirmed→rejected 시 자동 승격 트리거\n   - cancelMyApplication(memberId): 본인 취소 + 자동 승격\n2. supabase/migrations/20260419000005_auto_promote_waitlist.sql:\n   CREATE FUNCTION public.promote_next_waitlist(p_event_id uuid) RETURNS void — 정원 여유 시 oldest waiting → confirmed\n3. lib/supabase/members.ts: getMembersByEventId(eventId) — profiles JOIN\n4. /events/[token]/apply/page.tsx: 비로그인 시 redirect('/auth/login?redirectTo=...'), applyToEvent 호출, 토스트\n5. components/login-form.tsx: useSearchParams로 redirectTo 추출, 로그인 성공 후 복귀\n6. manage/[eventId]/members/page.tsx: 더미 데이터 → getMembersByEventId, 상태 변경 → updateMemberStatus\n7. Playwright: 7개 시나리오 (자동승인/정원초과/수동승인/자동승격/마감일/중복신청/redirectTo)",
       "verificationCriteria": "- 자동승인+정원여유 → confirmed, 정원초과 → waiting\n- 수동승인 → 항상 waiting\n- confirmed→rejected 시 대기자 자동 승격\n- 마감일 초과 신청 차단\n- 중복 신청 DUPLICATE 에러\n- redirectTo로 로그인 후 원래 페이지 복귀\n- Playwright 7개 시나리오 통과",
-      "analysisResult": "Gather 프로젝트 Phase 3 목표: Phase 1~2에서 확정된 UI와 View 모델을 근거로 DB 스키마를 설계하고, 더미 데이터를 실제 Supabase 연동으로 교체한다. 8개 테이블(profiles, events, event_members, announcements, announcement_comments, announcement_reactions, settlement_items, settlement_payments + host_bank_accounts), 6개 ENUM, RLS 정책 전 테이블 적용, Server Actions + Supabase @supabase/ssr 패턴 준수, Next.js 15 App Router (Server Components, params await, Server Actions), TypeScript any 금지, Playwright MCP 테스트 필수."
+      "analysisResult": "Gather 프로젝트 Phase 3 목표: Phase 1~2에서 확정된 UI와 View 모델을 근거로 DB 스키마를 설계하고, 더미 데이터를 실제 Supabase 연동으로 교체한다. 8개 테이블(profiles, events, event_members, announcements, announcement_comments, announcement_reactions, settlement_items, settlement_payments + host_bank_accounts), 6개 ENUM, RLS 정책 전 테이블 적용, Server Actions + Supabase @supabase/ssr 패턴 준수, Next.js 15 App Router (Server Components, params await, Server Actions), TypeScript any 금지, Playwright MCP 테스트 필수.",
+      "summary": "promote_next_waitlist PostgreSQL 함수 생성/적용, lib/actions/member.ts (applyToEvent/updateMemberStatus/cancelMyApplication), lib/supabase/members.ts 구현. apply 페이지 Server Component+Client Form 분리, members/page.tsx DUMMY 제거, login-form redirectTo 처리 + Suspense 추가. type-check 통과."
     },
     {
       "id": "6dc6478e-a5d8-488e-948b-9ed26145db4e",
