@@ -1271,14 +1271,14 @@
       "id": "7d3d2b69-75ea-4dce-98d7-b441d8f9dbcf",
       "name": "Task 031: 참여자용 정산 현황 연동",
       "description": "settlements-status/page.tsx의 더미 데이터를 Supabase 연동으로 교체하고 계좌번호 복사 기능을 연결한다.\n\n구현 범위:\n1. lib/supabase/settlements.ts에 getMySettlementStatus(eventId, userId) 추가\n   - 현재 사용자의 event_member_id 조회\n   - settlement_payments + settlement_items 조인으로 본인 납부 내역 조회\n   - host_bank_accounts 조회\n2. components/copy-button.tsx — 'use client', navigator.clipboard.writeText + toast.success\n3. settlements-status/page.tsx — DUMMY 제거, getMySettlementStatus 호출, CopyButton 연결\n   - 확정 참여자가 아닌 경우 접근 차단 (notFound or redirect)\n4. RLS 정책: payments_select는 em.user_id = auth.uid() OR host — 참여자 본인 데이터만 노출 확인",
-      "status": "in_progress",
+      "status": "completed",
       "dependencies": [
         {
           "taskId": "23e6bbc7-3744-4819-90f3-4240fcf4f641"
         }
       ],
       "createdAt": "2026-04-19T15:20:06.064Z",
-      "updatedAt": "2026-04-19T15:41:09.218Z",
+      "updatedAt": "2026-04-19T15:41:10.415Z",
       "relatedFiles": [
         {
           "path": "lib/supabase/settlements.ts",
@@ -1304,7 +1304,8 @@
       "implementationGuide": "// lib/supabase/settlements.ts\nasync function getMySettlementStatus(eventId, userId):\n  member = supabase.from('event_members').select('id').eq('event_id').eq('user_id').eq('status','confirmed').single()\n  if not member: return null\n  payments = supabase.from('settlement_payments').select('*, settlement_items(*)').eq('event_member_id', member.id)\n  bankAccount = supabase.from('host_bank_accounts').select('*').eq('event_id').single()\n  return { payments, bankAccount, totalDue, isPaid }\n\n// settlements-status/page.tsx\nstatus = await getMySettlementStatus(eventId, user.id)\nif not status: notFound()\nrender: 총 납부 금액, 납부 상태 배지, 항목별 내역, CopyButton(계좌번호)",
       "verificationCriteria": "1. 확정 참여자로 로그인 후 settlements-status 접근 → 본인 납부 금액 표시\n2. 미확정/비로그인 접근 → notFound 또는 redirect\n3. 계좌번호 복사 버튼 클릭 → toast.success('계좌번호가 복사되었습니다')\n4. 다른 사람의 납부 내역 미노출 (RLS)\n5. lint/type-check 0 에러",
       "analysisResult": "Phase 4 정산 기능: settlement_items/settlement_payments/host_bank_accounts DB 테이블(이미 존재) 연동. 기존 Phase 3 패턴 준수 — \"use server\" + createClient() + auth.getUser() + Zod safeParse + ActionResult 반환 + revalidatePath. 더미 데이터(DUMMY_SETTLEMENTS) 완전 제거. 신규 파일: lib/schemas/settlement.ts, lib/utils/settlement.ts, lib/supabase/settlements.ts, lib/actions/settlement.ts, lib/email/settlement-reminder.ts(or resend.ts 확장), components/settlement-item-form.tsx, components/bank-account-form.tsx, components/payment-toggle-button.tsx, components/copy-button.tsx.",
-      "summary": "getMySettlementStatus(확정 멤버 여부+본인 납부내역+계좌 조회), CopyButton 컴포넌트, settlements-status/page.tsx DUMMY 완전 제거 및 Supabase 연동 완료. 미확정 참여자 notFound 차단. lint/type-check 0 에러."
+      "summary": "getMySettlementStatus(확정 멤버 여부+본인 납부내역+계좌 조회), CopyButton 컴포넌트, settlements-status/page.tsx DUMMY 완전 제거 및 Supabase 연동 완료. 미확정 참여자 notFound 차단. lint/type-check 0 에러.",
+      "completedAt": "2026-04-19T15:41:10.413Z"
     },
     {
       "id": "85a97712-e6ea-4556-a9d7-1a10d59a0f28",
