@@ -588,14 +588,14 @@
       "name": "Task 019: 인증 시스템 연동 강화 (CURRENT_USER 더미 제거 + 회원가입 자동 프로필 생성)",
       "description": "app/(protected)/layout.tsx의 CURRENT_USER 더미를 getProfile() 호출로 교체하고, 회원가입 시 profiles 레코드가 자동 생성되도록 handle_new_user 트리거를 적용한다.",
       "notes": "layout.tsx 외 CURRENT_USER 사용처(dashboard, manage 페이지 등)는 Task 020~025에서 순차 교체. 이 태스크에서는 layout만 교체.",
-      "status": "in_progress",
+      "status": "completed",
       "dependencies": [
         {
           "taskId": "d43746ef-821c-4a8d-95a8-a570a80411b0"
         }
       ],
       "createdAt": "2026-04-19T09:42:01.087Z",
-      "updatedAt": "2026-04-19T09:56:14.645Z",
+      "updatedAt": "2026-04-19T09:56:15.833Z",
       "relatedFiles": [
         {
           "path": "supabase/migrations/20260419000004_handle_new_user_trigger.sql",
@@ -621,7 +621,8 @@
       "implementationGuide": "1. supabase/migrations/20260419000004_handle_new_user_trigger.sql 생성:\n   CREATE FUNCTION public.handle_new_user() RETURNS trigger LANGUAGE plpgsql SECURITY DEFINER AS $$\n   BEGIN\n     INSERT INTO public.profiles (id, email, full_name)\n     VALUES (NEW.id, NEW.email, COALESCE(NEW.raw_user_meta_data->>'full_name', NEW.raw_user_meta_data->>'name', split_part(NEW.email,'@',1)));\n     RETURN NEW;\n   END; $$;\n   CREATE TRIGGER on_auth_user_created AFTER INSERT ON auth.users FOR EACH ROW EXECUTE FUNCTION public.handle_new_user();\n2. lib/supabase/profile.ts에 ensureProfile() 헬퍼 추가 (트리거 실패 백업용)\n3. app/(protected)/layout.tsx 수정:\n   - CURRENT_USER import 제거\n   - async function + getProfile() 호출\n   - profile === null → redirect('/auth/login')\n   - 사이드바에 profile.full_name ?? profile.email 표시\n4. Playwright E2E: 회원가입 → profiles 생성 확인(mcp__supabase__execute_sql), 사이드바 실명 표시",
       "verificationCriteria": "- mcp__supabase__execute_sql로 신규 가입 사용자의 profiles 레코드 존재 확인\n- layout.tsx에서 CURRENT_USER import 완전 제거\n- 사이드바에 실제 로그인 사용자 이름/이메일 표시\n- npm run type-check + lint 통과\n- Playwright 회원가입→로그인→대시보드 E2E 통과",
       "analysisResult": "Gather 프로젝트 Phase 3 목표: Phase 1~2에서 확정된 UI와 View 모델을 근거로 DB 스키마를 설계하고, 더미 데이터를 실제 Supabase 연동으로 교체한다. 8개 테이블(profiles, events, event_members, announcements, announcement_comments, announcement_reactions, settlement_items, settlement_payments + host_bank_accounts), 6개 ENUM, RLS 정책 전 테이블 적용, Server Actions + Supabase @supabase/ssr 패턴 준수, Next.js 15 App Router (Server Components, params await, Server Actions), TypeScript any 금지, Playwright MCP 테스트 필수.",
-      "summary": "handle_new_user 트리거 마이그레이션 적용 완료, ensureProfile() 함수 추가, (protected)/layout.tsx에서 CURRENT_USER 픽스처 제거 및 실제 Supabase getProfile() 연동으로 교체 완료. type-check/lint 통과, SQL 검증으로 실제 프로필 생성 확인됨."
+      "summary": "handle_new_user 트리거 마이그레이션 적용 완료, ensureProfile() 함수 추가, (protected)/layout.tsx에서 CURRENT_USER 픽스처 제거 및 실제 Supabase getProfile() 연동으로 교체 완료. type-check/lint 통과, SQL 검증으로 실제 프로필 생성 확인됨.",
+      "completedAt": "2026-04-19T09:56:15.831Z"
     },
     {
       "id": "417ebfa1-442e-4841-ab09-02ca9db19651",
