@@ -500,10 +500,10 @@
       "name": "Task 017: 데이터 모델 및 DB 스키마 설계 (ERD 문서화)",
       "description": "Phase 1~2의 View 모델(lib/types/index.ts)을 근거로 8개 테이블의 PostgreSQL 스키마를 역설계하여 ERD 및 DDL 초안을 docs/ERD.md에 문서화한다. 이 문서가 Task 018 마이그레이션의 단일 진실 소스가 된다.",
       "notes": "share_token 컬럼명은 View 모델의 shareToken과 일관성을 위해 share_token으로 결정. host_bank_accounts는 이벤트별 구조(event_id 기반)로 결정. confirmedCount/waitingCount 같은 파생값은 '쿼리 집계'로 명시.",
-      "status": "in_progress",
+      "status": "completed",
       "dependencies": [],
       "createdAt": "2026-04-19T09:42:01.087Z",
-      "updatedAt": "2026-04-19T09:47:20.904Z",
+      "updatedAt": "2026-04-19T09:47:22.037Z",
       "relatedFiles": [
         {
           "path": "docs/ERD.md",
@@ -529,7 +529,8 @@
       "implementationGuide": "1. docs/ERD.md 신규 생성 — Mermaid erDiagram으로 8개 테이블 관계 시각화\n2. 8개 테이블 정의:\n   - profiles: 기존 유지 (id, email, full_name)\n   - events: id, host_id(FK auth.users), title, description, event_type(enum), status(enum), approval_type(enum), max_participants, starts_at, ends_at, location, registration_deadline, share_token(uuid UNIQUE DEFAULT gen_random_uuid()), created_at, updated_at\n   - event_members: id, event_id(FK), user_id(FK), status(enum), note, applied_at, confirmed_at, rejected_at, UNIQUE(event_id, user_id)\n   - announcements: id, event_id, author_id, title, body, is_pinned, created_at, updated_at\n   - announcement_comments: id, announcement_id, author_id, body, created_at\n   - announcement_reactions: id, announcement_id, user_id, emoji, UNIQUE(announcement_id, user_id, emoji)\n   - settlement_items: id, event_id, name, total_amount(integer), split_type(enum), created_at\n   - settlement_payments: id, settlement_item_id, event_member_id, amount(integer), ratio(numeric nullable), is_paid(boolean DEFAULT false), paid_at\n   - host_bank_accounts: id, event_id(FK NOT NULL), host_id(FK NOT NULL), bank_name, account_number, account_holder\n3. ENUM 타입 6종: event_type_enum, event_status_enum, approval_type_enum, member_status_enum, split_type_enum (PaymentStatus는 boolean is_paid로 대체)\n4. View 모델 필드 ↔ DB 컬럼 매핑표 작성 (ux-review.md §4-2 인용)\n5. 인덱스 권장 목록 명시 (events.host_id, events.share_token, event_members.event_id, event_members.user_id 등)\n6. lib/types/api.ts 추가 예정 명시: ActionResult<T> + ActionErrorCode",
       "verificationCriteria": "- docs/ERD.md 파일 존재 + Mermaid erDiagram 렌더링 가능\n- 8개 테이블 컬럼 정의 완비\n- 6개 ENUM 타입 모두 정의\n- View 모델의 모든 필드가 DB 컬럼으로 매핑됨\n- share_token 설계 근거와 host_bank_accounts 구조 결정 사유 문서화\n- 인덱스 권장 목록 6종 이상 명시",
       "analysisResult": "Gather 프로젝트 Phase 3 목표: Phase 1~2에서 확정된 UI와 View 모델을 근거로 DB 스키마를 설계하고, 더미 데이터를 실제 Supabase 연동으로 교체한다. 8개 테이블(profiles, events, event_members, announcements, announcement_comments, announcement_reactions, settlement_items, settlement_payments + host_bank_accounts), 6개 ENUM, RLS 정책 전 테이블 적용, Server Actions + Supabase @supabase/ssr 패턴 준수, Next.js 15 App Router (Server Components, params await, Server Actions), TypeScript any 금지, Playwright MCP 테스트 필수.",
-      "summary": "docs/ERD.md 생성 완료. Mermaid erDiagram으로 9개 테이블 관계 시각화, 테이블별 컬럼/타입/제약 정의표, 6종 ENUM, View 모델↔DB 매핑표, 설계 결정 사항(share_token/host_bank_accounts/PaymentStatus), 11종 인덱스 권장, RLS 설계 방향, ActionResult 타입 명세 모두 포함."
+      "summary": "docs/ERD.md 생성 완료. Mermaid erDiagram으로 9개 테이블 관계 시각화, 테이블별 컬럼/타입/제약 정의표, 6종 ENUM, View 모델↔DB 매핑표, 설계 결정 사항(share_token/host_bank_accounts/PaymentStatus), 11종 인덱스 권장, RLS 설계 방향, ActionResult 타입 명세 모두 포함.",
+      "completedAt": "2026-04-19T09:47:22.035Z"
     },
     {
       "id": "d43746ef-821c-4a8d-95a8-a570a80411b0",
