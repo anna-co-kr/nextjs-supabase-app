@@ -907,7 +907,7 @@
         }
       ],
       "createdAt": "2026-04-19T09:42:01.087Z",
-      "updatedAt": "2026-04-19T11:00:41.710Z",
+      "updatedAt": "2026-04-19T11:03:32.001Z",
       "relatedFiles": [
         {
           "path": "supabase/migrations/20260419000006_create_reminder_logs.sql",
@@ -947,7 +947,8 @@
       ],
       "implementationGuide": "1. supabase/migrations/20260419000006_create_reminder_logs.sql: reminder_logs 테이블 (event_id, user_id, reminder_type, sent_at, UNIQUE(event_id, user_id, reminder_type, DATE(sent_at)))\n2. .env.local: RESEND_API_KEY, CRON_SECRET, EMAIL_FROM, SUPABASE_SERVICE_ROLE_KEY 추가\n3. lib/supabase/admin.ts: createAdminClient() — service_role 키 사용\n4. lib/email/resend.ts: Resend 인스턴스 + sendReminderEmail(to, type, event)\n5. lib/email/templates/event-reminder.tsx: React Email 컴포넌트 (이벤트 정보 + CTA 버튼)\n6. app/api/cron/reminders/route.ts:\n   - Bearer CRON_SECRET 검증 → 401\n   - createAdminClient()로 D-1/D-3 대상 조회 (starts_at IN CURRENT_DATE+1, CURRENT_DATE+3)\n   - reminder_logs INSERT ON CONFLICT DO NOTHING → 0 rows면 스킵\n   - sendReminderEmail 호출 + after() 로깅\n7. vercel.json: crons [{ path: '/api/cron/reminders', schedule: '0 0 * * *' }]\n8. CLAUDE.md 환경변수 섹션 갱신\n9. Playwright: 수동 트리거/중복방지/인증체크/대상외 4개 시나리오",
       "verificationCriteria": "- D-1/D-3 확정 참여자에게 이메일 발송 (Resend 대시보드 확인)\n- reminder_logs UNIQUE 제약으로 동일 날짜 중복 발송 방지\n- CRON_SECRET 누락 시 401\n- vercel.json crons 설정 올바른 cron 표현식\n- Playwright 4개 시나리오 통과",
-      "analysisResult": "Gather 프로젝트 Phase 3 목표: Phase 1~2에서 확정된 UI와 View 모델을 근거로 DB 스키마를 설계하고, 더미 데이터를 실제 Supabase 연동으로 교체한다. 8개 테이블(profiles, events, event_members, announcements, announcement_comments, announcement_reactions, settlement_items, settlement_payments + host_bank_accounts), 6개 ENUM, RLS 정책 전 테이블 적용, Server Actions + Supabase @supabase/ssr 패턴 준수, Next.js 15 App Router (Server Components, params await, Server Actions), TypeScript any 금지, Playwright MCP 테스트 필수."
+      "analysisResult": "Gather 프로젝트 Phase 3 목표: Phase 1~2에서 확정된 UI와 View 모델을 근거로 DB 스키마를 설계하고, 더미 데이터를 실제 Supabase 연동으로 교체한다. 8개 테이블(profiles, events, event_members, announcements, announcement_comments, announcement_reactions, settlement_items, settlement_payments + host_bank_accounts), 6개 ENUM, RLS 정책 전 테이블 적용, Server Actions + Supabase @supabase/ssr 패턴 준수, Next.js 15 App Router (Server Components, params await, Server Actions), TypeScript any 금지, Playwright MCP 테스트 필수.",
+      "summary": "reminder_logs 마이그레이션 적용, lib/supabase/admin.ts (service_role 클라이언트), lib/email/resend.ts (sendReminderEmail), app/api/cron/reminders/route.ts (CRON_SECRET 인증, D-1/D-3 대상 조회, 중복 방지 INSERT, after() 비동기 발송), vercel.json cron 설정, CLAUDE.md 환경변수 갱신. type-check 통과."
     },
     {
       "id": "5be52f1b-1898-4ee4-8f6a-9c348cb734ab",
