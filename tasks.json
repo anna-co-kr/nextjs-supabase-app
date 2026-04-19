@@ -1110,10 +1110,10 @@
       "id": "91ad2e5d-dc9c-485d-b4da-241707966f6f",
       "name": "Task 028: 정산 항목 CRUD 및 분담 계산 연동 (F008)",
       "description": "정산 항목 등록/수정/삭제 Server Action과 3종 분담 계산 로직을 구현하고 settlements/page.tsx의 더미 데이터를 Supabase 연동으로 교체한다.\n\n구현 범위:\n1. lib/schemas/settlement.ts — settlementItemCreateSchema(name, total_amount, split_type, individual_amounts?, ratios?), settlementItemUpdateSchema\n2. lib/utils/settlement.ts — calculatePayments(totalAmount, splitType, members, opts) 순수 함수: equal=total/count, individual=opts.amounts[], ratio=total*opts.ratios[]/100\n3. lib/supabase/settlements.ts — getSettlementsByEventId(eventId): settlement_items + settlement_payments(event_members+profiles) 단일 조인 쿼리\n4. lib/actions/settlement.ts — createSettlementItem: DB insert + calculatePayments 호출 + settlement_payments bulk insert / updateSettlementItem / deleteSettlementItem\n5. components/settlement-item-form.tsx — Dialog + React Hook Form + zodResolver, split_type 선택에 따라 개별/비율 입력 필드 동적 표시\n6. app/(protected)/manage/[eventId]/settlements/page.tsx — DUMMY_EVENTS/DUMMY_SETTLEMENTS 제거, getSettlementsByEventId 호출, SettlementItemForm 연결",
-      "status": "pending",
+      "status": "in_progress",
       "dependencies": [],
       "createdAt": "2026-04-19T15:20:06.064Z",
-      "updatedAt": "2026-04-19T15:20:06.064Z",
+      "updatedAt": "2026-04-19T15:24:51.480Z",
       "relatedFiles": [
         {
           "path": "lib/schemas/settlement.ts",
