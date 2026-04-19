@@ -675,14 +675,14 @@
       "name": "Task 021: 이벤트 CRUD Server Action 구현 (F001)",
       "description": "이벤트 생성/수정/삭제를 Server Action으로 처리하고 Zod 검증과 RLS를 연계한다. 폼 컴포넌트의 onSubmit을 실제 Server Action으로 교체한다.",
       "notes": "share_token은 DB DEFAULT gen_random_uuid()로 자동 생성. CASCADE 삭제 동작 마이그레이션에서 확인 필수.",
-      "status": "pending",
+      "status": "in_progress",
       "dependencies": [
         {
           "taskId": "417ebfa1-442e-4841-ab09-02ca9db19651"
         }
       ],
       "createdAt": "2026-04-19T09:42:01.087Z",
-      "updatedAt": "2026-04-19T09:42:01.087Z",
+      "updatedAt": "2026-04-19T09:57:55.805Z",
       "relatedFiles": [
         {
           "path": "lib/schemas/event.ts",
