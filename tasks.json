@@ -986,6 +986,119 @@
       "analysisResult": "Gather 프로젝트 Phase 3 목표: Phase 1~2에서 확정된 UI와 View 모델을 근거로 DB 스키마를 설계하고, 더미 데이터를 실제 Supabase 연동으로 교체한다. 8개 테이블(profiles, events, event_members, announcements, announcement_comments, announcement_reactions, settlement_items, settlement_payments + host_bank_accounts), 6개 ENUM, RLS 정책 전 테이블 적용, Server Actions + Supabase @supabase/ssr 패턴 준수, Next.js 15 App Router (Server Components, params await, Server Actions), TypeScript any 금지, Playwright MCP 테스트 필수.",
       "summary": "Phase 3 통합 테스트 완료. lint/type-check/build 0 에러, 전체 테이블 RLS 활성화(10/10), API 인증 경계(401) 확인, proxy.ts /api 경로 미들웨어 제외 버그 수정. 시나리오 A(10단계)/B(7단계)/C(RLS 4건)/D(엣지 8건) PASS. Phase 4 진입 가능.",
       "completedAt": "2026-04-19T11:07:36.610Z"
+    },
+    {
+      "id": "7b860fbb-47a5-4ba3-bfa4-bd46a6edb920",
+      "name": "Task 014: 마이크로 인터랙션 및 피드백 개선",
+      "description": "폼 제출/삭제 시 Toast 피드백 미적용 구간 보완, 로딩 상태 및 전환 애니메이션 강화, 모바일 터치 타깃 크기 조정. Sonner는 이미 설치됨. 현재 toast 미적용: 이벤트 수정/삭제(manage/[eventId]/page.tsx), 공지 CRUD(announcement-actions.tsx, announcement-form.tsx), 댓글 form(comment-form.tsx), 로그인 성공/실패(login-form.tsx).",
+      "notes": "useFormStatus 또는 useTransition 사용. any 타입 금지.",
+      "status": "pending",
+      "dependencies": [],
+      "createdAt": "2026-04-19T14:58:34.339Z",
+      "updatedAt": "2026-04-19T14:58:34.339Z",
+      "relatedFiles": [
+        {
+          "path": "app/(protected)/manage/[eventId]/page.tsx",
+          "type": "TO_MODIFY",
+          "description": "이벤트 삭제/수정 toast 추가"
+        },
+        {
+          "path": "components/announcement-actions.tsx",
+          "type": "TO_MODIFY",
+          "description": "공지 CRUD toast"
+        },
+        {
+          "path": "components/announcement-form.tsx",
+          "type": "TO_MODIFY",
+          "description": "공지 저장 toast"
+        },
+        {
+          "path": "components/comment-form.tsx",
+          "type": "TO_MODIFY",
+          "description": "댓글 등록 toast"
+        },
+        {
+          "path": "components/login-form.tsx",
+          "type": "TO_MODIFY",
+          "description": "로그인 toast"
+        },
+        {
+          "path": "components/ui/sonner.tsx",
+          "type": "REFERENCE",
+          "description": "Toaster 설정"
+        }
+      ],
+      "implementationGuide": "1. app/(protected)/manage/[eventId]/page.tsx - 이벤트 삭제/수정 결과에 toast 추가\n2. components/announcement-actions.tsx - 공지 삭제/핀 토글 toast\n3. components/announcement-form.tsx - 공지 저장 toast\n4. components/comment-form.tsx - 댓글 등록 toast\n5. components/login-form.tsx - 로그인 성공 toast (에러는 현재 인라인 표시됨)\n6. 버튼 disabled + spinner: Server Action 호출 중 버튼에 isPending 상태로 Loader2 아이콘 표시 (useTransition 또는 useFormStatus)\n7. 모바일 터치 타깃: 주요 인터랙티브 요소 min-h-[44px] min-w-[44px] 확인 및 적용",
+      "verificationCriteria": "1. 이벤트 삭제/수정 성공/실패 시 toast 표시\n2. 공지 작성/수정/삭제/핀 토글 시 toast\n3. 댓글 등록/삭제 시 toast\n4. Server Action 진행 중 버튼 비활성화 + 스피너\n5. npm run lint && npm run type-check 0 에러",
+      "analysisResult": "Phase 2 미완료 태스크 014~016 구현. Sonner/toast 이미 설치됨. skeleton/aria 일부 적용됨. Phase 3 백엔드 연동 완료 상태. 테스트는 Playwright MCP 활용."
+    },
+    {
+      "id": "50fdcf3a-860b-4934-aa75-b73e4ed6b25c",
+      "name": "Task 015: 접근성 및 반응형 보완",
+      "description": "aria-label/role/alt 속성 보강, 키보드 네비게이션(Tab/Enter/Esc) 점검, 모바일 반응형 개선. 멤버 관리 테이블, 공지 리액션 버튼, 다이얼로그 포커스 트랩 등.",
+      "notes": "WCAG AA 기준 목표. 완벽한 스크린리더 지원보다 핵심 인터랙션 위주 개선.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "7b860fbb-47a5-4ba3-bfa4-bd46a6edb920"
+        }
+      ],
+      "createdAt": "2026-04-19T14:58:34.339Z",
+      "updatedAt": "2026-04-19T14:58:34.339Z",
+      "relatedFiles": [
+        {
+          "path": "app/(protected)/manage/[eventId]/members/page.tsx",
+          "type": "TO_MODIFY",
+          "description": "테이블 접근성"
+        },
+        {
+          "path": "components/announcement-reaction-button.tsx",
+          "type": "TO_MODIFY",
+          "description": "리액션 버튼 aria"
+        },
+        {
+          "path": "app/(protected)/layout.tsx",
+          "type": "TO_MODIFY",
+          "description": "사이드바 aria"
+        },
+        {
+          "path": "components/page-header.tsx",
+          "type": "REFERENCE",
+          "description": "헤더 구조 참고"
+        }
+      ],
+      "implementationGuide": "1. 테이블 접근성: app/(protected)/manage/[eventId]/members/page.tsx Table에 scope='col' 추가, 상태 배지에 aria-label\n2. 리액션 버튼: components/announcement-reaction-button.tsx에 aria-label='이모지 리액션 토글', aria-pressed 추가\n3. 다이얼로그: 기존 Dialog 컴포넌트에 DialogTitle이 없는 경우 추가 (스크린리더용)\n4. 이미지/아이콘: 장식용 아이콘 aria-hidden='true', 의미있는 아이콘에 aria-label\n5. 폼 필드: label htmlFor 연결 확인, 필수 필드 aria-required='true'\n6. 포커스 스타일: focus-visible:ring-2 클래스 누락 버튼 확인\n7. 반응형: 모바일에서 사이드바 오버레이 접근성 (aria-modal, aria-expanded)",
+      "verificationCriteria": "1. 테이블 헤더 scope 속성 적용\n2. 리액션 버튼 aria-label, aria-pressed 적용\n3. 장식 아이콘 aria-hidden='true' 전반 적용\n4. 폼 필드 label 연결 확인\n5. npm run lint && npm run type-check 0 에러",
+      "analysisResult": "Phase 2 미완료 태스크 014~016 구현. Sonner/toast 이미 설치됨. skeleton/aria 일부 적용됨. Phase 3 백엔드 연동 완료 상태. 테스트는 Playwright MCP 활용."
+    },
+    {
+      "id": "969b4afc-419f-441c-a0b1-1dd638c2537d",
+      "name": "Task 016: Phase 2 최종 UI 검수 (Playwright MCP)",
+      "description": "Task 014~015 개선사항 반영 여부를 Playwright MCP로 검증. 주요 페이지 스냅샷, toast 동작, 반응형 뷰포트 확인. tasks/016-phase2-ui-review.md에 결과 기록.",
+      "notes": "테스트는 반드시 Playwright MCP 사용.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "50fdcf3a-860b-4934-aa75-b73e4ed6b25c"
+        }
+      ],
+      "createdAt": "2026-04-19T14:58:34.339Z",
+      "updatedAt": "2026-04-19T14:58:34.339Z",
+      "relatedFiles": [
+        {
+          "path": "tasks/016-phase2-ui-review.md",
+          "type": "CREATE",
+          "description": "검수 보고서"
+        },
+        {
+          "path": "docs/ROADMAP.md",
+          "type": "TO_MODIFY",
+          "description": "Phase 2 완료 표시"
+        }
+      ],
+      "implementationGuide": "Playwright MCP 도구로:\n1. 개발 서버 실행 확인 (localhost:3000)\n2. 홈(/) 스냅샷\n3. /auth/login 스냅샷\n4. /dashboard (로그인 필요 → /auth/login 리디렉션 확인)\n5. 모바일 뷰포트(375px) 주요 페이지 스냅샷\n6. lint/type-check/build 최종 확인\n7. tasks/016-phase2-ui-review.md 작성 (결과 표 포함)\n8. ROADMAP.md Phase 2 완료 표시",
+      "verificationCriteria": "1. Playwright 스냅샷 주요 페이지 통과\n2. 모바일 뷰포트 레이아웃 확인\n3. lint/type-check/build 0 에러\n4. tasks/016-phase2-ui-review.md 생성\n5. ROADMAP.md Phase 2 ✅ 표시",
+      "analysisResult": "Phase 2 미완료 태스크 014~016 구현. Sonner/toast 이미 설치됨. skeleton/aria 일부 적용됨. Phase 3 백엔드 연동 완료 상태. 테스트는 Playwright MCP 활용."
     }
   ]
 }
