@@ -1311,14 +1311,14 @@
       "id": "85a97712-e6ea-4556-a9d7-1a10d59a0f28",
       "name": "Task 032: 미납자 리마인더 발송 (F009)",
       "description": "미납자 필터링 및 Resend 이메일 발송 Server Action을 구현하고 24시간 쿨다운 중복 방지를 적용한다.\n\n구현 범위:\n1. lib/email/resend.ts에 sendUnpaidReminderEmail(to, eventInfo, amount, bankAccount) 추가\n   - 이메일 템플릿: 이벤트명, 미납 금액, 계좌번호, 납부 기한\n2. lib/actions/settlement.ts에 sendUnpaidReminders(eventId) 추가\n   - 미납자 조회: settlement_payments is_paid=false + event_members(user+profile)\n   - 24시간 쿨다운: reminder_logs에서 type='unpaid_reminder', sent_at > now()-24h 확인\n   - Resend 발송 + reminder_logs insert\n   - 발송 성공/실패 요약 반환\n3. settlements/page.tsx에 미납자 리마인더 버튼 연결 (SendReminderButton 클라이언트 컴포넌트)",
-      "status": "in_progress",
+      "status": "completed",
       "dependencies": [
         {
           "taskId": "7d3d2b69-75ea-4dce-98d7-b441d8f9dbcf"
         }
       ],
       "createdAt": "2026-04-19T15:20:06.064Z",
-      "updatedAt": "2026-04-19T15:45:59.675Z",
+      "updatedAt": "2026-04-19T15:46:00.859Z",
       "relatedFiles": [
         {
           "path": "lib/email/resend.ts",
@@ -1354,7 +1354,8 @@
       "implementationGuide": "// lib/actions/settlement.ts\nasync function sendUnpaidReminders(eventId):\n  verify host\n  unpaidPayments = query settlement_payments where is_paid=false, join event_members+profiles\n  bankAccount = getBankAccount(eventId)\n  event = getEventById(eventId)\n  results = []\n  for each unpaid member:\n    recentLog = reminder_logs where event_id=eventId, member_id=memberId, type='unpaid_reminder', sent_at > now()-24h\n    if recentLog exists: skip (쿨다운)\n    success = sendUnpaidReminderEmail(email, event, amount, bankAccount)\n    if success: insert reminder_logs {event_id, member_id, type:'unpaid_reminder', sent_at:now()}\n    results.push({memberId, success})\n  revalidatePath\n  return {success:true, data:{sent: count, skipped: count}}\n\n// components/send-reminder-button.tsx\n'use client', useTransition\nonClick: sendUnpaidReminders(eventId) + toast.success(`${sent}명에게 발송 완료`)",
       "verificationCriteria": "1. 미납자 존재 시 버튼 클릭 → Resend 발송 + toast.success('N명에게 발송 완료')\n2. 24시간 내 재발송 시 해당 멤버 건너뜀 (쿨다운)\n3. 미납자 없을 시 toast.success('미납자가 없습니다')\n4. lint/type-check 0 에러",
       "analysisResult": "Phase 4 정산 기능: settlement_items/settlement_payments/host_bank_accounts DB 테이블(이미 존재) 연동. 기존 Phase 3 패턴 준수 — \"use server\" + createClient() + auth.getUser() + Zod safeParse + ActionResult 반환 + revalidatePath. 더미 데이터(DUMMY_SETTLEMENTS) 완전 제거. 신규 파일: lib/schemas/settlement.ts, lib/utils/settlement.ts, lib/supabase/settlements.ts, lib/actions/settlement.ts, lib/email/settlement-reminder.ts(or resend.ts 확장), components/settlement-item-form.tsx, components/bank-account-form.tsx, components/payment-toggle-button.tsx, components/copy-button.tsx.",
-      "summary": "sendUnpaidReminderEmail(HTML 템플릿), sendUnpaidReminders Server Action(24시간 쿨다운+멤버별 미납 합산), SendReminderButton 컴포넌트 구현. reminder_logs에 unpaid_reminder 타입 마이그레이션 추가. lint/type-check 0 에러."
+      "summary": "sendUnpaidReminderEmail(HTML 템플릿), sendUnpaidReminders Server Action(24시간 쿨다운+멤버별 미납 합산), SendReminderButton 컴포넌트 구현. reminder_logs에 unpaid_reminder 타입 마이그레이션 추가. lint/type-check 0 에러.",
+      "completedAt": "2026-04-19T15:46:00.857Z"
     },
     {
       "id": "d8765ad4-0036-4a51-af89-1301848d2c5e",
