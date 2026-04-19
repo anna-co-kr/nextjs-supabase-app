@@ -1318,7 +1318,7 @@
         }
       ],
       "createdAt": "2026-04-19T15:20:06.064Z",
-      "updatedAt": "2026-04-19T15:41:17.626Z",
+      "updatedAt": "2026-04-19T15:45:59.675Z",
       "relatedFiles": [
         {
           "path": "lib/email/resend.ts",
@@ -1353,7 +1353,8 @@
       ],
       "implementationGuide": "// lib/actions/settlement.ts\nasync function sendUnpaidReminders(eventId):\n  verify host\n  unpaidPayments = query settlement_payments where is_paid=false, join event_members+profiles\n  bankAccount = getBankAccount(eventId)\n  event = getEventById(eventId)\n  results = []\n  for each unpaid member:\n    recentLog = reminder_logs where event_id=eventId, member_id=memberId, type='unpaid_reminder', sent_at > now()-24h\n    if recentLog exists: skip (쿨다운)\n    success = sendUnpaidReminderEmail(email, event, amount, bankAccount)\n    if success: insert reminder_logs {event_id, member_id, type:'unpaid_reminder', sent_at:now()}\n    results.push({memberId, success})\n  revalidatePath\n  return {success:true, data:{sent: count, skipped: count}}\n\n// components/send-reminder-button.tsx\n'use client', useTransition\nonClick: sendUnpaidReminders(eventId) + toast.success(`${sent}명에게 발송 완료`)",
       "verificationCriteria": "1. 미납자 존재 시 버튼 클릭 → Resend 발송 + toast.success('N명에게 발송 완료')\n2. 24시간 내 재발송 시 해당 멤버 건너뜀 (쿨다운)\n3. 미납자 없을 시 toast.success('미납자가 없습니다')\n4. lint/type-check 0 에러",
-      "analysisResult": "Phase 4 정산 기능: settlement_items/settlement_payments/host_bank_accounts DB 테이블(이미 존재) 연동. 기존 Phase 3 패턴 준수 — \"use server\" + createClient() + auth.getUser() + Zod safeParse + ActionResult 반환 + revalidatePath. 더미 데이터(DUMMY_SETTLEMENTS) 완전 제거. 신규 파일: lib/schemas/settlement.ts, lib/utils/settlement.ts, lib/supabase/settlements.ts, lib/actions/settlement.ts, lib/email/settlement-reminder.ts(or resend.ts 확장), components/settlement-item-form.tsx, components/bank-account-form.tsx, components/payment-toggle-button.tsx, components/copy-button.tsx."
+      "analysisResult": "Phase 4 정산 기능: settlement_items/settlement_payments/host_bank_accounts DB 테이블(이미 존재) 연동. 기존 Phase 3 패턴 준수 — \"use server\" + createClient() + auth.getUser() + Zod safeParse + ActionResult 반환 + revalidatePath. 더미 데이터(DUMMY_SETTLEMENTS) 완전 제거. 신규 파일: lib/schemas/settlement.ts, lib/utils/settlement.ts, lib/supabase/settlements.ts, lib/actions/settlement.ts, lib/email/settlement-reminder.ts(or resend.ts 확장), components/settlement-item-form.tsx, components/bank-account-form.tsx, components/payment-toggle-button.tsx, components/copy-button.tsx.",
+      "summary": "sendUnpaidReminderEmail(HTML 템플릿), sendUnpaidReminders Server Action(24시간 쿨다운+멤버별 미납 합산), SendReminderButton 컴포넌트 구현. reminder_logs에 unpaid_reminder 타입 마이그레이션 추가. lint/type-check 0 에러."
     },
     {
       "id": "d8765ad4-0036-4a51-af89-1301848d2c5e",
