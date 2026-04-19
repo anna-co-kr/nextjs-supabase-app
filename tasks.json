@@ -854,14 +854,14 @@
       "name": "Task 025: 공지·댓글·이모지 리액션 Server Action 연동 (F006)",
       "description": "공지 CRUD, 고정 토글, 댓글 CRUD, 이모지 리액션 토글을 Server Action으로 구현하고 낙관적 UI를 적용한다.",
       "notes": "리액션 토글은 UNIQUE(announcement_id, user_id, emoji) 제약으로 중복 방지. 낙관적 업데이트 실패 시 롤백 필수.",
-      "status": "pending",
+      "status": "in_progress",
       "dependencies": [
         {
           "taskId": "554e43f1-2baf-455b-861f-5565bb07ee30"
         }
       ],
       "createdAt": "2026-04-19T09:42:01.087Z",
-      "updatedAt": "2026-04-19T09:42:01.087Z",
+      "updatedAt": "2026-04-19T10:55:13.232Z",
       "relatedFiles": [
         {
           "path": "lib/schemas/announcement.ts",
