@@ -36,6 +36,8 @@ export function EventStatusBadge({ status, className }: EventStatusBadgeProps) {
   return (
     /* 배지: rounded-md, border 없음, 작은 패딩 */
     <span
+      role="status"
+      aria-label={`이벤트 상태: ${label}`}
       className={cn(
         "inline-flex items-center rounded-md px-3 py-1 text-xs font-medium",
         colorClass,
@@ -76,6 +78,7 @@ export function MemberStatusBadge({ status, className }: MemberStatusBadgeProps)
   return (
     <Badge
       variant="outline"
+      aria-label={`참여 상태: ${label}`}
       className={cn("rounded-md border-0 px-3 py-1 text-xs font-medium", colorClass, className)}
     >
       {label}

@@ -3,6 +3,8 @@
 import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Loader2 } from "lucide-react";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -30,7 +32,6 @@ interface AnnouncementCreateFormProps {
 
 function AnnouncementCreateForm({ eventId, onSuccess }: AnnouncementCreateFormProps) {
   const [isPending, startTransition] = useTransition();
-  const [serverError, setServerError] = useState<string | null>(null);
 
   const {
     register,
@@ -43,14 +44,14 @@ function AnnouncementCreateForm({ eventId, onSuccess }: AnnouncementCreateFormPr
   });
 
   const onSubmit = (values: AnnouncementCreateInput) => {
-    setServerError(null);
     startTransition(async () => {
       const result = await createAnnouncement(values);
       if (result.success) {
         reset({ eventId });
+        toast.success("공지가 작성되었습니다");
         onSuccess?.();
       } else {
-        setServerError(result.error);
+        toast.error(result.error);
       }
     });
   };
@@ -84,11 +85,16 @@ function AnnouncementCreateForm({ eventId, onSuccess }: AnnouncementCreateFormPr
         {errors.body && <p className="text-xs text-destructive">{errors.body.message}</p>}
       </div>
 
-      {serverError && <p className="text-sm text-destructive">{serverError}</p>}
-
       <div className="flex justify-end gap-2">
         <Button type="submit" size="sm" disabled={isPending}>
-          {isPending ? "작성 중..." : "공지 작성"}
+          {isPending ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              작성 중...
+            </>
+          ) : (
+            "공지 작성"
+          )}
         </Button>
       </div>
     </form>
@@ -106,7 +112,6 @@ interface AnnouncementEditFormProps {
 
 function AnnouncementEditForm({ announcement, onSuccess, onCancel }: AnnouncementEditFormProps) {
   const [isPending, startTransition] = useTransition();
-  const [serverError, setServerError] = useState<string | null>(null);
 
   const {
     register,
@@ -122,13 +127,13 @@ function AnnouncementEditForm({ announcement, onSuccess, onCancel }: Announcemen
   });
 
   const onSubmit = (values: AnnouncementUpdateInput) => {
-    setServerError(null);
     startTransition(async () => {
       const result = await updateAnnouncement(values);
       if (result.success) {
+        toast.success("공지가 수정되었습니다");
         onSuccess?.();
       } else {
-        setServerError(result.error);
+        toast.error(result.error);
       }
     });
   };
@@ -155,14 +160,19 @@ function AnnouncementEditForm({ announcement, onSuccess, onCancel }: Announcemen
         {errors.body && <p className="text-xs text-destructive">{errors.body.message}</p>}
       </div>
 
-      {serverError && <p className="text-sm text-destructive">{serverError}</p>}
-
       <div className="flex justify-end gap-2">
         <Button type="button" variant="ghost" size="sm" onClick={onCancel} disabled={isPending}>
           취소
         </Button>
         <Button type="submit" size="sm" disabled={isPending}>
-          {isPending ? "저장 중..." : "저장"}
+          {isPending ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              저장 중...
+            </>
+          ) : (
+            "저장"
+          )}
         </Button>
       </div>
     </form>

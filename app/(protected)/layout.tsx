@@ -104,6 +104,7 @@ export default async function ProtectedLayout({ children }: { children: React.Re
         {/* 대시보드 링크 */}
         <Link
           href="/dashboard"
+          aria-label="대시보드로 이동"
           className="flex flex-1 flex-col items-center justify-center gap-1 py-2 text-muted-foreground transition-colors hover:text-foreground"
         >
           <LayoutDashboard className="h-5 w-5" aria-hidden="true" />
@@ -113,6 +114,7 @@ export default async function ProtectedLayout({ children }: { children: React.Re
         {/* 새 모임 만들기 — 중앙 버튼 */}
         <Link
           href="/dashboard/events/new"
+          aria-label="새 모임 만들기"
           className="flex flex-1 flex-col items-center justify-center gap-1 py-2 text-muted-foreground transition-colors hover:text-foreground"
         >
           <div className="flex h-9 w-9 items-center justify-center rounded-md bg-primary">

@@ -25,6 +25,8 @@ export function ReactionButton({ announcementId, emoji, count, reactedByMe }: Re
       type="button"
       onClick={handleClick}
       disabled={isPending}
+      aria-label={`${emoji} 리액션 ${reactedByMe ? "취소" : "추가"}, 현재 ${count}개`}
+      aria-pressed={reactedByMe}
       className={cn(
         "flex cursor-pointer items-center gap-1 rounded-full border px-2 py-0.5 text-xs transition-colors",
         reactedByMe
@@ -33,7 +35,7 @@ export function ReactionButton({ announcementId, emoji, count, reactedByMe }: Re
         isPending && "opacity-50",
       )}
     >
-      {emoji} {count}
+      <span aria-hidden="true">{emoji}</span> {count}
     </button>
   );
 }
@@ -64,10 +66,10 @@ export function AddReactionButton({ announcementId }: AddReactionButtonProps) {
           type="button"
           onClick={() => handleSelect(emoji)}
           disabled={isPending}
+          aria-label={`${emoji} 리액션 추가`}
           className="rounded px-1.5 py-0.5 text-base transition-colors hover:bg-muted disabled:opacity-50"
-          title={`${emoji} 리액션`}
         >
-          {emoji}
+          <span aria-hidden="true">{emoji}</span>
         </button>
       ))}
     </div>

@@ -5,6 +5,7 @@ import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Loader2 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useSearchParams } from "next/navigation";
@@ -131,7 +132,14 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
               className="h-12 w-full rounded-md bg-primary text-sm font-medium text-primary-foreground hover:bg-primary/90"
               disabled={isSubmitting}
             >
-              {isSubmitting ? "로그인 중..." : "로그인"}
+              {isSubmitting ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  로그인 중...
+                </>
+              ) : (
+                "로그인"
+              )}
             </Button>
           </form>
 

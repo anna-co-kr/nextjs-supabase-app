@@ -158,7 +158,7 @@
 
 ---
 
-### Phase 2: UI 검토 및 사용성 보완
+### Phase 2: UI 검토 및 사용성 보완 ✅
 
 **목표**: Phase 1에서 완성된 UI를 사용자 관점에서 검토하고 UX·디자인·인터랙션을 다듬는다
 **구현 범위**: UI 개선, 마이크로 인터랙션, 접근성, 디자인 토큰 정돈
@@ -179,25 +179,28 @@
   - 아이콘 세트 통일 (lucide-react)
   - ✅ 완료: text-black/white 하드코딩 → text-foreground/bg-background 교체. text-red-500 → text-destructive 통일. 스켈레톤 스타일 EventCard와 통일. cn() 헬퍼 적용. 대기자 색상 다크 모드 대응 추가.
 
-- **Task 014: 마이크로 인터랙션 및 피드백 개선**
+- **Task 014: 마이크로 인터랙션 및 피드백 개선** ✅
   - 예상 소요: 2일
   - 폼 제출·삭제 시 Toast/Sonner 피드백
   - 로딩/전환 애니메이션 (skeleton, fade-in)
   - 낙관적 UI 업데이트 패턴 준비 (추후 API 연동 대비)
   - 모바일 터치 타깃 크기 조정
+  - ✅ 완료: announcement-actions/form, comment-form, login-form에 toast + Loader2 스피너 적용. 댓글 달기 버튼 min-h-[44px] 터치 타깃 확보.
 
-- **Task 015: 접근성 및 반응형 보완**
+- **Task 015: 접근성 및 반응형 보완** ✅
   - 예상 소요: 2일
   - 키보드 네비게이션 점검 (Tab, Enter, Esc)
   - aria-label, alt, role 속성 보강
   - 모바일 하단 네비게이션 및 터치 제스처 개선
   - 스크린 리더 시나리오 테스트
+  - ✅ 완료: ReactionButton aria-label/aria-pressed, TableHead scope="col", EventStatusBadge role="status", MemberStatusBadge aria-label, 모바일 하단 네비 aria-label 적용.
 
-- **Task 016: Phase 2 최종 UI 검수**
+- **Task 016: Phase 2 최종 UI 검수** ✅
   - 예상 소요: 1일
   - 개선 사항 반영 여부 체크리스트 검증
   - Playwright MCP 스냅샷 테스트로 UI 회귀 방지 베이스라인 수립
   - 디자인 리뷰 승인 → Phase 3 진입 준비
+  - ✅ 완료: Playwright MCP로 홈/로그인/대시보드 리디렉션/모바일(375px) 5개 시나리오 통과. lint/type-check/build 0 에러.
 
 ---
 

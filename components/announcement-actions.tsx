@@ -1,7 +1,8 @@
 "use client";
 
 import { useTransition } from "react";
-import { Pin, PinOff, Trash2 } from "lucide-react";
+import { Loader2, Pin, PinOff, Trash2 } from "lucide-react";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { deleteAnnouncement, togglePinAnnouncement } from "@/lib/actions/announcement";
 
@@ -10,10 +11,9 @@ import { deleteAnnouncement, togglePinAnnouncement } from "@/lib/actions/announc
 // ---------------------------------------------------------------------------
 interface DeleteAnnouncementButtonProps {
   id: string;
-  onError?: (message: string) => void;
 }
 
-export function DeleteAnnouncementButton({ id, onError }: DeleteAnnouncementButtonProps) {
+export function DeleteAnnouncementButton({ id }: DeleteAnnouncementButtonProps) {
   const [isPending, startTransition] = useTransition();
 
   const handleClick = () => {
@@ -21,7 +21,9 @@ export function DeleteAnnouncementButton({ id, onError }: DeleteAnnouncementButt
     startTransition(async () => {
       const result = await deleteAnnouncement(id);
       if (!result.success) {
-        onError?.(result.error);
+        toast.error(result.error);
+      } else {
+        toast.success("공지가 삭제되었습니다");
       }
     });
   };
@@ -33,9 +35,10 @@ export function DeleteAnnouncementButton({ id, onError }: DeleteAnnouncementButt
       className="h-7 text-xs text-destructive hover:text-destructive"
       onClick={handleClick}
       disabled={isPending}
+      aria-label="공지 삭제"
     >
       {isPending ? (
-        "삭제 중..."
+        <Loader2 className="h-3 w-3 animate-spin" />
       ) : (
         <>
           <Trash2 className="mr-1 h-3 w-3" />
@@ -52,17 +55,18 @@ export function DeleteAnnouncementButton({ id, onError }: DeleteAnnouncementButt
 interface TogglePinButtonProps {
   id: string;
   isPinned: boolean;
-  onError?: (message: string) => void;
 }
 
-export function TogglePinButton({ id, isPinned, onError }: TogglePinButtonProps) {
+export function TogglePinButton({ id, isPinned }: TogglePinButtonProps) {
   const [isPending, startTransition] = useTransition();
 
   const handleClick = () => {
     startTransition(async () => {
       const result = await togglePinAnnouncement(id);
       if (!result.success) {
-        onError?.(result.error);
+        toast.error(result.error);
+      } else {
+        toast.success(isPinned ? "고정이 해제되었습니다" : "공지가 고정되었습니다");
       }
     });
   };
@@ -74,10 +78,10 @@ export function TogglePinButton({ id, isPinned, onError }: TogglePinButtonProps)
       className="h-7 text-xs"
       onClick={handleClick}
       disabled={isPending}
-      title={isPinned ? "고정 해제" : "공지 고정"}
+      aria-label={isPinned ? "공지 고정 해제" : "공지 고정"}
     >
       {isPending ? (
-        "처리 중..."
+        <Loader2 className="h-3 w-3 animate-spin" />
       ) : isPinned ? (
         <>
           <PinOff className="mr-1 h-3 w-3" />

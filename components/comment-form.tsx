@@ -3,7 +3,8 @@
 import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { MessageCircle, Trash2 } from "lucide-react";
+import { Loader2, MessageCircle, Trash2 } from "lucide-react";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
@@ -20,7 +21,6 @@ interface CommentFormProps {
 
 export function CommentForm({ announcementId }: CommentFormProps) {
   const [isPending, startTransition] = useTransition();
-  const [serverError, setServerError] = useState<string | null>(null);
   const [isOpen, setIsOpen] = useState(false);
 
   const {
@@ -34,14 +34,14 @@ export function CommentForm({ announcementId }: CommentFormProps) {
   });
 
   const onSubmit = (values: CommentCreateInput) => {
-    setServerError(null);
     startTransition(async () => {
       const result = await createComment(values);
       if (result.success) {
         reset({ announcementId });
         setIsOpen(false);
+        toast.success("댓글이 등록되었습니다");
       } else {
-        setServerError(result.error);
+        toast.error(result.error);
       }
     });
   };
@@ -51,7 +51,7 @@ export function CommentForm({ announcementId }: CommentFormProps) {
       <button
         type="button"
         onClick={() => setIsOpen(true)}
-        className="flex cursor-pointer items-center gap-1 text-xs text-muted-foreground hover:text-foreground"
+        className="flex min-h-[44px] cursor-pointer items-center gap-1 text-xs text-muted-foreground hover:text-foreground"
       >
         <MessageCircle className="h-3.5 w-3.5" />
         댓글 달기
@@ -71,23 +71,26 @@ export function CommentForm({ announcementId }: CommentFormProps) {
         autoFocus
       />
       {errors.body && <p className="text-xs text-destructive">{errors.body.message}</p>}
-      {serverError && <p className="text-xs text-destructive">{serverError}</p>}
       <div className="flex items-center justify-end gap-2">
         <Button
           type="button"
           variant="ghost"
           size="sm"
           className="h-7 text-xs"
-          onClick={() => {
-            setIsOpen(false);
-            setServerError(null);
-          }}
+          onClick={() => setIsOpen(false)}
           disabled={isPending}
         >
           취소
         </Button>
         <Button type="submit" size="sm" className="h-7 text-xs" disabled={isPending}>
-          {isPending ? "작성 중..." : "댓글 작성"}
+          {isPending ? (
+            <>
+              <Loader2 className="mr-1 h-3 w-3 animate-spin" />
+              작성 중...
+            </>
+          ) : (
+            "댓글 작성"
+          )}
         </Button>
       </div>
     </form>
@@ -118,7 +121,12 @@ export function DeleteCommentButton({
   const handleClick = () => {
     if (!confirm("댓글을 삭제하시겠습니까?")) return;
     startTransition(async () => {
-      await deleteComment(commentId);
+      const result = await deleteComment(commentId);
+      if (result.success) {
+        toast.success("댓글이 삭제되었습니다");
+      } else {
+        toast.error(result.error);
+      }
     });
   };
 
@@ -130,7 +138,7 @@ export function DeleteCommentButton({
       className="ml-1 text-[10px] text-muted-foreground hover:text-destructive disabled:opacity-50"
       title="댓글 삭제"
     >
-      <Trash2 className="h-3 w-3" />
+      {isPending ? <Loader2 className="h-3 w-3 animate-spin" /> : <Trash2 className="h-3 w-3" />}
     </button>
   );
 }

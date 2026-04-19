@@ -80,11 +80,13 @@ function MemberTable({ members }: MemberTableProps) {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>참여자</TableHead>
-              <TableHead>신청일</TableHead>
-              <TableHead>상태</TableHead>
-              <TableHead>메모</TableHead>
-              <TableHead className="text-right">관리</TableHead>
+              <TableHead scope="col">참여자</TableHead>
+              <TableHead scope="col">신청일</TableHead>
+              <TableHead scope="col">상태</TableHead>
+              <TableHead scope="col">메모</TableHead>
+              <TableHead scope="col" className="text-right">
+                관리
+              </TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
