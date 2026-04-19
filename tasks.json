@@ -500,10 +500,10 @@
       "name": "Task 017: 데이터 모델 및 DB 스키마 설계 (ERD 문서화)",
       "description": "Phase 1~2의 View 모델(lib/types/index.ts)을 근거로 8개 테이블의 PostgreSQL 스키마를 역설계하여 ERD 및 DDL 초안을 docs/ERD.md에 문서화한다. 이 문서가 Task 018 마이그레이션의 단일 진실 소스가 된다.",
       "notes": "share_token 컬럼명은 View 모델의 shareToken과 일관성을 위해 share_token으로 결정. host_bank_accounts는 이벤트별 구조(event_id 기반)로 결정. confirmedCount/waitingCount 같은 파생값은 '쿼리 집계'로 명시.",
-      "status": "pending",
+      "status": "in_progress",
       "dependencies": [],
       "createdAt": "2026-04-19T09:42:01.087Z",
-      "updatedAt": "2026-04-19T09:42:01.087Z",
+      "updatedAt": "2026-04-19T09:44:02.608Z",
       "relatedFiles": [
         {
           "path": "docs/ERD.md",
