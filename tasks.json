@@ -629,14 +629,14 @@
       "name": "Task 020: 대시보드 및 이벤트 목록 Supabase 연동 (DUMMY_EVENTS 제거)",
       "description": "app/(protected)/dashboard/page.tsx의 DUMMY_EVENTS/DUMMY_MEMBERS를 Supabase 쿼리로 교체하고 View 모델 ↔ DB 매퍼 레이어를 구축한다.",
       "notes": "Next.js 캐싱: 'use cache' 디렉티브 + cacheTag('events') 시도. revalidateTag('events')는 Task 021에서 적용.",
-      "status": "in_progress",
+      "status": "completed",
       "dependencies": [
         {
           "taskId": "23bf2a67-1778-4559-b868-39efda5c0cc1"
         }
       ],
       "createdAt": "2026-04-19T09:42:01.087Z",
-      "updatedAt": "2026-04-19T09:57:41.098Z",
+      "updatedAt": "2026-04-19T09:57:42.204Z",
       "relatedFiles": [
         {
           "path": "lib/supabase/events.ts",
@@ -667,7 +667,8 @@
       "implementationGuide": "1. lib/supabase/events.ts 신규 생성:\n   - getMyHostingEvents(): events WHERE host_id=auth.uid() + confirmed/waiting count 집계\n   - getMyParticipatingEvents(): event_members JOIN events, 본인이 호스트인 건 제외\n   - 각 함수는 매 호출마다 createClient() 새 인스턴스\n2. lib/mappers/event.ts 신규 생성:\n   - mapEventRowToView(row, host, counts): Event — snake_case→camelCase 변환\n   - 순수 함수 (DB 접근 X)\n3. app/(protected)/dashboard/page.tsx 수정:\n   - DUMMY_EVENTS, DUMMY_MEMBERS, CURRENT_USER import 제거\n   - async 함수 + Promise.all([getMyHostingEvents(), getMyParticipatingEvents()])\n   - 빈 결과 → EmptyState 그대로\n4. Playwright: 빈 DB EmptyState, mcp__supabase__execute_sql로 이벤트 INSERT 후 카드 표시 확인",
       "verificationCriteria": "- dashboard/page.tsx에서 DUMMY_EVENTS, DUMMY_MEMBERS, CURRENT_USER import 제거\n- DB 이벤트 데이터가 대시보드에 표시됨\n- confirmedCount/waitingCount 집계값이 실제 event_members와 일치\n- 빈 DB 상태에서 EmptyState 정상 표시\n- npm run type-check 통과",
       "analysisResult": "Gather 프로젝트 Phase 3 목표: Phase 1~2에서 확정된 UI와 View 모델을 근거로 DB 스키마를 설계하고, 더미 데이터를 실제 Supabase 연동으로 교체한다. 8개 테이블(profiles, events, event_members, announcements, announcement_comments, announcement_reactions, settlement_items, settlement_payments + host_bank_accounts), 6개 ENUM, RLS 정책 전 테이블 적용, Server Actions + Supabase @supabase/ssr 패턴 준수, Next.js 15 App Router (Server Components, params await, Server Actions), TypeScript any 금지, Playwright MCP 테스트 필수.",
-      "summary": "dashboard/page.tsx에서 DUMMY_EVENTS/DUMMY_MEMBERS/CURRENT_USER 완전 제거, lib/supabase/events.ts 생성(getMyHostingEvents/getMyParticipatingEvents), lib/mappers/event.ts 생성(mapEventRowToView 순수 함수). Promise.all 병렬 조회, async Server Component 전환. type-check/lint 통과."
+      "summary": "dashboard/page.tsx에서 DUMMY_EVENTS/DUMMY_MEMBERS/CURRENT_USER 완전 제거, lib/supabase/events.ts 생성(getMyHostingEvents/getMyParticipatingEvents), lib/mappers/event.ts 생성(mapEventRowToView 순수 함수). Promise.all 병렬 조회, async Server Component 전환. type-check/lint 통과.",
+      "completedAt": "2026-04-19T09:57:42.203Z"
     },
     {
       "id": "116a18fb-0145-4327-9d58-25883ce289bd",
