@@ -629,14 +629,14 @@
       "name": "Task 020: 대시보드 및 이벤트 목록 Supabase 연동 (DUMMY_EVENTS 제거)",
       "description": "app/(protected)/dashboard/page.tsx의 DUMMY_EVENTS/DUMMY_MEMBERS를 Supabase 쿼리로 교체하고 View 모델 ↔ DB 매퍼 레이어를 구축한다.",
       "notes": "Next.js 캐싱: 'use cache' 디렉티브 + cacheTag('events') 시도. revalidateTag('events')는 Task 021에서 적용.",
-      "status": "pending",
+      "status": "in_progress",
       "dependencies": [
         {
           "taskId": "23bf2a67-1778-4559-b868-39efda5c0cc1"
         }
       ],
       "createdAt": "2026-04-19T09:42:01.087Z",
-      "updatedAt": "2026-04-19T09:42:01.087Z",
+      "updatedAt": "2026-04-19T09:56:19.673Z",
       "relatedFiles": [
         {
           "path": "lib/supabase/events.ts",
