@@ -1080,14 +1080,14 @@
       "name": "Task 016: Phase 2 최종 UI 검수 (Playwright MCP)",
       "description": "Task 014~015 개선사항 반영 여부를 Playwright MCP로 검증. 주요 페이지 스냅샷, toast 동작, 반응형 뷰포트 확인. tasks/016-phase2-ui-review.md에 결과 기록.",
       "notes": "테스트는 반드시 Playwright MCP 사용.",
-      "status": "in_progress",
+      "status": "completed",
       "dependencies": [
         {
           "taskId": "50fdcf3a-860b-4934-aa75-b73e4ed6b25c"
         }
       ],
       "createdAt": "2026-04-19T14:58:34.339Z",
-      "updatedAt": "2026-04-19T15:09:21.459Z",
+      "updatedAt": "2026-04-19T15:09:22.614Z",
       "relatedFiles": [
         {
           "path": "tasks/016-phase2-ui-review.md",
@@ -1103,7 +1103,8 @@
       "implementationGuide": "Playwright MCP 도구로:\n1. 개발 서버 실행 확인 (localhost:3000)\n2. 홈(/) 스냅샷\n3. /auth/login 스냅샷\n4. /dashboard (로그인 필요 → /auth/login 리디렉션 확인)\n5. 모바일 뷰포트(375px) 주요 페이지 스냅샷\n6. lint/type-check/build 최종 확인\n7. tasks/016-phase2-ui-review.md 작성 (결과 표 포함)\n8. ROADMAP.md Phase 2 완료 표시",
       "verificationCriteria": "1. Playwright 스냅샷 주요 페이지 통과\n2. 모바일 뷰포트 레이아웃 확인\n3. lint/type-check/build 0 에러\n4. tasks/016-phase2-ui-review.md 생성\n5. ROADMAP.md Phase 2 ✅ 표시",
       "analysisResult": "Phase 2 미완료 태스크 014~016 구현. Sonner/toast 이미 설치됨. skeleton/aria 일부 적용됨. Phase 3 백엔드 연동 완료 상태. 테스트는 Playwright MCP 활용.",
-      "summary": "Playwright MCP로 5개 시나리오(홈/로그인/대시보드 리디렉션/모바일 375px 홈·로그인) 검증 완료. 스크린샷 4장 저장. lint/type-check/build 0 에러. tasks/016-phase2-ui-review.md 생성. ROADMAP.md Phase 2 전체 ✅ 완료 표시."
+      "summary": "Playwright MCP로 5개 시나리오(홈/로그인/대시보드 리디렉션/모바일 375px 홈·로그인) 검증 완료. 스크린샷 4장 저장. lint/type-check/build 0 에러. tasks/016-phase2-ui-review.md 생성. ROADMAP.md Phase 2 전체 ✅ 완료 표시.",
+      "completedAt": "2026-04-19T15:09:22.613Z"
     }
   ]
 }
