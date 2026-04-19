@@ -537,14 +537,14 @@
       "name": "Task 018: Supabase 마이그레이션 및 RLS 정책 적용",
       "description": "Task 017의 ERD를 기반으로 Supabase 마이그레이션 파일을 작성하고, RLS 정책을 적용한 뒤 TypeScript 타입을 재생성한다. 이 태스크 완료 후 다음 태스크부터 Supabase 쿼리로 더미 데이터를 교체할 수 있다.",
       "notes": "mcp__supabase__apply_migration 사용. 마이그레이션 적용 후 mcp__supabase__list_tables로 확인. 자동 updated_at 트리거는 handle_updated_at() 함수로 events, announcements에 적용.",
-      "status": "in_progress",
+      "status": "completed",
       "dependencies": [
         {
           "taskId": "d129e700-e460-4df9-9532-a14a8e1b711c"
         }
       ],
       "createdAt": "2026-04-19T09:42:01.087Z",
-      "updatedAt": "2026-04-19T09:52:24.674Z",
+      "updatedAt": "2026-04-19T09:52:25.821Z",
       "relatedFiles": [
         {
           "path": "supabase/migrations/20260419000001_create_enums.sql",
@@ -580,7 +580,8 @@
       "implementationGuide": "1. supabase/migrations/ 디렉토리 생성, 파일 3개:\n   - 20260419000001_create_enums.sql: ENUM 타입 6종\n   - 20260419000002_create_tables.sql: 8개 테이블 + 인덱스 + updated_at 트리거\n   - 20260419000003_enable_rls_policies.sql: 전 테이블 RLS 활성화 + 정책\n2. RLS 정책:\n   - events: SELECT (status!='draft', 비로그인 포함), INSERT/UPDATE/DELETE (host_id=auth.uid())\n   - event_members: SELECT (본인 OR 해당이벤트 host), INSERT (본인), UPDATE (host), DELETE (본인 OR host)\n   - announcements: SELECT (confirmed 참여자 OR host), ALL (host만)\n   - announcement_comments/reactions: SELECT (confirmed OR host), INSERT/DELETE (본인 + confirmed OR host)\n   - settlement_items/payments: SELECT (confirmed OR host), UPDATE is_paid (host만)\n   - host_bank_accounts: SELECT (confirmed OR host), ALL (host)\n3. mcp__supabase__apply_migration 호출로 각 파일 적용\n4. mcp__supabase__generate_typescript_types 호출 → types/database.types.ts 갱신\n5. 편의 타입 별칭 추가: EventRow, EventInsert, EventUpdate 등 8개 테이블 모두\n6. lib/types/api.ts 신규 생성: ActionResult<T>, ActionErrorCode\n7. Playwright로 RLS 검증: 비로그인 /events/[token] 200, /dashboard 리디렉션",
       "verificationCriteria": "- mcp__supabase__list_tables 결과에 9개 테이블(profiles 포함) 존재\n- 각 테이블 rowsecurity=true\n- types/database.types.ts에 8개 테이블 Row/Insert/Update 타입 생성\n- npm run type-check 통과\n- 비로그인 events SELECT 가능 (status!='draft' 조건)\n- 타 사용자 events INSERT/UPDATE/DELETE → RLS 차단",
       "analysisResult": "Gather 프로젝트 Phase 3 목표: Phase 1~2에서 확정된 UI와 View 모델을 근거로 DB 스키마를 설계하고, 더미 데이터를 실제 Supabase 연동으로 교체한다. 8개 테이블(profiles, events, event_members, announcements, announcement_comments, announcement_reactions, settlement_items, settlement_payments + host_bank_accounts), 6개 ENUM, RLS 정책 전 테이블 적용, Server Actions + Supabase @supabase/ssr 패턴 준수, Next.js 15 App Router (Server Components, params await, Server Actions), TypeScript any 금지, Playwright MCP 테스트 필수.",
-      "summary": "마이그레이션 파일 3개 생성 및 Supabase 적용 완료. 9개 테이블 모두 rowsecurity=true. types/database.types.ts 재생성 + 편의 타입 16개 추가. lib/types/api.ts ActionResult/ActionErrorCode 생성. npm run type-check 통과."
+      "summary": "마이그레이션 파일 3개 생성 및 Supabase 적용 완료. 9개 테이블 모두 rowsecurity=true. types/database.types.ts 재생성 + 편의 타입 16개 추가. lib/types/api.ts ActionResult/ActionErrorCode 생성. npm run type-check 통과.",
+      "completedAt": "2026-04-19T09:52:25.820Z"
     },
     {
       "id": "23bf2a67-1778-4559-b868-39efda5c0cc1",
