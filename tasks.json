@@ -963,7 +963,7 @@
         }
       ],
       "createdAt": "2026-04-19T09:42:01.087Z",
-      "updatedAt": "2026-04-19T11:03:42.089Z",
+      "updatedAt": "2026-04-19T11:07:35.415Z",
       "relatedFiles": [
         {
           "path": "tasks/027-phase3-integration-test.md",
@@ -983,7 +983,8 @@
       ],
       "implementationGuide": "1. tasks/027-phase3-integration-test.md 시나리오 문서 작성\n2. 시나리오 A (주최자 10단계): 회원가입→이벤트생성→공유링크→참여자승인→공지→CSV→cron리마인더\n3. 시나리오 B (참여자 7단계): 비로그인 공유링크→로그인→참여신청→승인→공지댓글→리액션\n4. 시나리오 C (RLS 4건): 타사용자 관리 페이지 접근 차단, draft 이벤트 SELECT 차단\n5. 시나리오 D (엣지 8건): max_participants=0, 동시신청 race condition, 마감일 경계, 중복신청, 이벤트 CASCADE 삭제, 빈 CSV, EmptyState\n6. npm run lint + type-check + build 전체 통과\n7. mcp__supabase__get_advisors critical 이슈 0건\n8. 결과 보고서: 시나리오별 PASS/FAIL/SKIP 표 + 발견 버그 목록 + Phase 4 진입 가능 여부 판단",
       "verificationCriteria": "- 시나리오 A 10단계 PASS\n- 시나리오 B 7단계 PASS\n- 시나리오 C RLS 4건 모두 차단 확인\n- 시나리오 D 엣지 8건 처리 확인\n- npm run lint + type-check + build 0 에러\n- mcp__supabase__get_advisors critical 0건\n- 결과 보고서 작성 완료",
-      "analysisResult": "Gather 프로젝트 Phase 3 목표: Phase 1~2에서 확정된 UI와 View 모델을 근거로 DB 스키마를 설계하고, 더미 데이터를 실제 Supabase 연동으로 교체한다. 8개 테이블(profiles, events, event_members, announcements, announcement_comments, announcement_reactions, settlement_items, settlement_payments + host_bank_accounts), 6개 ENUM, RLS 정책 전 테이블 적용, Server Actions + Supabase @supabase/ssr 패턴 준수, Next.js 15 App Router (Server Components, params await, Server Actions), TypeScript any 금지, Playwright MCP 테스트 필수."
+      "analysisResult": "Gather 프로젝트 Phase 3 목표: Phase 1~2에서 확정된 UI와 View 모델을 근거로 DB 스키마를 설계하고, 더미 데이터를 실제 Supabase 연동으로 교체한다. 8개 테이블(profiles, events, event_members, announcements, announcement_comments, announcement_reactions, settlement_items, settlement_payments + host_bank_accounts), 6개 ENUM, RLS 정책 전 테이블 적용, Server Actions + Supabase @supabase/ssr 패턴 준수, Next.js 15 App Router (Server Components, params await, Server Actions), TypeScript any 금지, Playwright MCP 테스트 필수.",
+      "summary": "Phase 3 통합 테스트 완료. lint/type-check/build 0 에러, 전체 테이블 RLS 활성화(10/10), API 인증 경계(401) 확인, proxy.ts /api 경로 미들웨어 제외 버그 수정. 시나리오 A(10단계)/B(7단계)/C(RLS 4건)/D(엣지 8건) PASS. Phase 4 진입 가능."
     }
   ]
 }
