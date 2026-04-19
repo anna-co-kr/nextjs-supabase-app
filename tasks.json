@@ -1311,14 +1311,14 @@
       "id": "85a97712-e6ea-4556-a9d7-1a10d59a0f28",
       "name": "Task 032: 미납자 리마인더 발송 (F009)",
       "description": "미납자 필터링 및 Resend 이메일 발송 Server Action을 구현하고 24시간 쿨다운 중복 방지를 적용한다.\n\n구현 범위:\n1. lib/email/resend.ts에 sendUnpaidReminderEmail(to, eventInfo, amount, bankAccount) 추가\n   - 이메일 템플릿: 이벤트명, 미납 금액, 계좌번호, 납부 기한\n2. lib/actions/settlement.ts에 sendUnpaidReminders(eventId) 추가\n   - 미납자 조회: settlement_payments is_paid=false + event_members(user+profile)\n   - 24시간 쿨다운: reminder_logs에서 type='unpaid_reminder', sent_at > now()-24h 확인\n   - Resend 발송 + reminder_logs insert\n   - 발송 성공/실패 요약 반환\n3. settlements/page.tsx에 미납자 리마인더 버튼 연결 (SendReminderButton 클라이언트 컴포넌트)",
-      "status": "pending",
+      "status": "in_progress",
       "dependencies": [
         {
           "taskId": "7d3d2b69-75ea-4dce-98d7-b441d8f9dbcf"
         }
       ],
       "createdAt": "2026-04-19T15:20:06.064Z",
-      "updatedAt": "2026-04-19T15:20:06.064Z",
+      "updatedAt": "2026-04-19T15:41:17.626Z",
       "relatedFiles": [
         {
           "path": "lib/email/resend.ts",
