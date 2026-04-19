@@ -1105,6 +1105,290 @@
       "analysisResult": "Phase 2 미완료 태스크 014~016 구현. Sonner/toast 이미 설치됨. skeleton/aria 일부 적용됨. Phase 3 백엔드 연동 완료 상태. 테스트는 Playwright MCP 활용.",
       "summary": "Playwright MCP로 5개 시나리오(홈/로그인/대시보드 리디렉션/모바일 375px 홈·로그인) 검증 완료. 스크린샷 4장 저장. lint/type-check/build 0 에러. tasks/016-phase2-ui-review.md 생성. ROADMAP.md Phase 2 전체 ✅ 완료 표시.",
       "completedAt": "2026-04-19T15:09:22.613Z"
+    },
+    {
+      "id": "91ad2e5d-dc9c-485d-b4da-241707966f6f",
+      "name": "Task 028: 정산 항목 CRUD 및 분담 계산 연동 (F008)",
+      "description": "정산 항목 등록/수정/삭제 Server Action과 3종 분담 계산 로직을 구현하고 settlements/page.tsx의 더미 데이터를 Supabase 연동으로 교체한다.\n\n구현 범위:\n1. lib/schemas/settlement.ts — settlementItemCreateSchema(name, total_amount, split_type, individual_amounts?, ratios?), settlementItemUpdateSchema\n2. lib/utils/settlement.ts — calculatePayments(totalAmount, splitType, members, opts) 순수 함수: equal=total/count, individual=opts.amounts[], ratio=total*opts.ratios[]/100\n3. lib/supabase/settlements.ts — getSettlementsByEventId(eventId): settlement_items + settlement_payments(event_members+profiles) 단일 조인 쿼리\n4. lib/actions/settlement.ts — createSettlementItem: DB insert + calculatePayments 호출 + settlement_payments bulk insert / updateSettlementItem / deleteSettlementItem\n5. components/settlement-item-form.tsx — Dialog + React Hook Form + zodResolver, split_type 선택에 따라 개별/비율 입력 필드 동적 표시\n6. app/(protected)/manage/[eventId]/settlements/page.tsx — DUMMY_EVENTS/DUMMY_SETTLEMENTS 제거, getSettlementsByEventId 호출, SettlementItemForm 연결",
+      "status": "pending",
+      "dependencies": [],
+      "createdAt": "2026-04-19T15:20:06.064Z",
+      "updatedAt": "2026-04-19T15:20:06.064Z",
+      "relatedFiles": [
+        {
+          "path": "lib/schemas/settlement.ts",
+          "type": "CREATE",
+          "description": "Zod 스키마"
+        },
+        {
+          "path": "lib/utils/settlement.ts",
+          "type": "CREATE",
+          "description": "분담 계산 순수 함수"
+        },
+        {
+          "path": "lib/supabase/settlements.ts",
+          "type": "CREATE",
+          "description": "Supabase 쿼리 레이어"
+        },
+        {
+          "path": "lib/actions/settlement.ts",
+          "type": "CREATE",
+          "description": "Server Action"
+        },
+        {
+          "path": "components/settlement-item-form.tsx",
+          "type": "CREATE",
+          "description": "항목 추가/수정 Dialog 폼"
+        },
+        {
+          "path": "app/(protected)/manage/[eventId]/settlements/page.tsx",
+          "type": "TO_MODIFY",
+          "description": "더미 데이터 제거"
+        },
+        {
+          "path": "lib/schemas/announcement.ts",
+          "type": "REFERENCE",
+          "description": "Zod 스키마 패턴"
+        },
+        {
+          "path": "lib/actions/announcement.ts",
+          "type": "REFERENCE",
+          "description": "Server Action 패턴"
+        },
+        {
+          "path": "supabase/migrations/20260419000002_create_tables.sql",
+          "type": "REFERENCE",
+          "description": "settlement_items/payments 스키마"
+        },
+        {
+          "path": "types/database.types.ts",
+          "type": "DEPENDENCY",
+          "description": "Tables 타입"
+        }
+      ],
+      "implementationGuide": "// lib/utils/settlement.ts\nfunction calculatePayments(totalAmount, splitType, memberIds, opts):\n  if splitType == 'equal': return memberIds.map(id => ({memberId: id, amount: Math.round(totalAmount/count)}))\n  if splitType == 'individual': return memberIds.map((id,i) => ({memberId: id, amount: opts.amounts[i]}))\n  if splitType == 'ratio': return memberIds.map((id,i) => ({memberId: id, amount: Math.round(totalAmount * opts.ratios[i] / 100)}))\n\n// lib/actions/settlement.ts\nasync function createSettlementItem(input):\n  validate with Zod\n  get user, verify host\n  get confirmed members for event\n  insert settlement_items row\n  payments = calculatePayments(total_amount, split_type, memberIds, opts)\n  bulk insert settlement_payments\n  revalidatePath\n  return ActionResult\n\n// settlements/page.tsx\nreplace DUMMY_EVENTS with getEventById(eventId)\nreplace DUMMY_SETTLEMENTS with getSettlementsByEventId(eventId)\npass data to SettlementItemForm and PaymentToggleButton",
+      "verificationCriteria": "1. lint/type-check 0 에러\n2. 균등(3명, 10000원) → 각 3334/3333/3333 또는 반올림 처리 일관성 확인\n3. 개별 지정: 입력값 합산이 total_amount와 일치해야 함\n4. 비율: 합산 100% 검증 (Zod refine)\n5. 항목 추가 후 settlement_payments 레코드 확정 멤버 수만큼 생성\n6. Playwright MCP: localhost:3001 정산 관리 페이지 로드 확인",
+      "analysisResult": "Phase 4 정산 기능: settlement_items/settlement_payments/host_bank_accounts DB 테이블(이미 존재) 연동. 기존 Phase 3 패턴 준수 — \"use server\" + createClient() + auth.getUser() + Zod safeParse + ActionResult 반환 + revalidatePath. 더미 데이터(DUMMY_SETTLEMENTS) 완전 제거. 신규 파일: lib/schemas/settlement.ts, lib/utils/settlement.ts, lib/supabase/settlements.ts, lib/actions/settlement.ts, lib/email/settlement-reminder.ts(or resend.ts 확장), components/settlement-item-form.tsx, components/bank-account-form.tsx, components/payment-toggle-button.tsx, components/copy-button.tsx."
+    },
+    {
+      "id": "a9341cf4-f8ba-4e5a-ac34-e7b54a28885c",
+      "name": "Task 029: 호스트 계좌번호 등록 연동 (F009)",
+      "description": "host_bank_accounts 테이블 CRUD를 구현하고 settlements/page.tsx의 계좌 등록/수정 버튼에 연결한다.\n\n구현 범위:\n1. lib/schemas/settlement.ts에 bankAccountSchema 추가 (bank_name, account_number, account_holder)\n2. lib/actions/settlement.ts에 upsertBankAccount(eventId, input) 추가\n3. lib/supabase/settlements.ts에 getBankAccount(eventId) 추가\n4. components/bank-account-form.tsx — Dialog + React Hook Form + zodResolver\n5. settlements/page.tsx — getBankAccount 호출, BankAccountForm 연결\n\n주의: host_bank_accounts에 UNIQUE(event_id) 제약이 없으므로 기존 레코드 조회 후 update/insert 분기 처리",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "91ad2e5d-dc9c-485d-b4da-241707966f6f"
+        }
+      ],
+      "createdAt": "2026-04-19T15:20:06.064Z",
+      "updatedAt": "2026-04-19T15:20:06.064Z",
+      "relatedFiles": [
+        {
+          "path": "lib/schemas/settlement.ts",
+          "type": "TO_MODIFY",
+          "description": "bankAccountSchema 추가"
+        },
+        {
+          "path": "lib/actions/settlement.ts",
+          "type": "TO_MODIFY",
+          "description": "upsertBankAccount 추가"
+        },
+        {
+          "path": "lib/supabase/settlements.ts",
+          "type": "TO_MODIFY",
+          "description": "getBankAccount 추가"
+        },
+        {
+          "path": "components/bank-account-form.tsx",
+          "type": "CREATE",
+          "description": "계좌 등록/수정 Dialog"
+        },
+        {
+          "path": "app/(protected)/manage/[eventId]/settlements/page.tsx",
+          "type": "TO_MODIFY",
+          "description": "BankAccountForm 연결"
+        },
+        {
+          "path": "supabase/migrations/20260419000003_enable_rls_policies.sql",
+          "type": "REFERENCE",
+          "description": "bank_accounts RLS 확인"
+        }
+      ],
+      "implementationGuide": "// lib/actions/settlement.ts\nasync function upsertBankAccount(eventId, input):\n  validate Zod\n  verify host\n  existing = getBankAccount(eventId)\n  if existing: update where id=existing.id\n  else: insert {event_id, host_id, ...input}\n  revalidatePath\n  return ActionResult\n\n// components/bank-account-form.tsx\nDialog trigger = '등록' or '수정' button\nform fields: bank_name(은행명), account_number(계좌번호), account_holder(예금주)\nonSubmit: call upsertBankAccount Server Action + toast",
+      "verificationCriteria": "1. 계좌 미등록 상태에서 '등록' 버튼 클릭 → Dialog 열림 → 저장 → 계좌 표시\n2. 계좌 등록 후 '수정' 클릭 → 기존값 채워진 폼 → 수정 저장\n3. 다른 이벤트의 계좌가 노출되지 않음 (RLS)\n4. lint/type-check 0 에러",
+      "analysisResult": "Phase 4 정산 기능: settlement_items/settlement_payments/host_bank_accounts DB 테이블(이미 존재) 연동. 기존 Phase 3 패턴 준수 — \"use server\" + createClient() + auth.getUser() + Zod safeParse + ActionResult 반환 + revalidatePath. 더미 데이터(DUMMY_SETTLEMENTS) 완전 제거. 신규 파일: lib/schemas/settlement.ts, lib/utils/settlement.ts, lib/supabase/settlements.ts, lib/actions/settlement.ts, lib/email/settlement-reminder.ts(or resend.ts 확장), components/settlement-item-form.tsx, components/bank-account-form.tsx, components/payment-toggle-button.tsx, components/copy-button.tsx."
+    },
+    {
+      "id": "23e6bbc7-3744-4819-90f3-4240fcf4f641",
+      "name": "Task 030: 납부 확인 및 상태 관리 연동 (F009)",
+      "description": "settlement_payments의 is_paid 상태 토글 Server Action을 구현하고 납부 완료율 요약 카드를 실데이터로 연동한다.\n\n구현 범위:\n1. lib/actions/settlement.ts에 togglePaymentStatus(paymentId, isPaid) 추가\n   - is_paid=true → paid_at=now(), is_paid=false → paid_at=null\n2. lib/supabase/settlements.ts에 getSettlementSummary(eventId) 추가\n   - totalAmount, paidCount, unpaidCount 집계\n3. components/payment-toggle-button.tsx — useTransition + Loader2 스피너, 확인/취소 토글\n4. settlements/page.tsx — PaymentToggleButton 연결, 요약 카드 실데이터 반영\n5. 모바일 카드 + 데스크톱 테이블 양쪽에 PaymentToggleButton 적용",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "a9341cf4-f8ba-4e5a-ac34-e7b54a28885c"
+        }
+      ],
+      "createdAt": "2026-04-19T15:20:06.064Z",
+      "updatedAt": "2026-04-19T15:20:06.064Z",
+      "relatedFiles": [
+        {
+          "path": "lib/actions/settlement.ts",
+          "type": "TO_MODIFY",
+          "description": "togglePaymentStatus 추가"
+        },
+        {
+          "path": "lib/supabase/settlements.ts",
+          "type": "TO_MODIFY",
+          "description": "getSettlementSummary 추가"
+        },
+        {
+          "path": "components/payment-toggle-button.tsx",
+          "type": "CREATE",
+          "description": "납부 토글 버튼"
+        },
+        {
+          "path": "app/(protected)/manage/[eventId]/settlements/page.tsx",
+          "type": "TO_MODIFY",
+          "description": "요약 카드 실데이터 반영"
+        },
+        {
+          "path": "components/member-actions.tsx",
+          "type": "REFERENCE",
+          "description": "useTransition 패턴"
+        }
+      ],
+      "implementationGuide": "// lib/actions/settlement.ts\nasync function togglePaymentStatus(paymentId, isPaid):\n  verify host (payment -> settlement_item -> event -> host_id)\n  update settlement_payments set is_paid=isPaid, paid_at=(isPaid ? now() : null)\n  revalidatePath\n  return ActionResult\n\n// components/payment-toggle-button.tsx\n'use client'\nconst [isPending, startTransition] = useTransition()\nonClick: startTransition(() => togglePaymentStatus(id, !currentIsPaid))\nrender: isPending ? <Loader2 animate-spin /> : (isPaid ? '취소' : '확인')",
+      "verificationCriteria": "1. '확인' 클릭 → is_paid=true, paid_at 기록, 버튼 → '취소'로 전환\n2. '취소' 클릭 → is_paid=false, paid_at=null, 버튼 → '확인'으로 전환\n3. 요약 카드: 납부 완료 명수/미납 명수 실데이터 반영\n4. Playwright MCP: localhost:3001 납부 토글 동작 확인\n5. lint/type-check 0 에러",
+      "analysisResult": "Phase 4 정산 기능: settlement_items/settlement_payments/host_bank_accounts DB 테이블(이미 존재) 연동. 기존 Phase 3 패턴 준수 — \"use server\" + createClient() + auth.getUser() + Zod safeParse + ActionResult 반환 + revalidatePath. 더미 데이터(DUMMY_SETTLEMENTS) 완전 제거. 신규 파일: lib/schemas/settlement.ts, lib/utils/settlement.ts, lib/supabase/settlements.ts, lib/actions/settlement.ts, lib/email/settlement-reminder.ts(or resend.ts 확장), components/settlement-item-form.tsx, components/bank-account-form.tsx, components/payment-toggle-button.tsx, components/copy-button.tsx."
+    },
+    {
+      "id": "7d3d2b69-75ea-4dce-98d7-b441d8f9dbcf",
+      "name": "Task 031: 참여자용 정산 현황 연동",
+      "description": "settlements-status/page.tsx의 더미 데이터를 Supabase 연동으로 교체하고 계좌번호 복사 기능을 연결한다.\n\n구현 범위:\n1. lib/supabase/settlements.ts에 getMySettlementStatus(eventId, userId) 추가\n   - 현재 사용자의 event_member_id 조회\n   - settlement_payments + settlement_items 조인으로 본인 납부 내역 조회\n   - host_bank_accounts 조회\n2. components/copy-button.tsx — 'use client', navigator.clipboard.writeText + toast.success\n3. settlements-status/page.tsx — DUMMY 제거, getMySettlementStatus 호출, CopyButton 연결\n   - 확정 참여자가 아닌 경우 접근 차단 (notFound or redirect)\n4. RLS 정책: payments_select는 em.user_id = auth.uid() OR host — 참여자 본인 데이터만 노출 확인",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "23e6bbc7-3744-4819-90f3-4240fcf4f641"
+        }
+      ],
+      "createdAt": "2026-04-19T15:20:06.064Z",
+      "updatedAt": "2026-04-19T15:20:06.064Z",
+      "relatedFiles": [
+        {
+          "path": "lib/supabase/settlements.ts",
+          "type": "TO_MODIFY",
+          "description": "getMySettlementStatus 추가"
+        },
+        {
+          "path": "components/copy-button.tsx",
+          "type": "CREATE",
+          "description": "클립보드 복사 버튼"
+        },
+        {
+          "path": "app/(protected)/manage/[eventId]/settlements-status/page.tsx",
+          "type": "TO_MODIFY",
+          "description": "더미 제거, Supabase 연동"
+        },
+        {
+          "path": "app/(protected)/manage/[eventId]/settlements/page.tsx",
+          "type": "REFERENCE",
+          "description": "페이지 구조 참조"
+        }
+      ],
+      "implementationGuide": "// lib/supabase/settlements.ts\nasync function getMySettlementStatus(eventId, userId):\n  member = supabase.from('event_members').select('id').eq('event_id').eq('user_id').eq('status','confirmed').single()\n  if not member: return null\n  payments = supabase.from('settlement_payments').select('*, settlement_items(*)').eq('event_member_id', member.id)\n  bankAccount = supabase.from('host_bank_accounts').select('*').eq('event_id').single()\n  return { payments, bankAccount, totalDue, isPaid }\n\n// settlements-status/page.tsx\nstatus = await getMySettlementStatus(eventId, user.id)\nif not status: notFound()\nrender: 총 납부 금액, 납부 상태 배지, 항목별 내역, CopyButton(계좌번호)",
+      "verificationCriteria": "1. 확정 참여자로 로그인 후 settlements-status 접근 → 본인 납부 금액 표시\n2. 미확정/비로그인 접근 → notFound 또는 redirect\n3. 계좌번호 복사 버튼 클릭 → toast.success('계좌번호가 복사되었습니다')\n4. 다른 사람의 납부 내역 미노출 (RLS)\n5. lint/type-check 0 에러",
+      "analysisResult": "Phase 4 정산 기능: settlement_items/settlement_payments/host_bank_accounts DB 테이블(이미 존재) 연동. 기존 Phase 3 패턴 준수 — \"use server\" + createClient() + auth.getUser() + Zod safeParse + ActionResult 반환 + revalidatePath. 더미 데이터(DUMMY_SETTLEMENTS) 완전 제거. 신규 파일: lib/schemas/settlement.ts, lib/utils/settlement.ts, lib/supabase/settlements.ts, lib/actions/settlement.ts, lib/email/settlement-reminder.ts(or resend.ts 확장), components/settlement-item-form.tsx, components/bank-account-form.tsx, components/payment-toggle-button.tsx, components/copy-button.tsx."
+    },
+    {
+      "id": "85a97712-e6ea-4556-a9d7-1a10d59a0f28",
+      "name": "Task 032: 미납자 리마인더 발송 (F009)",
+      "description": "미납자 필터링 및 Resend 이메일 발송 Server Action을 구현하고 24시간 쿨다운 중복 방지를 적용한다.\n\n구현 범위:\n1. lib/email/resend.ts에 sendUnpaidReminderEmail(to, eventInfo, amount, bankAccount) 추가\n   - 이메일 템플릿: 이벤트명, 미납 금액, 계좌번호, 납부 기한\n2. lib/actions/settlement.ts에 sendUnpaidReminders(eventId) 추가\n   - 미납자 조회: settlement_payments is_paid=false + event_members(user+profile)\n   - 24시간 쿨다운: reminder_logs에서 type='unpaid_reminder', sent_at > now()-24h 확인\n   - Resend 발송 + reminder_logs insert\n   - 발송 성공/실패 요약 반환\n3. settlements/page.tsx에 미납자 리마인더 버튼 연결 (SendReminderButton 클라이언트 컴포넌트)",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "7d3d2b69-75ea-4dce-98d7-b441d8f9dbcf"
+        }
+      ],
+      "createdAt": "2026-04-19T15:20:06.064Z",
+      "updatedAt": "2026-04-19T15:20:06.064Z",
+      "relatedFiles": [
+        {
+          "path": "lib/email/resend.ts",
+          "type": "TO_MODIFY",
+          "description": "sendUnpaidReminderEmail 추가"
+        },
+        {
+          "path": "lib/actions/settlement.ts",
+          "type": "TO_MODIFY",
+          "description": "sendUnpaidReminders 추가"
+        },
+        {
+          "path": "components/send-reminder-button.tsx",
+          "type": "CREATE",
+          "description": "리마인더 발송 버튼"
+        },
+        {
+          "path": "app/(protected)/manage/[eventId]/settlements/page.tsx",
+          "type": "TO_MODIFY",
+          "description": "SendReminderButton 연결"
+        },
+        {
+          "path": "lib/email/resend.ts",
+          "type": "REFERENCE",
+          "description": "sendReminderEmail 패턴"
+        },
+        {
+          "path": "supabase/migrations/20260419000006_create_reminder_logs.sql",
+          "type": "REFERENCE",
+          "description": "reminder_logs 스키마 확인"
+        }
+      ],
+      "implementationGuide": "// lib/actions/settlement.ts\nasync function sendUnpaidReminders(eventId):\n  verify host\n  unpaidPayments = query settlement_payments where is_paid=false, join event_members+profiles\n  bankAccount = getBankAccount(eventId)\n  event = getEventById(eventId)\n  results = []\n  for each unpaid member:\n    recentLog = reminder_logs where event_id=eventId, member_id=memberId, type='unpaid_reminder', sent_at > now()-24h\n    if recentLog exists: skip (쿨다운)\n    success = sendUnpaidReminderEmail(email, event, amount, bankAccount)\n    if success: insert reminder_logs {event_id, member_id, type:'unpaid_reminder', sent_at:now()}\n    results.push({memberId, success})\n  revalidatePath\n  return {success:true, data:{sent: count, skipped: count}}\n\n// components/send-reminder-button.tsx\n'use client', useTransition\nonClick: sendUnpaidReminders(eventId) + toast.success(`${sent}명에게 발송 완료`)",
+      "verificationCriteria": "1. 미납자 존재 시 버튼 클릭 → Resend 발송 + toast.success('N명에게 발송 완료')\n2. 24시간 내 재발송 시 해당 멤버 건너뜀 (쿨다운)\n3. 미납자 없을 시 toast.success('미납자가 없습니다')\n4. lint/type-check 0 에러",
+      "analysisResult": "Phase 4 정산 기능: settlement_items/settlement_payments/host_bank_accounts DB 테이블(이미 존재) 연동. 기존 Phase 3 패턴 준수 — \"use server\" + createClient() + auth.getUser() + Zod safeParse + ActionResult 반환 + revalidatePath. 더미 데이터(DUMMY_SETTLEMENTS) 완전 제거. 신규 파일: lib/schemas/settlement.ts, lib/utils/settlement.ts, lib/supabase/settlements.ts, lib/actions/settlement.ts, lib/email/settlement-reminder.ts(or resend.ts 확장), components/settlement-item-form.tsx, components/bank-account-form.tsx, components/payment-toggle-button.tsx, components/copy-button.tsx."
+    },
+    {
+      "id": "d8765ad4-0036-4a51-af89-1301848d2c5e",
+      "name": "Task 033: Phase 4 통합 테스트",
+      "description": "Phase 4에서 구현한 모든 정산 기능을 주최자/참여자 페르소나로 전체 루프 검증하고 Phase 4 완료를 확정한다.\n\n검증 범위:\n1. 품질 게이트: npm run lint, npm run type-check, npm run build (0 에러)\n2. Playwright MCP (localhost:3001) 시나리오:\n   - 정산 항목 추가(균등/개별/비율) → 항목 목록 표시\n   - 계좌번호 등록 → 계좌 카드 표시\n   - 납부 확인 클릭 → 상태 변경 확인\n   - 참여자 정산 현황 페이지 접근 → 본인 금액 표시\n   - 미납자 리마인더 버튼 → 발송 toast 확인\n3. 스크린샷 저장: tasks/screenshots/033-*.png\n4. 결과 보고서: tasks/033-phase4-test-report.md\n5. ROADMAP.md Phase 4 완료 표시 (✅)\n6. shrimp-task-manager 태스크 완료 처리",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "85a97712-e6ea-4556-a9d7-1a10d59a0f28"
+        }
+      ],
+      "createdAt": "2026-04-19T15:20:06.064Z",
+      "updatedAt": "2026-04-19T15:20:06.064Z",
+      "relatedFiles": [
+        {
+          "path": "tasks/033-phase4-test-report.md",
+          "type": "CREATE",
+          "description": "통합 테스트 결과 보고서"
+        },
+        {
+          "path": "docs/ROADMAP.md",
+          "type": "TO_MODIFY",
+          "description": "Phase 4 완료 표시"
+        },
+        {
+          "path": "tasks/016-phase2-ui-review.md",
+          "type": "REFERENCE",
+          "description": "보고서 형식 참조"
+        },
+        {
+          "path": "app/(protected)/manage/[eventId]/settlements/page.tsx",
+          "type": "REFERENCE",
+          "description": "정산 관리 페이지"
+        },
+        {
+          "path": "app/(protected)/manage/[eventId]/settlements-status/page.tsx",
+          "type": "REFERENCE",
+          "description": "참여자 정산 현황 페이지"
+        }
+      ],
+      "implementationGuide": "// 순서\n1. npm run lint && npm run type-check && npm run build\n2. Playwright MCP 시나리오 5개 실행 (로그인 후)\n3. 스크린샷 저장\n4. 보고서 작성\n5. ROADMAP.md 업데이트\n6. git commit + push",
+      "verificationCriteria": "1. lint/type-check/build 0 에러\n2. Playwright MCP 5개 시나리오 PASS\n3. DUMMY_SETTLEMENTS import가 코드베이스에 존재하지 않음\n4. ROADMAP.md Phase 4 heading에 ✅ 표시\n5. tasks/033-phase4-test-report.md 생성",
+      "analysisResult": "Phase 4 정산 기능: settlement_items/settlement_payments/host_bank_accounts DB 테이블(이미 존재) 연동. 기존 Phase 3 패턴 준수 — \"use server\" + createClient() + auth.getUser() + Zod safeParse + ActionResult 반환 + revalidatePath. 더미 데이터(DUMMY_SETTLEMENTS) 완전 제거. 신규 파일: lib/schemas/settlement.ts, lib/utils/settlement.ts, lib/supabase/settlements.ts, lib/actions/settlement.ts, lib/email/settlement-reminder.ts(or resend.ts 확장), components/settlement-item-form.tsx, components/bank-account-form.tsx, components/payment-toggle-button.tsx, components/copy-button.tsx."
     }
   ]
 }
