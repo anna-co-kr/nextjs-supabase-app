@@ -1233,7 +1233,7 @@
         }
       ],
       "createdAt": "2026-04-19T15:20:06.064Z",
-      "updatedAt": "2026-04-19T15:36:40.171Z",
+      "updatedAt": "2026-04-19T15:39:12.608Z",
       "relatedFiles": [
         {
           "path": "lib/actions/settlement.ts",
@@ -1263,7 +1263,8 @@
       ],
       "implementationGuide": "// lib/actions/settlement.ts\nasync function togglePaymentStatus(paymentId, isPaid):\n  verify host (payment -> settlement_item -> event -> host_id)\n  update settlement_payments set is_paid=isPaid, paid_at=(isPaid ? now() : null)\n  revalidatePath\n  return ActionResult\n\n// components/payment-toggle-button.tsx\n'use client'\nconst [isPending, startTransition] = useTransition()\nonClick: startTransition(() => togglePaymentStatus(id, !currentIsPaid))\nrender: isPending ? <Loader2 animate-spin /> : (isPaid ? '취소' : '확인')",
       "verificationCriteria": "1. '확인' 클릭 → is_paid=true, paid_at 기록, 버튼 → '취소'로 전환\n2. '취소' 클릭 → is_paid=false, paid_at=null, 버튼 → '확인'으로 전환\n3. 요약 카드: 납부 완료 명수/미납 명수 실데이터 반영\n4. Playwright MCP: localhost:3001 납부 토글 동작 확인\n5. lint/type-check 0 에러",
-      "analysisResult": "Phase 4 정산 기능: settlement_items/settlement_payments/host_bank_accounts DB 테이블(이미 존재) 연동. 기존 Phase 3 패턴 준수 — \"use server\" + createClient() + auth.getUser() + Zod safeParse + ActionResult 반환 + revalidatePath. 더미 데이터(DUMMY_SETTLEMENTS) 완전 제거. 신규 파일: lib/schemas/settlement.ts, lib/utils/settlement.ts, lib/supabase/settlements.ts, lib/actions/settlement.ts, lib/email/settlement-reminder.ts(or resend.ts 확장), components/settlement-item-form.tsx, components/bank-account-form.tsx, components/payment-toggle-button.tsx, components/copy-button.tsx."
+      "analysisResult": "Phase 4 정산 기능: settlement_items/settlement_payments/host_bank_accounts DB 테이블(이미 존재) 연동. 기존 Phase 3 패턴 준수 — \"use server\" + createClient() + auth.getUser() + Zod safeParse + ActionResult 반환 + revalidatePath. 더미 데이터(DUMMY_SETTLEMENTS) 완전 제거. 신규 파일: lib/schemas/settlement.ts, lib/utils/settlement.ts, lib/supabase/settlements.ts, lib/actions/settlement.ts, lib/email/settlement-reminder.ts(or resend.ts 확장), components/settlement-item-form.tsx, components/bank-account-form.tsx, components/payment-toggle-button.tsx, components/copy-button.tsx.",
+      "summary": "togglePaymentStatus Server Action(권한 체인 검증+paid_at 자동 기록), PaymentToggleButton 컴포넌트(useTransition+Loader2), 모바일/데스크톱 양쪽 연결 완료. 요약 카드 flatMap 집계로 실데이터 반영. lint/type-check 0 에러."
     },
     {
       "id": "7d3d2b69-75ea-4dce-98d7-b441d8f9dbcf",
