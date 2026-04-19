@@ -861,7 +861,7 @@
         }
       ],
       "createdAt": "2026-04-19T09:42:01.087Z",
-      "updatedAt": "2026-04-19T10:55:13.232Z",
+      "updatedAt": "2026-04-19T11:00:33.535Z",
       "relatedFiles": [
         {
           "path": "lib/schemas/announcement.ts",
@@ -891,7 +891,8 @@
       ],
       "implementationGuide": "1. lib/schemas/announcement.ts: announcementCreateSchema, announcementUpdateSchema, commentCreateSchema\n2. lib/actions/announcement.ts ('use server'):\n   - createAnnouncement, updateAnnouncement, deleteAnnouncement (주최자만)\n   - togglePinAnnouncement: is_pinned 반전 UPDATE\n   - createComment, updateComment, deleteComment (확정 참여자 OR host)\n   - toggleReaction(announcementId, emoji): UNIQUE 제약 활용 — 있으면 DELETE, 없으면 INSERT\n3. lib/supabase/announcements.ts: getAnnouncementsByEventId — announcements + comments + reactions JOIN, is_pinned DESC, created_at DESC 정렬, 본인 reactedByMe 계산\n4. manage/announcements/page.tsx: 더미 데이터 → getAnnouncementsByEventId + Server Actions 연결\n5. manage/announcements-list/page.tsx: 댓글/리액션 낙관적 UI (useOptimistic)\n6. Playwright: 6개 시나리오 (작성/고정토글/수정삭제/댓글/리액션토글/권한차단)",
       "verificationCriteria": "- 공지 작성/수정/삭제/고정 토글 DB 반영\n- 댓글 작성/수정/삭제 (본인만 수정/삭제)\n- 동일 이모지 재클릭 시 토글\n- 비확정 참여자 댓글 작성 → RLS 차단\n- 낙관적 UI 즉시 반영 + 실패 시 롤백\n- Playwright 6개 시나리오 통과",
-      "analysisResult": "Gather 프로젝트 Phase 3 목표: Phase 1~2에서 확정된 UI와 View 모델을 근거로 DB 스키마를 설계하고, 더미 데이터를 실제 Supabase 연동으로 교체한다. 8개 테이블(profiles, events, event_members, announcements, announcement_comments, announcement_reactions, settlement_items, settlement_payments + host_bank_accounts), 6개 ENUM, RLS 정책 전 테이블 적용, Server Actions + Supabase @supabase/ssr 패턴 준수, Next.js 15 App Router (Server Components, params await, Server Actions), TypeScript any 금지, Playwright MCP 테스트 필수."
+      "analysisResult": "Gather 프로젝트 Phase 3 목표: Phase 1~2에서 확정된 UI와 View 모델을 근거로 DB 스키마를 설계하고, 더미 데이터를 실제 Supabase 연동으로 교체한다. 8개 테이블(profiles, events, event_members, announcements, announcement_comments, announcement_reactions, settlement_items, settlement_payments + host_bank_accounts), 6개 ENUM, RLS 정책 전 테이블 적용, Server Actions + Supabase @supabase/ssr 패턴 준수, Next.js 15 App Router (Server Components, params await, Server Actions), TypeScript any 금지, Playwright MCP 테스트 필수.",
+      "summary": "lib/schemas/announcement.ts, lib/supabase/announcements.ts, lib/actions/announcement.ts (7개 Server Actions) 구현. Client 컴포넌트 4개(AnnouncementForm/Actions/ReactionButton/CommentForm) 분리. announcements/page.tsx + announcements-list/page.tsx DUMMY 데이터 제거 및 실제 Supabase 연동. type-check 통과."
     },
     {
       "id": "dea6c684-97b8-488d-bbe4-1e0f533ee3ca",
