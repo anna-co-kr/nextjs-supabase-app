@@ -21,6 +21,10 @@ npm run type-check   # TypeScript 타입 검사
 NEXT_PUBLIC_SUPABASE_URL=
 NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=
 NEXT_PUBLIC_SITE_URL=        # 프로덕션 배포 URL (예: https://yourdomain.com), 미설정 시 http://localhost:3000 사용
+SUPABASE_SERVICE_ROLE_KEY=   # 서버 전용 (서비스 롤 키) — 절대 클라이언트 노출 금지
+RESEND_API_KEY=              # Resend 이메일 발송 API 키
+EMAIL_FROM=                  # 발신자 주소 (예: Gather <noreply@yourdomain.com>)
+CRON_SECRET=                 # Vercel Cron Job 인증 시크릿 (Bearer 토큰)
 ```
 
 ## 프로젝트 개요
