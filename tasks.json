@@ -813,14 +813,14 @@
       "name": "Task 024: 참여자 목록 CSV 내보내기 (F005, UTF-8 BOM)",
       "description": "주최자가 참여자 목록을 CSV로 다운로드하는 기능을 Route Handler로 구현한다. 한글 깨짐 방지를 위해 UTF-8 BOM을 포함한다.",
       "notes": "날짜 포맷은 toLocaleDateString('ko-KR') 사용. CSV 이스케이프 처리 철저히 (쉼표/따옴표/개행).",
-      "status": "pending",
+      "status": "in_progress",
       "dependencies": [
         {
           "taskId": "554e43f1-2baf-455b-861f-5565bb07ee30"
         }
       ],
       "createdAt": "2026-04-19T09:42:01.087Z",
-      "updatedAt": "2026-04-19T09:42:01.087Z",
+      "updatedAt": "2026-04-19T10:09:02.727Z",
       "relatedFiles": [
         {
           "path": "lib/utils/csv.ts",
